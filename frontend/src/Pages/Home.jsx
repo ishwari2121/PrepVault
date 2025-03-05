@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaBuilding, FaSearch, FaQuestionCircle, FaRocket, FaUsers } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-
+import Footer from './Footer'
 const Home = () => {
   const navigate = useNavigate();
   const [totalMembersRegistered,setTotalMembersRegistered] = useState(0);
@@ -176,6 +176,7 @@ const Home = () => {
                     ))}
                 </motion.div>
             </div>
+            <Footer/>
         </div>
     );
 };
