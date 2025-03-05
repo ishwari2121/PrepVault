@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 import authRoutes from "./routes/authRoutes.js";
+import comroutes from './routes/Companyroutes.js'
+
 
 dotenv.config();
 
@@ -11,6 +13,8 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/api/auth", authRoutes);
+app.use("/api/companies", comroutes);
+
 
 mongoose
   .connect(process.env.MONGO_URI)
