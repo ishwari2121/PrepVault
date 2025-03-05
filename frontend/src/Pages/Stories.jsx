@@ -1,16 +1,13 @@
 import React from "react";
 import MarkdownEditor from "../components/MarkdownEditor";
-import "../components/MarkdownEditor.css";
-
 
 export default function Stories() {
   return (
-    <div>
-      <h1 style={{ textAlign: "center" }}>Markdown Editor</h1>
+    <div className="flex flex-col items-center mt-6">
+      <h1 className="text-3xl font-semibold text-center text-gray-800 mb-4">
+        Markdown Editor
+      </h1>
       <MarkdownEditor />
     </div>
-  )
-};
-
-
-
+  );
+}
