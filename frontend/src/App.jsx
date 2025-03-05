@@ -8,6 +8,7 @@ import Stories from "./Pages/Stories";
 import Companies from "./Pages/Companies";
 import SharedInterview from "./components/SharedInterview";
 import QuesAns from "./components/QuesAns";
+import ErrorPage from "./Pages/ErrorPage";
 function Layout() {
   const location = useLocation(); 
 
@@ -26,7 +27,7 @@ function Layout() {
         <Route path="/companies" element={<Companies/>}/>
         <Route path="/interviews" element={<SharedInterview/>}/>
         <Route path="/question-answer" element={<QuesAns/>}/>
-        
+        <Route path="*" element={<ErrorPage/>}/>
       </Routes>
     </>
   );
