@@ -52,7 +52,7 @@ const Navbar = () => {
 
             <div className="auth-buttons flex gap-5 animate-fadeInRight">
                 <button 
-                    onClick={() => navigate("/login")}
+                    onClick={() => navigate("/signin")}
                     className="relative overflow-hidden rounded-lg bg-gradient-to-r from-indigo-500 to-indigo-600 px-8 py-3 font-semibold text-white shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:scale-105 hover:shadow-lg hover:shadow-indigo-500/30 active:scale-95"
                 >
                     <span className="relative z-10">Sign In</span>
