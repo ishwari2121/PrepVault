@@ -43,7 +43,7 @@ const Navbar = () => {
                     </NavLink>
 
                     <NavLink 
-                        to="/stories" 
+                        to="/" 
                         className="transition-all duration-300 relative flex items-center gap-2 rounded-lg px-4 py-3 text-[#f8fafc] hover:-translate-y-0.5 hover:bg-white/10 aria-[current=page]:bg-indigo-500/10 aria-[current=page]:text-indigo-400"
                     >
                         <FaBookOpen className="h-5 w-5 text-indigo-500 transition-transform duration-300 hover:scale-110 hover:text-indigo-400" />

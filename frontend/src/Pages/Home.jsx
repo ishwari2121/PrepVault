@@ -95,7 +95,7 @@ const Home = () => {
                         </p>
                     </motion.div>
 
-                    <motion.div
+                    <motion.div onClick={(e)=>navigate("/stories")}
                         variants={itemVariants}
                         className="bg-white/5 p-8 rounded-2xl border border-white/10 backdrop-blur-lg hover:shadow-2xl hover:shadow-cyan-500/20 transition-all"
                     >
