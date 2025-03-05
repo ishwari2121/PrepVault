@@ -10,9 +10,13 @@ const CompanyDetails = () => {
 
     useEffect(() => {
         axios.get(`http://localhost:5000/api/companies/${companyName}`)
-            .then(response => setCompany(response.data))
+            .then(response => {
+                setCompany(response.data);
+                // console.log("Fetched Company Data:", response.data);  // ✅ Now logs actual data
+            })
             .catch(error => console.error("Error fetching company details:", error));
     }, [companyName]);
+    
 
     if (!company) return <p>Loading...</p>;
 
