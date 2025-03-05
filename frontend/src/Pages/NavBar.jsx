@@ -21,7 +21,6 @@ const Navbar = () => {
 
     return (
         <nav className="sticky top-0 z-50 flex w-full items-center justify-between bg-gradient-to-br from-[#0f172a] to-[#1e293b] px-[5%] py-4 shadow-lg backdrop-blur-sm relative">
-            {/* Logo */}
             <div className="logo-container animate-fadeInLeft">
                 <NavLink to="/">
                     <h2 className="bg-gradient-to-r from-[#e11d48] to-[#6366f1] bg-clip-text text-2xl font-bold text-transparent shadow-md transition-all duration-500 hover:bg-gradient-to-l hover:scale-105 max-md:text-xl">
@@ -30,9 +29,8 @@ const Navbar = () => {
                 </NavLink>
             </div>
 
-            {/* Navigation Links and Search Bar */}
+          
             <div className="flex items-center gap-10 relative">
-                {/* Navigation Links */}
                 <div className="nav-links flex gap-10 max-md:gap-6">
                     <NavLink 
                         to="/companies" 
@@ -64,8 +62,6 @@ const Navbar = () => {
                         </span>
                     </NavLink>
                 </div>
-
-                {/* Expanding Search Bar */}
                 <div className="relative z-60">
                     <form 
                         onSubmit={handleSearch}
@@ -86,8 +82,6 @@ const Navbar = () => {
                     </form>
                 </div>
             </div>
-
-            {/* Auth Buttons */}
             <div className="auth-buttons flex gap-5 animate-fadeInRight">
                 {isLoggedIn ? (
                     <>
