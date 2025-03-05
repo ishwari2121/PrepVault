@@ -27,9 +27,7 @@ const Footer = () => {
             className="bg-[#0f172a] border-t border-white/10 py-12"
         >
             <div className="container mx-auto px-4">
-                {/* Footer Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
-                    {/* About Section */}
                     <motion.div
                         whileHover={{ y: -5 }}
                         className="space-y-4"
@@ -42,7 +40,6 @@ const Footer = () => {
                         </p>
                     </motion.div>
 
-                    {/* Quick Links */}
                     <motion.div
                         whileHover={{ y: -5 }}
                         className="space-y-4"
@@ -58,7 +55,6 @@ const Footer = () => {
                         </ul>
                     </motion.div>
 
-                    {/* Contact Info */}
                     <motion.div
                         whileHover={{ y: -5 }}
                         className="space-y-4"
@@ -72,7 +68,7 @@ const Footer = () => {
                             <li className="text-gray-300">Address: PICT, PUNE</li>
                         </ul>
                     </motion.div>
-                    
+
                     <motion.div
                         whileHover={{ y: -5 }}
                         className="space-y-4"
@@ -121,10 +117,9 @@ const Footer = () => {
                     </motion.div>
                 </div>
 
-                {/* Divider */}
+               
                 <div className="border-t border-white/10 my-8"></div>
-
-                {/* Copyright */}
+                
                 <motion.div
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
