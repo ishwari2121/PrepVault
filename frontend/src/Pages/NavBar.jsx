@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { FaBuilding, FaBookOpen, FaRobot, FaSearch } from 'react-icons/fa';
 import axios from 'axios';
@@ -9,6 +9,7 @@ const Navbar = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [companies, setCompanies] = useState([]);
     const [showDropdown, setShowDropdown] = useState(false);
+    const searchRef = useRef(null);
 
     useEffect(() => {
         axios.get("http://localhost:5000/api/companies")
@@ -28,14 +29,25 @@ const Navbar = () => {
         }
     };
 
-    // When clicking a company from the dropdown, you might want to navigate or update the input value.
     const handleCompanyClick = (companyName) => {
-
         setSearchQuery(companyName);
         setShowDropdown(false);
-        // For example, navigate to a company detail page:
         navigate(`/company/${companyName}`);
     };
+
+    // Handle click outside the search bar to hide the dropdown
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (searchRef.current && !searchRef.current.contains(event.target)) {
+                setShowDropdown(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     return (
         <nav className="sticky top-0 z-50 flex w-full items-center justify-between bg-gradient-to-br from-[#0f172a] to-[#1e293b] px-[5%] py-4 shadow-lg backdrop-blur-sm relative">
@@ -80,7 +92,7 @@ const Navbar = () => {
                     </NavLink>
                 </div>
 
-                <div className="relative z-60">
+                <div className="relative z-60" ref={searchRef}>
                     <form onSubmit={handleSearch} className="relative group transition-all duration-300">
                         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <FaSearch className="h-5 w-5 text-gray-400 transition-colors group-hover:text-indigo-400" />
@@ -94,18 +106,19 @@ const Navbar = () => {
                                 setShowDropdown(true);
                             }}
                             onFocus={() => setShowDropdown(true)}
+                            onBlur={() => setTimeout(() => setShowDropdown(false), 200)} // Delay to allow click on dropdown items
                             className="w-10 h-10 rounded-full bg-white/10 pl-10 pr-4 py-2 text-white placeholder-gray-300 
                                        transition-all duration-300 group-hover:w-96 focus:w-96 focus:outline-none 
                                        focus:ring-2 focus:ring-indigo-500"
                         />
                     </form>
                     {showDropdown && searchQuery && filteredCompanies.length > 0 && (
-                        <ul className="absolute top-full mt-2 w-full max-h-60 overflow-auto rounded-md bg-white/10 py-2 text-white shadow-lg">
+                        <ul className="absolute top-full mt-2 w-full max-h-60 overflow-auto rounded-md bg-gray-800 py-2 shadow-lg">
                             {filteredCompanies.map((company) => (
                                 <li 
                                     key={company.id}
-                                    onClick={() => {handleCompanyClick(company.name);}}
-                                    className="cursor-pointer px-4 py-2 hover:bg-indigo-500/20"
+                                    onMouseDown={() => handleCompanyClick(company.name)}
+                                    className="cursor-pointer px-4 py-2 text-white hover:bg-indigo-500/20"
                                 >
                                     {company.name}
                                 </li>
