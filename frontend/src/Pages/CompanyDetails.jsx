@@ -10,9 +10,13 @@ const CompanyDetails = () => {
 
     useEffect(() => {
         axios.get(`http://localhost:5000/api/companies/${companyName}`)
-            .then(response => setCompany(response.data))
+            .then(response => {
+                setCompany(response.data);
+                // console.log("Fetched Company Data:", response.data);  // ✅ Now logs actual data
+            })
             .catch(error => console.error("Error fetching company details:", error));
     }, [companyName]);
+    
 
     if (!company) return <p>Loading...</p>;
 
@@ -32,12 +36,19 @@ const CompanyDetails = () => {
                 </button>
             </div>
 
-            {/* Show recruitment process */}
-                        {view === "recruitment" && (
-                <div className="mt-4 p-4 bg-gray-100 rounded-md">
-                    <h2 className="text-2xl font-semibold">Recruitment Process</h2>
-                    <p className="mt-2 text-lg">
-                        {company.recruitmentProcess.split("\n").map((line, index) => (
+ {/* Show recruitment process */}
+{view === "recruitment" && company.recruitmentProcess && (
+    <div className="mt-4 p-4 bg-gray-100 rounded-md">
+        <h2 className="text-2xl font-semibold">Recruitment Process</h2>
+
+        {Object.entries(company.recruitmentProcess).map(([key, value]) =>
+            value && key !== "sampleQuestions" ? ( // Exclude sampleQuestions from normal rendering
+                <div key={key} className="mt-3">
+                    <h3 className="text-xl font-medium capitalize">
+                        {key.replace(/([A-Z])/g, " $1").trim()} {/* Format key names */}
+                    </h3>
+                    <p className="mt-1 text-lg">
+                        {value.split("\n").map((line, index) => (
                             <span key={index}>
                                 {line.includes("http") ? (
                                     <a
@@ -56,7 +67,23 @@ const CompanyDetails = () => {
                         ))}
                     </p>
                 </div>
-            )}
+            ) : null
+        )}
+
+        {/* Handle sampleQuestions separately */}
+        {company.recruitmentProcess.sampleQuestions?.length > 0 && (
+            <div className="mt-3">
+                <h3 className="text-xl font-medium">Sample Questions</h3>
+                <ul className="list-disc pl-5 text-lg">
+                    {company.recruitmentProcess.sampleQuestions.map((question, index) => (
+                        <li key={index} className="mt-1">{question}</li>
+                    ))}
+                </ul>
+            </div>
+        )}
+    </div>
+)}
+
 
             {/* Show eligibility criteria with year selection */}
             {view === "eligibility" && (
