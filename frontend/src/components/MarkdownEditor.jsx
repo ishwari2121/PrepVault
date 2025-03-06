@@ -12,23 +12,6 @@ const MarkdownEditor = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   return (
-<<<<<<< HEAD
-    <div className="w-full flex flex-col items-center mt-4">
-      {/* Editor Wrapper */}
-      <div className="w-11/12 max-w-7xl">
-        <MDEditor
-          value={value}
-          onChange={setValue}
-          height={600}
-          className="border border-gray-300 rounded-lg shadow-md bg-white"
-        />
-
-        {/* Submit Button */}
-        <button className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200">
-          Submit
-        </button>
-      </div>
-=======
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
       <motion.div 
         className="w-full max-w-4xl bg-slate-800/30 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-700/50 overflow-hidden"
@@ -176,7 +159,6 @@ const MarkdownEditor = () => {
           <div className="absolute bottom-10 -right-20 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl animate-pulse delay-100" />
         </div>
       </motion.div>
->>>>>>> 035442a7d6a398a3c805063c4ffd11cd684cee30
     </div>
   );
 };
