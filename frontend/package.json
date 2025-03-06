@@ -15,6 +15,8 @@
     "@uiw/react-md-editor": "^4.0.5",
     "axios": "^1.8.1",
     "framer-motion": "^12.4.10",
+    "highlight.js": "^11.11.1",
+    "marked": "^15.0.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0",

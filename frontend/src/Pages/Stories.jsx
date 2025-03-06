@@ -6,7 +6,6 @@ import "../components/MarkdownEditor.css";
 export default function Stories() {
   return (
     <div>
-      <h1 style={{ textAlign: "center" }}>Markdown Editor</h1>
       <MarkdownEditor />
     </div>
   )
