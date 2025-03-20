@@ -1,12 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { FaBuilding, FaBookOpen, FaRobot, FaSearch } from 'react-icons/fa';
+import { AuthContext } from '../Context/AuthContext';
 
 const Navbar = () => {
     const navigate = useNavigate();
+    const { user, logout } = useContext(AuthContext); 
     const [isLoggedIn, setIsLoggedIn] = useState(true); // Assuming the user is logged in
     const [searchQuery, setSearchQuery] = useState('');
 
+    const handleLogout = () => {
+        logout();
+        navigate('/');
+    };
     const handleSearch = (e) => {
         e.preventDefault();
         if (searchQuery.trim()) {
@@ -42,7 +48,7 @@ const Navbar = () => {
                     </NavLink>
 
                     <NavLink 
-                        to="/stories" 
+                        to="/interviewexp" 
                         className="transition-all duration-300 relative flex items-center gap-2 rounded-lg px-4 py-3 text-[#f8fafc] hover:-translate-y-0.5 hover:bg-white/10 aria-[current=page]:bg-indigo-500/10 aria-[current=page]:text-indigo-400"
                     >
                         <FaBookOpen className="h-5 w-5 text-indigo-500 transition-transform duration-300 hover:scale-110 hover:text-indigo-400" />
@@ -82,22 +88,22 @@ const Navbar = () => {
                 </div>
             </div>
             <div className="auth-buttons flex gap-5 animate-fadeInRight">
-                {isLoggedIn ? (
-                    <>
-                        <button 
-                            onClick={() => navigate("/profile")}
-                            className="relative overflow-hidden rounded-lg px-6 py-3 font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/10 hover:shadow-md hover:scale-105"
-                        >
-                            Profile
-                        </button>
-                        <button 
-                            onClick={handleSignOut}
-                            className="relative overflow-hidden rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-6 py-3 font-semibold text-white shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/30 active:scale-95"
-                        >
-                            Logout
-                        </button>
-                    </>
-                ) : null}
+            {user ? (
+                        <>
+                            <button 
+                                onClick={() => navigate("/profile")}
+                                className="relative overflow-hidden rounded-lg px-6 py-3 font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/10 hover:shadow-md"
+                            >
+                                Profile
+                            </button>
+                            <button 
+                                onClick={handleLogout}
+                                className="relative overflow-hidden rounded-lg bg-gradient-to-r from-red-500 to-red-600 px-6 py-3 font-semibold text-white shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:scale-105 hover:shadow-lg hover:shadow-red-500/30 active:scale-95"
+                            >
+                                Sign Out
+                            </button>
+                        </>
+                            ) : null}
             </div>
         </nav>
     );

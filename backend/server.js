@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import authRoutes from "./routes/authRoutes.js";
 import comroutes from './routes/Companyroutes.js'
-
+import interview from "./routes/InterviewExpRoutes.js"
 
 dotenv.config();
 
@@ -14,6 +14,7 @@ app.use(cors());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/companies", comroutes);
+app.use("/api/interviewExp",interview);
 
 
 mongoose

@@ -25,6 +25,7 @@ router.get("/:companyName", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
+    console.log("hello");
     try {
         const { name, eligibilityCriteria = [], recruitmentProcess = "" } = req.body;
 

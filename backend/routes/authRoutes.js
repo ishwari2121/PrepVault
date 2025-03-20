@@ -1,6 +1,7 @@
 import express from "express";
 import bcrypt from "bcryptjs";
 import User from "../models/User.js";
+import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
@@ -28,21 +29,26 @@ router.post("/signup", async (req, res) => {
 router.post("/signin", async (req, res) => {
     try {
         const { email, password } = req.body;
-
+    
+        // Check if user exists
         const user = await User.findOne({ email });
-        if (!user) {
-            return res.status(400).json({ message: "Invalid email or password" });
-        }
-
+        if (!user) return res.status(400).json({ message: "User not found" });
+    
+        // Compare passwords
         const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) {
-            return res.status(400).json({ message: "Invalid email or password" });
-        }
-
-        res.json({ message: "Login successful", user: { username: user.username, email: user.email } });
-    } catch (error) {
-        res.status(500).json({ message: "Server Error", error: error.message });
-    }
+        if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
+    
+        // Generate JWT Token
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    
+        res.status(200).json({
+          message: "Login successful",
+          token,
+          user: { id: user._id,username: user.username, email: user.email } 
+        });
+      } catch (err) {
+        res.status(500).json({ message: "Server error" });
+      }
 });
 
 export default router;

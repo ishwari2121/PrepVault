@@ -1,10 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect,useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiAlertCircle, FiMail, FiLock, FiLogIn } from "react-icons/fi";
+import { AuthContext } from "../Context/AuthContext";
 
 const Signin = () => {
+  const { login } = useContext(AuthContext);
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [mounted, setMounted] = useState(false);
   const [error, setError] = useState("");
@@ -24,7 +26,9 @@ const Signin = () => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      const { data } = await axios.post("http://localhost:5000/api/auth/signin", formData);
+      const  res  = await axios.post("http://localhost:5000/api/auth/signin", formData);
+      console.log("Login Response:", res.data);
+      login(res.data);
       navigate("/dashboard");
     } catch (err) {
       setError(err.response?.data?.message || "Invalid credentials");

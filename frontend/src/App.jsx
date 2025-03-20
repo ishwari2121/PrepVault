@@ -4,30 +4,32 @@ import Signin from "./Pages/Signin";
 import Home from "./Pages/Home";
 import Navbar from "./Pages/NavBar";
 import LLM from "./Pages/LLM";
-import Stories from "./Pages/Stories";
+import Interview from "./Pages/InterviewExp";
 import Companies from "./Pages/Companies";
 import SharedInterview from "./components/SharedInterview";
 import QuesAns from "./components/QuesAns";
 import ErrorPage from "./Pages/ErrorPage";
 import CompanyDetails from "./Pages/CompanyDetails";
 import UserNavbar from "./components/UserNavbar";
+import { AuthContext } from './Context/AuthContext';
+import { useContext } from "react";
 
 function Layout() {
   const location = useLocation();
-
-  const hideNavbarRoutes = ["/signin", "/signup", "/dashboard"];
-  const shouldShowNavbar = !hideNavbarRoutes.includes(location.pathname);
+  const { user } = useContext(AuthContext);  
+  const hideNavbarRoutes = ["/signin", "/signup"];
+  const shouldShowNavbar = !user && !hideNavbarRoutes.includes(location.pathname);
 
   return (
     <>
-      {shouldShowNavbar && <Navbar />}
+      {user ? <UserNavbar /> : shouldShowNavbar && <Navbar />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
-        <Route path="/dashboard" element={<><UserNavbar /><Home /></>} />
+        <Route path="/dashboard" element={<Home />} />
         <Route path="/LLM" element={<LLM />} />
-        <Route path="/stories" element={<Stories />} />
+        <Route path="/interviewexp" element={<Interview />} />
         <Route path="/companies" element={<Companies />} />
         <Route path="/interviews" element={<SharedInterview />} />
         <Route path="/company/:companyName" element={<CompanyDetails />} />
