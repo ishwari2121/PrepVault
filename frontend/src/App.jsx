@@ -6,13 +6,14 @@ import Navbar from "./Pages/NavBar";
 import LLM from "./Pages/LLM";
 import Interview from "./Pages/InterviewExp";
 import Companies from "./Pages/Companies";
-import SharedInterview from "./components/SharedInterview";
-import QuesAns from "./components/QuesAns";
+import SharedInterview from "./Pages/SharedInterview";
+import QuesAns from "./Components/QuesAns";
 import ErrorPage from "./Pages/ErrorPage";
 import CompanyDetails from "./Pages/CompanyDetails";
-import UserNavbar from "./components/UserNavbar";
+import UserNavbar from "./Components/UserNavbar";
 import { AuthContext } from './Context/AuthContext';
 import { useContext } from "react";
+import InterviewDetail from "./Components/InterviewDetail";
 
 function Layout() {
   const location = useLocation();
@@ -34,6 +35,7 @@ function Layout() {
         <Route path="/interviews" element={<SharedInterview />} />
         <Route path="/company/:companyName" element={<CompanyDetails />} />
         <Route path="/question-answer" element={<QuesAns />} />
+        <Route path="/interview/:id" element={<InterviewDetail />} />
         <Route path="*" element={<ErrorPageWrapper />} />
       </Routes>
     </>
