@@ -1,59 +1,57 @@
 import { createContext, useState, useEffect } from "react";
 import axios from 'axios';
+
 const AuthContext = createContext(null);
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  // Check localStorage for user on app load
+  // Initialize auth state from localStorage
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      const parsedUser = JSON.parse(storedUser);
+      setUser(parsedUser);
+      axios.defaults.headers.common['Authorization'] = `Bearer ${parsedUser.token}`;
     }
   }, []);
 
-  useEffect(() => {
-    console.log("Updated User:", user); // Track user state changes
-}, [user]);
-
-
-  // Login function
   const login = (userData) => {
-    console.log("Login Response in AuthContext:", userData); // Debugging line
-  
-    if (!userData.token) {
-        console.error("No token received!");
-        return;
+    if (!userData?.token) {
+      console.error("Invalid login data - no token provided");
+      return;
     }
 
-    const newUser = { ...userData.user, token: userData.token };
-    console.log("Updated User Data:", newUser); // Check stored user object
-  
-    // ✅ Set token in Axios headers
-    axios.defaults.headers.common['Authorization'] = `Bearer ${userData.token}`;
+    const newUser = {
+      ...userData.user,
+      token: userData.token
+    };
 
     setUser(newUser);
     localStorage.setItem("user", JSON.stringify(newUser));
-};
+    axios.defaults.headers.common['Authorization'] = `Bearer ${userData.token}`;
+  };
 
-  
-  
-
-  // Logout function
   const logout = () => {
-    setUser(null);  
+    // Clear all auth-related data
+    setUser(null);
     localStorage.removeItem("user");
+    
+    // Completely remove axios authorization header
     delete axios.defaults.headers.common['Authorization'];
-    console.log("User logged out successfully.");
-};
+    
+    // Force clear cached credentials
+    axios.interceptors.request.use(config => {
+      config.headers['Authorization'] = undefined;
+      return config;
+    });
+  };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, setUser }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-// Export AuthContext and AuthProvider
 export { AuthContext, AuthProvider };

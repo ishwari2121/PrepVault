@@ -10,7 +10,7 @@ router.post("/submit-experience", verifyToken, async (req, res) => {
     
     const { year, branch, company, totalRounds, rounds, additionalTips, type } = req.body;
 
-    if (!year || !branch || !company || !totalRounds || !rounds || !additionalTips || !type) {
+    if (!year || !branch || !company || !totalRounds || !rounds  || !type) {
         return res.status(400).json({ message: "All fields are required." });
     }
 

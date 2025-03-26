@@ -32,6 +32,7 @@ const Home = () => {
                 transition={{ duration: 1 }}
                 className="flex flex-col items-center justify-center text-center py-28 px-4"
             >
+                
                 <motion.div
                     animate={{ scale: [1, 1.02, 1] }}
                     transition={{ duration: 2, repeat: Infinity }}

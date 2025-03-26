@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Signup from "./Pages/Signup";
 import Signin from "./Pages/Signin";
 import Home from "./Pages/Home";
@@ -10,20 +10,20 @@ import SharedInterview from "./Pages/SharedInterview";
 import QuesAns from "./Components/QuesAns";
 import ErrorPage from "./Pages/ErrorPage";
 import CompanyDetails from "./Pages/CompanyDetails";
-import UserNavbar from "./Components/UserNavbar";
-import { AuthContext } from './Context/AuthContext';
-import { useContext } from "react";
+import UserNavbar from "./components/UserNavbar";
+import { AuthProvider } from "./Context/AuthContext";
+import { createContext, useState } from "react";
 import InterviewDetail from "./Components/InterviewDetail";
 
-function Layout() {
-  const location = useLocation();
-  const { user } = useContext(AuthContext);  
-  const hideNavbarRoutes = ["/signin", "/signup"];
-  const shouldShowNavbar = !user && !hideNavbarRoutes.includes(location.pathname);
+// ✅ Create and export context
+export const LoginFromInterviewExp = createContext();
 
+function Layout() {
+  const [loginFromInterview, setLoginFromInterview] = useState(false);
+  
   return (
-    <>
-      {user ? <UserNavbar /> : shouldShowNavbar && <Navbar />}
+    <LoginFromInterviewExp.Provider value={{ loginFromInterview, setLoginFromInterview }}>
+      <UserNavbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
@@ -33,24 +33,23 @@ function Layout() {
         <Route path="/interviewexp" element={<Interview />} />
         <Route path="/companies" element={<Companies />} />
         <Route path="/interviews" element={<SharedInterview />} />
+        <Route path="/stories" element={<SharedInterview/>} />
         <Route path="/company/:companyName" element={<CompanyDetails />} />
         <Route path="/question-answer" element={<QuesAns />} />
         <Route path="/interview/:id" element={<InterviewDetail />} />
-        <Route path="*" element={<ErrorPageWrapper />} />
+        <Route path="*" element={<ErrorPage />} />
       </Routes>
-    </>
+    </LoginFromInterviewExp.Provider>
   );
-}
-
-function ErrorPageWrapper() {
-  return <ErrorPage />;
 }
 
 function App() {
   return (
-    <Router>
-      <Layout />
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Layout />
+      </Router>
+    </AuthProvider>
   );
 }
 
