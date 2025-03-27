@@ -10,7 +10,6 @@ router.get('/', async (req, res) => {
     const questions = await CommonQuestion.find(query)
       .sort({ createdAt: -1 })
       .select('-__v');
-    console.log(questions);
     res.status(200).json({
       count: questions.length,
       data: questions
@@ -64,15 +63,12 @@ router.post('/add-Question', async (req, res) => {
       });
   
       const savedQuestion = await newQuestion.save();
-      console.log("Saved question:", savedQuestion);
-  
       res.status(201).json({
         message: 'Question created successfully',
         data: savedQuestion
       });
   
     } catch (error) {
-      console.error("Full error:", error);
       if (error.name === 'ValidationError') {
         return res.status(400).json({
           message: 'Validation error',
@@ -140,7 +136,6 @@ router.post('/answers/:id', async (req, res) => {
 // POST route to update votes for a specific answer
 router.post('/:questionId/answers/:answerId/vote', async (req, res) => {
   try {
-    console.log("helo");
     const { questionId, answerId } = req.params;
     const { action } = req.body; // 'upvote' or 'downvote'
 
@@ -188,7 +183,6 @@ router.post('/:questionId/answers/:answerId/vote', async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Error updating vote:', error);
     
     if (error.name === 'CastError') {
       return res.status(400).json({ message: 'Invalid ID format' });
