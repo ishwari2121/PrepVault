@@ -13,7 +13,7 @@ import CompanyDetails from "./Pages/CompanyDetails";
 import UserNavbar from "./components/UserNavbar";
 import { AuthProvider } from "./Context/AuthContext";
 import { createContext, useState } from "react";
-import InterviewDetail from "./Components/InterviewDetail";
+import InterviewDetail from "./components/InterviewDetail";
 
 // ✅ Create and export context
 export const LoginFromInterviewExp = createContext();

@@ -26,6 +26,18 @@ router.post("/signup", async (req, res) => {
     }
 });
 
+router.get('/all-users',async (req,res)=>{
+    try
+    {
+        const all_user = await User.find();
+        res.status(200).json(all_user);
+    }
+    catch(err)
+    {
+      res.status(500).json({message:false,error : err.message});
+    }
+})
+
 router.post("/signin", async (req, res) => {
     try {
         const { email, password } = req.body;

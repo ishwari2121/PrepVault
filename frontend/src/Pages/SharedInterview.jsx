@@ -2,18 +2,21 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaBuilding, FaUser, FaCalendarAlt, FaStar, FaSearch } from "react-icons/fa";
+import { FaBuilding, FaUser, FaCalendarAlt, FaStar, FaSearch, FaBriefcase, FaGraduationCap } from "react-icons/fa";
 
 const SharedInterview = () => {
     const [experiences, setExperiences] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState("");
+    const [selectedType, setSelectedType] = useState("Both");
     const navigate = useNavigate();
 
-    // Filter experiences based on search query
-    const filteredExperiences = experiences.filter(exp =>
-        exp.company.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    // Filter experiences based on search query and selected type
+    const filteredExperiences = experiences.filter(exp => {
+        const matchesSearch = exp.company.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesType = selectedType === "Both" || exp.type === selectedType;
+        return matchesSearch && matchesType;
+    });
 
     // Floating stars animation setup
     const floatingStars = [...Array(15)].map((_, i) => ({
@@ -71,6 +74,18 @@ const SharedInterview = () => {
             boxShadow: "0 25px 50px rgba(34, 211, 238, 0.15)",
             transition: { type: "spring", stiffness: 300 }
         },
+        tap: { scale: 0.98 }
+    };
+
+    // Type filter variants
+    const typeFilterVariants = {
+        hidden: { opacity: 0, x: 20 },
+        visible: { 
+            opacity: 1, 
+            x: 0,
+            transition: { type: "spring", stiffness: 300, damping: 20 }
+        },
+        hover: { scale: 1.02 },
         tap: { scale: 0.98 }
     };
 
@@ -139,13 +154,14 @@ const SharedInterview = () => {
                         Discover valuable interview experiences shared by our community members
                     </motion.p>
 
-                    {/* Animated Search Bar */}
+                    {/* Search and Filter Section */}
                     <motion.div
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="mb-12 max-w-3xl mx-auto px-4"
+                        className="mb-12 max-w-7xl mx-auto px-4 flex flex-col md:flex-row gap-4"
                     >
-                        <div className="relative group">
+                        {/* Search Bar */}
+                        <div className="relative group flex-1">
                             <motion.div
                                 className="absolute inset-0 rounded-2xl bg-gradient-to-r from-cyan-500/20 to-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity blur-xl"
                                 animate={{
@@ -183,6 +199,43 @@ const SharedInterview = () => {
                                 </motion.div>
                             </div>
                         </div>
+
+                        {/* Type Filter Dropdown */}
+                        <motion.div
+                            className="relative group"
+                            variants={typeFilterVariants}
+                            initial="hidden"
+                            animate="visible"
+                            whileHover="hover"
+                            whileTap="tap"
+                        >
+                            <div className="relative">
+                                <select
+                                    value={selectedType}
+                                    onChange={(e) => setSelectedType(e.target.value)}
+                                    className="w-full md:w-48 pl-12 pr-6 py-4 rounded-2xl bg-[#0f172a]/80 backdrop-blur-lg border border-purple-500/30 focus:border-purple-400/50 focus:ring-2 focus:ring-purple-400/20 text-cyan-100 appearance-none transition-all duration-300 cursor-pointer"
+                                >
+                                    <option value="Both">Both Types</option>
+                                    <option value="Placement">Placement</option>
+                                    <option value="Internship">Internship</option>
+                                </select>
+                                <div className="absolute left-5 top-1/2 -translate-y-1/2">
+                                    {selectedType === "Placement" ? (
+                                        <FaBriefcase className="text-purple-400 text-lg" />
+                                    ) : selectedType === "Internship" ? (
+                                        <FaGraduationCap className="text-blue-400 text-lg" />
+                                    ) : (
+                                        <div className="flex gap-1">
+                                            <FaBriefcase className="text-purple-400 text-sm" />
+                                            <FaGraduationCap className="text-blue-400 text-sm" />
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="absolute right-4 top-1/2 -translate-y-1/2 text-cyan-400/60">
+                                    ▼
+                                </div>
+                            </div>
+                        </motion.div>
                     </motion.div>
                 </motion.div>
 
@@ -225,8 +278,8 @@ const SharedInterview = () => {
                                     className="col-span-full text-center p-6 rounded-xl bg-[#0f172a]/50 backdrop-blur-lg"
                                 >
                                     <p className="text-cyan-200">
-                                        {searchQuery ? 
-                                            `No results for "${searchQuery}"` : 
+                                        {searchQuery || selectedType !== "Both" ? 
+                                            `No results found${searchQuery ? ` for "${searchQuery}"` : ""}${selectedType !== "Both" ? ` in ${selectedType}` : ""}` : 
                                             "No interview experiences available yet. Be the first to share!"
                                         }
                                     </p>

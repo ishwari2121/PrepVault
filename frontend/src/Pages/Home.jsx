@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaBuilding, FaSearch, FaQuestionCircle, FaRocket, FaUsers } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import Footer from './Footer'
+import axios from 'axios';
 const Home = () => {
   const navigate = useNavigate();
-  const [totalMembersRegistered,setTotalMembersRegistered] = useState(0);
-  const [totalSharedInterview,setTotalSharedInterview] = useState(0);
-  const [totalCompaniesCoved,setTotalCompaniesCoved] = useState(0);
+  const [totalMembersRegistered,setTotalMembersRegistered] = useState([]);
+  const [totalSharedInterview,setTotalSharedInterview] = useState([]);
+  const [totalCompaniesCoved,setTotalCompaniesCoved] = useState([]);
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
@@ -18,6 +19,46 @@ const Home = () => {
             }
         }
     };
+
+    useEffect(() => {
+        const fetchExperiences = async () => {
+            try {
+                const response = await axios.get("http://localhost:5000/api/interviewExp/all-experiences");
+                setTotalSharedInterview(response.data);
+            } catch (error) {
+                console.error("Error fetching interview experiences:", error);
+            }
+    };
+
+        fetchExperiences();
+    }, []);
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const response = await axios.get("http://localhost:5000/api/auth/all-users");
+                setTotalMembersRegistered(response.data);
+            } catch (error) {
+                console.error("Error fetching interview experiences:", error);
+            }
+        };
+
+        fetchUsers();
+    }, []);
+
+    useEffect(() => {
+        const fetchCompanies = async () => {
+            try {
+                const response = await axios.get("http://localhost:5000/api/companies");
+                console.log(response.data);
+                setTotalCompaniesCoved(response.data);
+            } catch (error) {
+                console.error("Error fetching interview experiences:", error);
+            }
+    };
+
+        fetchCompanies();
+    }, []);
 
     const itemVariants = {
         hidden: { opacity: 0, y: 20 },
@@ -159,9 +200,9 @@ const Home = () => {
                     className="grid grid-cols-2 md:grid-cols-3 gap-6 mt-24"
                 >
                     {[
-                        { value: totalMembersRegistered, label: 'Aspiring Members', icon: FaUsers },
-                        { value: totalSharedInterview, label: 'Interview Tips Shared', icon: FaRocket },
-                        { value: totalCompaniesCoved, label: 'Companies Covered', icon: FaBuilding },
+                        { value: totalMembersRegistered.length, label: 'Aspiring Members', icon: FaUsers },
+                        { value: totalSharedInterview.length, label: 'Interview Tips Shared', icon: FaRocket },
+                        { value: totalCompaniesCoved.length, label: 'Companies Covered', icon: FaBuilding },
                     ].map((stat, index) => (
                         <motion.div
                             key={index}
