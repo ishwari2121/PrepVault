@@ -9,6 +9,7 @@ const Home = () => {
   const [totalMembersRegistered,setTotalMembersRegistered] = useState([]);
   const [totalSharedInterview,setTotalSharedInterview] = useState([]);
   const [totalCompaniesCoved,setTotalCompaniesCoved] = useState([]);
+
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
@@ -50,7 +51,6 @@ const Home = () => {
         const fetchCompanies = async () => {
             try {
                 const response = await axios.get("http://localhost:5000/api/companies");
-                console.log(response.data);
                 setTotalCompaniesCoved(response.data);
             } catch (error) {
                 console.error("Error fetching interview experiences:", error);
@@ -156,6 +156,7 @@ const Home = () => {
                     <motion.div
                         variants={itemVariants}
                         className="bg-white/5 p-8 rounded-2xl border border-white/10 backdrop-blur-lg hover:shadow-2xl hover:shadow-cyan-500/20 transition-all"
+                        onClick={(e)=>navigate("/commonQuestion")}
                     >
                         <motion.div
                             whileHover={{ scale: 1.1, rotate: -5 }}

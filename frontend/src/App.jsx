@@ -36,9 +36,10 @@ function Layout() {
         <Route path="/interviews" element={<SharedInterview />} />
         <Route path="/stories" element={<SharedInterview/>} />
         <Route path="/company/:companyName" element={<CompanyDetails />} />
-        <Route path="/question-answer" element={<QuesAns />} />
+        {/* <Route path="/question-answer" element={<QuesAns />} /> */}
         <Route path="/interview/:id" element={<InterviewDetail />} />
         <Route path="/commonQuestion" element={<CommonQuestion/>} />
+        <Route path="/answer/:id" element={<QuesAns/>} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
       <Toaster />
