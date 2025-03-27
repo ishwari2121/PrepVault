@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiAlertCircle, FiUser, FiMail, FiLock, FiLogIn } from "react-icons/fi";
-
+import { toast } from 'react-hot-toast'
 const Signup = () => {
   const [formData, setFormData] = useState({ username: "", email: "", password: "" });
   const [mounted, setMounted] = useState(false);
@@ -25,6 +25,7 @@ const Signup = () => {
     setIsSubmitting(true);
     try {
       const { data } = await axios.post("http://localhost:5000/api/auth/signup", formData);
+      toast.success("Account Created Successfully");
       navigate("/signin");
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");

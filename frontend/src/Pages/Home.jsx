@@ -97,7 +97,7 @@ const Home = () => {
                     className="relative"
                 >
                     <div className="absolute -inset-2 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg blur opacity-75 group-hover:opacity-100 transition"></div>
-                    <button className="relative bg-gradient-to-r from-cyan-500 to-blue-600 px-10 py-4 rounded-lg text-xl font-bold shadow-2xl hover:shadow-cyan-500/40 transition-all">
+                    <button onClick={(e)=>navigate("/interviewexp")} className="relative bg-gradient-to-r from-cyan-500 to-blue-600 px-10 py-4 rounded-lg text-xl font-bold shadow-2xl hover:shadow-cyan-500/40 transition-all">
                         Share Your Journey
                     </button>
                 </motion.div>

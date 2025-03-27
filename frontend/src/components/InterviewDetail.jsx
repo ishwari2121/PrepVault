@@ -182,7 +182,8 @@ const InterviewDetail = () => {
                                         <div className="w-8 h-8 flex items-center justify-center rounded-full bg-cyan-600/30 text-cyan-200 text-sm border border-cyan-500/30">
                                             {round.roundNumber}
                                         </div>
-                                        <p className="text-cyan-100 flex-1">{round.experience}</p>
+                                        {/* Updated line with whitespace-pre-wrap */}
+                                        <p className="text-cyan-100 flex-1 whitespace-pre-wrap">{round.experience}</p>
                                     </div>
                                 </motion.div>
                             ))}
@@ -199,7 +200,7 @@ const InterviewDetail = () => {
                                 <FaLightbulb className="text-yellow-400" />
                                 Pro Tips & Resources
                             </h3>
-                            <p className="text-cyan-100">{experience.additionalTips}</p>
+                            <p className="text-cyan-100 whitespace-pre-wrap">{experience.additionalTips}</p>
                         </motion.div>
                     )}
                 </motion.div>

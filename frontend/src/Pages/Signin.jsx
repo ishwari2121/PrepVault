@@ -5,6 +5,40 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FiAlertCircle, FiMail, FiLock, FiLogIn } from "react-icons/fi";
 import { AuthContext } from "../Context/AuthContext";
 import { LoginFromInterviewExp } from "../App"; 
+import { toast } from 'react-hot-toast'
+
+// Add global styles once
+const toastStyles = `
+  @keyframes border-pulse {
+    0% { opacity: 0.8; background-position: 0% 50%; }
+    50% { opacity: 1; background-position: 100% 50%; }
+    100% { opacity: 0.8; background-position: 0% 50%; }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(15deg); }
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  @keyframes text-glow {
+    0%, 100% { filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.4)); }
+    50% { filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8)); }
+  }
+
+  @keyframes shine {
+    0% { transform: rotate(45deg) translateX(-100%); }
+    100% { transform: rotate(45deg) translateX(100%); }
+  }
+`;
+
+const styleSheet = document.createElement('style');
+styleSheet.innerText = toastStyles;
+document.head.appendChild(styleSheet);
 
 const Signin = () => {
   const { login } = useContext(AuthContext);
@@ -22,7 +56,6 @@ const Signin = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setError("");
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -30,15 +63,111 @@ const Signin = () => {
       const res = await axios.post("http://localhost:5000/api/auth/signin", formData);
       console.log("Login Response:", res.data);
       login(res.data);
-      if (loginFromInterview) 
-      {
+      if (loginFromInterview) {
         setLoginFromInterview(false); 
         navigate("/interviewexp");
-      } 
-      else
-      {
+      } else {
         navigate("/dashboard");
       }
+
+      // Enhanced Toast Notification
+      toast.success(
+        <div style={{
+          position: 'relative',
+          overflow: 'hidden',
+          padding: '16px 24px',
+        }}>
+          {/* Animated border gradient */}
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            borderRadius: '16px',
+            background: 'linear-gradient(45deg, #3b82f6, #60a5fa, #a5b4fc)',
+            animation: 'border-pulse 3s ease infinite',
+            zIndex: -1,
+          }} />
+          
+          {/* Floating particles */}
+          {['✨', '🌟', '🎊'].map((emoji, i) => (
+            <div key={i} style={{
+              position: 'absolute',
+              fontSize: '20px',
+              animation: `float ${3 + i}s infinite`,
+              top: `${Math.random() * 80 + 10}%`,
+              left: `${Math.random() * 80 + 10}%`,
+              opacity: 0.6,
+            }}>
+              {emoji}
+            </div>
+          ))}
+          
+          {/* Main content */}
+          <div style={{
+            position: 'relative',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            zIndex: 1,
+          }}>
+            {/* Bouncing icon */}
+            <div style={{
+              animation: 'bounce 1.5s infinite',
+              fontSize: '28px',
+            }}>
+              🎉
+            </div>
+            
+            {/* Text with fade-in effect */}
+            <div style={{
+              animation: 'text-glow 2s ease-in-out infinite',
+              fontWeight: 'bold',
+              background: 'linear-gradient(45deg, #fff, #e0f2fe)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+            }}>
+              Login Successful!
+            </div>
+          </div>
+
+          {/* Shine effect */}
+          <div style={{
+            position: 'absolute',
+            top: '-50%',
+            left: '-50%',
+            width: '200%',
+            height: '200%',
+            background: `linear-gradient(
+              45deg,
+              transparent 25%,
+              rgba(255, 255, 255, 0.1) 50%,
+              transparent 75%
+            )`,
+            animation: 'shine 3s infinite',
+            transform: 'rotate(45deg)',
+          }} />
+        </div>,
+        {
+          duration: 4000,
+          style: {
+            background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.9), rgba(96, 165, 250, 0.9))',
+            backdropFilter: 'blur(8px)',
+            border: '2px solid rgba(255, 255, 255, 0.1)',
+            boxShadow: '0 8px 32px rgba(31, 38, 135, 0.37)',
+            borderRadius: '16px',
+            color: 'white',
+          },
+          ariaProps: {
+            style: {
+              position: 'relative',
+              overflow: 'visible',
+            }
+          }
+        }
+      );
+
     } catch (err) {
       setError(err.response?.data?.message || "Invalid credentials");
       setIsSubmitting(false);

@@ -3,7 +3,7 @@ import axios from "axios";
 import { AuthContext } from "../Context/AuthContext";
 import { FaCalendar, FaSchool, FaBuilding, FaPlus, FaTimes, FaInfoCircle, FaLightbulb, FaStar } from "react-icons/fa";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
-
+import { toast } from 'react-hot-toast'
 const InterviewExperienceForm = () => {
     const { user } = useContext(AuthContext);
     const [companies, setCompanies] = useState([]);
@@ -122,7 +122,21 @@ const handleSubmit = async (e) => {
             payload,
             { headers: { Authorization: `Bearer ${token}` } }
         );
-
+        toast.success("Response Submitted Successfully!", {
+            icon: '🚀',
+            style: {
+              borderRadius: '12px',
+              background: 'linear-gradient(135deg, #3b82f6, #60a5fa)', // Smooth blue gradient
+              color: '#fff', // White text for contrast
+              border: '2px solid #1e3a8a', // Dark blue border for emphasis
+              boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.2)', // Soft shadow for depth
+              padding: '12px 16px',
+              fontWeight: 'bold',
+              fontSize: '16px',
+              textAlign: 'center',
+            },
+          });
+          
         setIsSubmitted(true);
     } catch (err) {
         alert(

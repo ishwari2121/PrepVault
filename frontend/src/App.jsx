@@ -14,7 +14,8 @@ import UserNavbar from "./components/UserNavbar";
 import { AuthProvider } from "./Context/AuthContext";
 import { createContext, useState } from "react";
 import InterviewDetail from "./components/InterviewDetail";
-
+import { Toaster} from 'react-hot-toast'
+import CommonQuestion from "../src/components/CommonQuestion";
 // ✅ Create and export context
 export const LoginFromInterviewExp = createContext();
 
@@ -37,8 +38,10 @@ function Layout() {
         <Route path="/company/:companyName" element={<CompanyDetails />} />
         <Route path="/question-answer" element={<QuesAns />} />
         <Route path="/interview/:id" element={<InterviewDetail />} />
+        <Route path="/commonQuestion" element={<CommonQuestion/>} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
+      <Toaster />
     </LoginFromInterviewExp.Provider>
   );
 }
