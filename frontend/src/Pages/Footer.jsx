@@ -53,8 +53,8 @@ const Footer = () => {
                         <ul className="space-y-2">
                             <li><NavLink to="/" className="text-gray-300 hover:text-cyan-400 transition-colors">Home</NavLink></li>
                             <li><NavLink to="/companies" className="text-gray-300 hover:text-cyan-400 transition-colors">Company Profiles</NavLink></li>
-                            <li><NavLink to="#" className="text-gray-300 hover:text-cyan-400 transition-colors">Share Interview</NavLink></li>
-                            <li><NavLink to="#" className="text-gray-300 hover:text-cyan-400 transition-colors">Question Bank</NavLink></li>
+                            <li><NavLink to="/interviewexp" className="text-gray-300 hover:text-cyan-400 transition-colors">Share Interview</NavLink></li>
+                            <li><NavLink to="/commonQuestion" className="text-gray-300 hover:text-cyan-400 transition-colors">Question Bank</NavLink></li>
                         </ul>
                     </motion.div>
 
@@ -65,6 +65,7 @@ const Footer = () => {
                     >
                         <h3 className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
                             Contact Us
+                            +
                         </h3>
                         <ul className="space-y-2">
                             <li className="text-gray-300">Email: PrepVault@gmail.com</li>

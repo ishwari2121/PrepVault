@@ -5,7 +5,7 @@ const commonQuestionSchema = new Schema({
   type: {
     type: String,
     required: true,
-    enum: ['technical', 'behavioral', 'hr', 'coding'],
+    enum: ['technical', 'Aptitude', 'hr', 'coding'],
     default: 'technical'
   },
   question: {

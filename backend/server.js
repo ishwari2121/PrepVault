@@ -5,9 +5,8 @@ import cors from "cors";
 import authRoutes from "./routes/authRoutes.js";
 import comroutes from "./routes/Companyroutes.js";
 import interview from "./routes/InterviewExpRoutes.js";
-// import CommonQuestionRoute from "./routes/CommonQuestionRoute.js"; // Ensure correct filename
 import connect  from "./routes/CommonQuestionRoute.js";
-
+import MCQRoute from './routes/MCQRoute.js'
 dotenv.config();
 
 const app = express();
@@ -18,6 +17,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/companies", comroutes);
 app.use("/api/interviewExp", interview);
 app.use("/api/commonQuestions", connect); // Use correctly named import
+app.use("/api/MCQ",MCQRoute);
 
 mongoose
   .connect(process.env.MONGO_URI)

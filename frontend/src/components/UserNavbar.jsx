@@ -89,7 +89,7 @@ const Navbar = () => {
                     >
                         <FaRobot className="h-5 w-5 text-indigo-500 transition-transform duration-300 hover:scale-110 hover:text-indigo-400" />
                         <span className="max-md:hidden relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-indigo-500 after:transition-all after:duration-300 hover:after:w-full">
-                            LLM Assistant
+                            Resume Analyzer
                         </span>
                     </NavLink>
                 </div>
