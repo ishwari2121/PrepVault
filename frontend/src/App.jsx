@@ -3,7 +3,7 @@ import Signup from "./Pages/Signup";
 import Signin from "./Pages/Signin";
 import Home from "./Pages/Home";
 import Navbar from "./Pages/NavBar";
-import LLM from "./Pages/LLM";
+import LLM from "./Pages/ResumeAnalyzer";
 import Interview from "./Pages/InterviewExp";
 import Companies from "./Pages/Companies";
 import SharedInterview from "./Pages/SharedInterview";
