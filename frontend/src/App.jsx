@@ -13,16 +13,17 @@ import UserNavbar from "./components/UserNavbar";
 import { AuthProvider } from "./Context/AuthContext";
 import { createContext, useState } from "react";
 import InterviewDetail from "./components/InterviewDetail";
-import { Toaster} from 'react-hot-toast'
+import { Toaster } from "react-hot-toast";
 import CommonQuestion from "../src/components/CommonQuestion";
-import ADD_questions from "./Pages/ADD_questions"
+import ADD_questions from "./Pages/ADD_questions";
+import DeveloperPage from "./Pages/DeveloperPage";
 
 // ✅ Create and export context
 export const LoginFromInterviewExp = createContext();
 
 function Layout() {
   const [loginFromInterview, setLoginFromInterview] = useState(false);
-  
+
   return (
     <LoginFromInterviewExp.Provider value={{ loginFromInterview, setLoginFromInterview }}>
       <UserNavbar />
@@ -33,16 +34,17 @@ function Layout() {
         <Route path="/signin/commonQuestion?category=technical" element={<Signin />} />
         <Route path="/signin/addAns/:id" element={<Signin />} />
         <Route path="/dashboard" element={<Home />} />
-        <Route path="/resumeAnalyzer" element={<ResumeAnalyzer/>} />
+        <Route path="/resumeAnalyzer" element={<ResumeAnalyzer />} />
         <Route path="/interviewexp" element={<Interview />} />
         <Route path="/companies" element={<Companies />} />
-        <Route path="/stories" element={<SharedInterview/>} />
+        <Route path="/stories" element={<SharedInterview />} />
         <Route path="/company/:companyName" element={<CompanyDetails />} />
         <Route path="/interview/:id" element={<InterviewDetail />} />
-        <Route path="/admin" element={<ADD_questions/>} />
-        <Route path="/commonQuestion" element={<CommonQuestion/>} />
-        <Route path="/answer/:id" element={<QuesAns/>} />
+        <Route path="/admin" element={<ADD_questions />} />
+        <Route path="/commonQuestion" element={<CommonQuestion />} />
+        <Route path="/answer/:id" element={<QuesAns />} />
         <Route path="*" element={<ErrorPage />} />
+        <Route path="/developer" element={<DeveloperPage />} />
       </Routes>
       <Toaster />
     </LoginFromInterviewExp.Provider>
