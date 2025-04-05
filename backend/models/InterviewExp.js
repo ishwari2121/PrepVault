@@ -14,7 +14,6 @@ const InterviewExperienceSchema = new mongoose.Schema({
     },
     company: {
         type: String,
-        enum: ["Pubmatic", "Bloomberg", "Barclays", "HSBC", "NICE"],
         required: true,
     },
     totalRounds: {

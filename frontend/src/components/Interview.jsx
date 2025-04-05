@@ -87,12 +87,21 @@ const handleSubmit = async (e) => {
     setIsSubmitting(true);
     
     try {
-        const token = JSON.parse(localStorage.getItem("user"))?.token;
-        if (!token) {
+        const userData = localStorage.getItem("user");
+        console.log("User Data from Local Storage:", userData);
+        
+        const token = userData ? JSON.parse(userData).token : null;
+        console.log("Extracted Token:", token);
+                if (!token) {
             alert("User is not authenticated.");
             return;
         }
 
+        const headers = {
+            Authorization: token ? `Bearer ${token}` : "",
+        };
+
+        console.log("Headers being sent:", headers); 
         // Validate all rounds have content
         if (formData.rounds.some(round => !round.experience.trim())) {
             throw new Error("Please fill all interview round experiences");
@@ -120,8 +129,14 @@ const handleSubmit = async (e) => {
         await axios.post(
             "http://localhost:5000/api/interviewExp/submit-experience",
             payload,
-            { headers: { Authorization: `Bearer ${token}` } }
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                }
+            }
         );
+        
         toast.success("Response Submitted Successfully!", {
             icon: '🚀',
             style: {

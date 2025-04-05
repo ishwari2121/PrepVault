@@ -30,6 +30,10 @@ app.use("/api/interviewExp", interview);
 app.use("/api/commonQuestions", connect);
 app.use("/api/MCQ", MCQRoute);
 
+
+
+
+
 app.post("/analyze", upload.single("resume"), async (req, res) => {
   try {
     const { jobDescription } = req.body;
