@@ -2,11 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Signup from "./Pages/Signup";
 import Signin from "./Pages/Signin";
 import Home from "./Pages/Home";
-<<<<<<< HEAD
-import Navbar from "./Pages/NavBar";
-import LLM from "./Pages/ResumeAnalyzer";
-=======
->>>>>>> 1d71cd032dc781719e485e5af2e6d8e3161c9067
+import ResumeAnalyzer from "./Pages/ResumeAnalyzer";
 import Interview from "./Pages/InterviewExp";
 import Companies from "./Pages/Companies";
 import SharedInterview from "./Pages/SharedInterview";
@@ -37,13 +33,11 @@ function Layout() {
         <Route path="/signin/commonQuestion?category=technical" element={<Signin />} />
         <Route path="/signin/addAns/:id" element={<Signin />} />
         <Route path="/dashboard" element={<Home />} />
-        {/* <Route path="/LLM" element={<ResumeAnalyzer/>} /> */}
+        <Route path="/resumeAnalyzer" element={<ResumeAnalyzer/>} />
         <Route path="/interviewexp" element={<Interview />} />
         <Route path="/companies" element={<Companies />} />
-        {/* <Route path="/interviews" element={<SharedInterview />} /> */}
         <Route path="/stories" element={<SharedInterview/>} />
         <Route path="/company/:companyName" element={<CompanyDetails />} />
-        {/* <Route path="/question-answer" element={<QuesAns />} /> */}
         <Route path="/interview/:id" element={<InterviewDetail />} />
         <Route path="/admin" element={<ADD_questions/>} />
         <Route path="/commonQuestion" element={<CommonQuestion/>} />

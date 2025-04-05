@@ -6,15 +6,11 @@ import authRoutes from "./routes/authRoutes.js";
 import comroutes from "./routes/companyRoutes.js";
 import interview from "./routes/InterviewExpRoutes.js";
 import connect from "./routes/CommonQuestionRoute.js";
-<<<<<<< HEAD
 import MCQRoute from "./routes/MCQRoute.js";
 import multer from "multer";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import fs from "fs/promises";
 import pdf from "pdf-parse";
-=======
-import MCQRoute from './routes/MCQRoute.js';
->>>>>>> 1d71cd032dc781719e485e5af2e6d8e3161c9067
 
 dotenv.config();
 
@@ -33,8 +29,6 @@ app.use("/api/companies", comroutes);
 app.use("/api/interviewExp", interview);
 app.use("/api/commonQuestions", connect);
 app.use("/api/MCQ", MCQRoute);
-<<<<<<< HEAD
-
 
 
 
@@ -122,8 +116,6 @@ app.post("/analyze", upload.single("resume"), async (req, res) => {
     res.status(500).json({ error: "An error occurred" });
   }
 });
-=======
->>>>>>> 1d71cd032dc781719e485e5af2e6d8e3161c9067
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log("✅ MongoDB Connected"))
