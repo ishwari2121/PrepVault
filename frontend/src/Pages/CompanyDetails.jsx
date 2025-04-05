@@ -17,18 +17,25 @@ import {
 } from "react-icons/fa";
 
 const CompanyDetails = () => {
-
     const { companyName } = useParams();
     const [company, setCompany] = useState(null);
-    const [view, setView] = useState(null); // "eligibility" or "recruitment"
+    const [view, setView] = useState(null);
     const [selectedYear, setSelectedYear] = useState(null);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 600);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 600);
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     useEffect(() => {
         axios
         .get(`http://localhost:5000/api/companies/${companyName}`)
         .then((response) => {
             setCompany(response.data);
-            console.log("Company Data:", response.data); // Debugging
         })
         .catch((error) => console.error("Error fetching company details:", error));
     }, [companyName]);
@@ -48,28 +55,27 @@ const CompanyDetails = () => {
         );
     }
 
-
-
     const itemVariants = {
-        hidden: { opacity: 0, x: -20,y: 20  },
+        hidden: { opacity: 0, x: -20, y: 20 },
         visible: { 
-        opacity: 1, 
-        x: 0,
-        transition: { 
-            type: "spring",
-            stiffness: 120,
-            damping: 14
+            opacity: 1, 
+            x: 0,
+            y: 0,
+            transition: { 
+                type: "spring",
+                stiffness: 120,
+                damping: 14
+            }
         }
-        },
-        visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 120 } },
     };
+
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
     };
 
     return (
-        <div className="min-h-screen p-8 bg-gradient-to-br from-[#0f172a] to-[#1e293b]">
+        <div className="min-h-screen p-4 sm:p-8 bg-gradient-to-br from-[#0f172a] to-[#1e293b]">
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -77,25 +83,26 @@ const CompanyDetails = () => {
             className="max-w-7xl mx-auto"
         >
             {/* Company Name */}
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-400 to-blue-500 bg-clip-text text-transparent mb-8">
+            <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-indigo-400 to-blue-500 bg-clip-text text-transparent mb-6 sm:mb-8">
             {company.name}
             </h1>
 
+            {/* View Buttons - Stacked on mobile */}
             <motion.div
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="flex gap-4 mb-8"
+            className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-6 sm:mb-8"
             >
             <motion.button
                 variants={itemVariants}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className={`px-6 py-3 rounded-lg transition-all duration-300 ${
+                className={`px-4 py-2 sm:px-6 sm:py-3 rounded-lg transition-all duration-300 ${
                 view === "recruitment"
                     ? "bg-indigo-600 hover:bg-indigo-700"
                     : "bg-gray-700 hover:bg-gray-600"
-                } text-white font-semibold`}
+                } text-white font-semibold text-sm sm:text-base`}
                 onClick={() => setView("recruitment")}
             >
                 View Recruitment Process
@@ -104,17 +111,18 @@ const CompanyDetails = () => {
                 variants={itemVariants}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className={`px-6 py-3 rounded-lg transition-all duration-300 ${
+                className={`px-4 py-2 sm:px-6 sm:py-3 rounded-lg transition-all duration-300 ${
                 view === "eligibility"
                     ? "bg-green-600 hover:bg-green-700"
                     : "bg-gray-700 hover:bg-gray-600"
-                } text-white font-semibold`}
+                } text-white font-semibold text-sm sm:text-base`}
                 onClick={() => setView("eligibility")}
             >
                 View Eligibility Criteria
             </motion.button>
             </motion.div>
 
+            {/* Recruitment Process Section - Mobile Optimized */}
             <AnimatePresence>
                 {view === "recruitment" && (
                     <motion.div
@@ -122,29 +130,32 @@ const CompanyDetails = () => {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -20, scale: 0.98 }}
                     transition={{ type: "spring", duration: 0.5 }}
-                    className="mt-6 p-6 bg-gradient-to-br from-gray-900/80 to-indigo-900/20 backdrop-blur-xl rounded-2xl shadow-2xl border border-indigo-500/20"
+                    className="mt-4 sm:mt-6 p-4 sm:p-6 bg-gradient-to-br from-gray-900/80 to-indigo-900/20 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg sm:shadow-2xl border border-indigo-500/20"
                     >
-                    <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-blue-400 mb-8">
+                    <h2 className="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-blue-400 mb-6 sm:mb-8">
                         Recruitment Journey
                         <motion.span 
                         animate={{ rotate: [0, 20, -20, 0] }}
                         transition={{ repeat: Infinity, duration: 3 }}
-                        className="ml-3 inline-block"
+                        className="ml-2 sm:ml-3 inline-block"
                         >
                         🚀
                         </motion.span>
                     </h2>
 
                     <div className="relative">
-                        <motion.div
-                        className="absolute left-6 top-0 h-full w-1 bg-gradient-to-b from-indigo-500/30 to-blue-500/30 rounded-full"
-                        initial={{ scaleY: 0 }}
-                        animate={{ scaleY: 1 }}
-                        transition={{ duration: 1.5, ease: "circOut" }}
-                        />
+                        {/* Timeline line - hidden on mobile */}
+                        {!isMobile && (
+                            <motion.div
+                            className="absolute left-6 top-0 h-full w-1 bg-gradient-to-b from-indigo-500/30 to-blue-500/30 rounded-full"
+                            initial={{ scaleY: 0 }}
+                            animate={{ scaleY: 1 }}
+                            transition={{ duration: 1.5, ease: "circOut" }}
+                            />
+                        )}
 
                         <motion.div
-                        className="space-y-8"
+                        className="space-y-6 sm:space-y-8"
                         variants={containerVariants}
                         initial="hidden"
                         animate="visible"
@@ -158,108 +169,117 @@ const CompanyDetails = () => {
                                 <motion.div
                                     key={key}
                                     variants={itemVariants}
-                                    className="flex items-start gap-6 pl-16 relative group"
+                                    className={`flex items-start gap-4 ${isMobile ? '' : 'pl-16'} relative group`}
                                     whileInView="visible"
                                     viewport={{ once: true, margin: "0px 0px -100px 0px" }}
                                 >
-                                    <motion.div
-                                    className="absolute left-6 top-4 w-4 h-4 rounded-full bg-indigo-400 ring-4 ring-indigo-400/20"
-                                    initial={{ scale: 0 }}
-                                    animate={{ scale: 1 }}
-                                    transition={{ type: "spring", stiffness: 200 }}
-                                    whileHover={{ scale: 1.2 }}
-                                    />
-
-                                    <div className="absolute inset-0 -left-12 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <div className="absolute left-0 top-0 w-24 h-24 bg-indigo-500/10 rounded-full blur-3xl" />
-                                    </div>
-
-                                    <motion.div
-                                    whileHover={{ 
-                                        scale: 1.03,
-                                        boxShadow: "0 20px 40px -10px rgba(99, 102, 241, 0.15)"
-                                    }}
-                                    transition={{ type: "spring", stiffness: 300 }}
-                                    className="w-full p-6 bg-gradient-to-br from-gray-800/70 to-indigo-900/20 rounded-xl border border-indigo-500/30 shadow-2xl relative overflow-hidden"
-                                    >
-                                    <div className="absolute inset-0 rounded-xl border border-transparent [mask:linear-gradient(#fff_0_0)_padding-box,linear-gradient(#fff_0_0)]">
+                                    {/* Timeline dot - hidden on mobile */}
+                                    {!isMobile && (
                                         <motion.div
-                                        className="absolute inset-0 bg-gradient-to-r from-indigo-500/30 to-blue-500/30 opacity-50"
-                                        animate={{
-                                            backgroundPosition: ['0% 0%', '100% 100%']
-                                        }}
-                                        transition={{
-                                            repeat: Infinity,
-                                            duration: 5,
-                                            ease: "linear"
-                                        }}
+                                        className="absolute left-6 top-4 w-4 h-4 rounded-full bg-indigo-400 ring-4 ring-indigo-400/20"
+                                        initial={{ scale: 0 }}
+                                        animate={{ scale: 1 }}
+                                        transition={{ type: "spring", stiffness: 200 }}
+                                        whileHover={{ scale: 1.2 }}
                                         />
-                                    </div>
+                                    )}
 
-                                    <div className="flex items-start gap-4 relative">
-                                        {/* Animated Icon */}
-                                        <motion.div 
-                                        className="p-3 bg-indigo-500/10 rounded-lg backdrop-blur-sm"
-                                        whileHover={{ rotate: [0, 10, -10, 0] }}
-                                        transition={{ duration: 0.5 }}
-                                        >
-                                        {key === "companyDetails" && value.includes("http") ? (
-                                            <FaLink className="text-xl text-indigo-400" />
-                                        ) : (
-                                            <FaFileAlt className="text-xl text-indigo-400" />
-                                        )}
-                                        </motion.div>
-
-                                        {/* Content */}
-                                        <div className="flex-1">
-                                        <motion.h3
-                                            className="text-indigo-400 text-lg font-medium mb-2 capitalize drop-shadow-md"
-                                            whileHover={{ x: 5 }}
-                                        >
-                                            {key.replace(/([A-Z])/g, " $1")}
-                                        </motion.h3>
-
-                                        {key === "sampleQuestions" ? (
-                                            <motion.ul 
-                                            className="list-disc pl-6 space-y-2"
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
-                                            >
-                                            {value.map((question, qIndex) => (
-                                                <motion.li 
-                                                key={qIndex} 
-                                                className="text-gray-300"
-                                                whileHover={{ x: 5 }}
-                                                transition={{ type: "spring" }}
-                                                >
-                                                {question}
-                                                </motion.li>
-                                            ))}
-                                            </motion.ul>
-                                        ) : key === "companyDetails" && value.includes("http") ? (
-                                            <motion.a
-                                            href={value}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="text-indigo-400 hover:text-indigo-300 flex items-center gap-2 transition-colors group"
-                                            whileHover={{ scale: 1.05 }}
-                                            >
-                                            <span className="border-b border-transparent group-hover:border-indigo-400 transition-all">
-                                                Application Link
-                                            </span>
-                                            <FaExternalLinkAlt className="text-sm transition-transform group-hover:rotate-45" />
-                                            </motion.a>
-                                        ) : (
-                                            <motion.p 
-                                            className="text-gray-300 whitespace-pre-wrap"
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
-                                            >
-                                            {value}
-                                            </motion.p>
-                                        )}
+                                    {!isMobile && (
+                                        <div className="absolute inset-0 -left-12 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <div className="absolute left-0 top-0 w-24 h-24 bg-indigo-500/10 rounded-full blur-3xl" />
                                         </div>
-                                    </div>
+                                    )}
+
+                                    <motion.div
+                                        whileHover={{ 
+                                            scale: isMobile ? 1 : 1.03,
+                                            boxShadow: isMobile ? "none" : "0 20px 40px -10px rgba(99, 102, 241, 0.15)"
+                                        }}
+                                        transition={{ type: "spring", stiffness: 300 }}
+                                        className={`w-full p-4 sm:p-6 bg-gradient-to-br from-gray-800/70 to-indigo-900/20 rounded-lg sm:rounded-xl border border-indigo-500/30 shadow-lg sm:shadow-2xl relative overflow-hidden ${
+                                            isMobile ? 'ml-0' : ''
+                                        }`}
+                                    >
+                                        {!isMobile && (
+                                            <div className="absolute inset-0 rounded-xl border border-transparent [mask:linear-gradient(#fff_0_0)_padding-box,linear-gradient(#fff_0_0)]">
+                                                <motion.div
+                                                className="absolute inset-0 bg-gradient-to-r from-indigo-500/30 to-blue-500/30 opacity-50"
+                                                animate={{
+                                                    backgroundPosition: ['0% 0%', '100% 100%']
+                                                }}
+                                                transition={{
+                                                    repeat: Infinity,
+                                                    duration: 5,
+                                                    ease: "linear"
+                                                }}
+                                                />
+                                            </div>
+                                        )}
+
+                                        <div className="flex items-start gap-3 sm:gap-4 relative">
+                                            {/* Icon */}
+                                            <motion.div 
+                                            className={`p-2 sm:p-3 bg-indigo-500/10 rounded-md sm:rounded-lg ${isMobile ? 'backdrop-blur-xs' : 'backdrop-blur-sm'}`}
+                                            whileHover={{ rotate: [0, 10, -10, 0] }}
+                                            transition={{ duration: 0.5 }}
+                                            >
+                                            {key === "companyDetails" && value.includes("http") ? (
+                                                <FaLink className="text-lg sm:text-xl text-indigo-400" />
+                                            ) : (
+                                                <FaFileAlt className="text-lg sm:text-xl text-indigo-400" />
+                                            )}
+                                            </motion.div>
+
+                                            {/* Content */}
+                                            <div className="flex-1">
+                                            <motion.h3
+                                                className="text-indigo-400 text-base sm:text-lg font-medium mb-1 sm:mb-2 capitalize"
+                                                whileHover={{ x: isMobile ? 0 : 5 }}
+                                            >
+                                                {key.replace(/([A-Z])/g, " $1")}
+                                            </motion.h3>
+
+                                            {key === "sampleQuestions" ? (
+                                                <motion.ul 
+                                                className="list-disc pl-4 sm:pl-6 space-y-1 sm:space-y-2 text-sm sm:text-base"
+                                                initial={{ opacity: 0 }}
+                                                animate={{ opacity: 1 }}
+                                                >
+                                                {value.map((question, qIndex) => (
+                                                    <motion.li 
+                                                    key={qIndex} 
+                                                    className="text-gray-300"
+                                                    whileHover={{ x: isMobile ? 0 : 5 }}
+                                                    transition={{ type: "spring" }}
+                                                    >
+                                                    {question}
+                                                    </motion.li>
+                                                ))}
+                                                </motion.ul>
+                                            ) : key === "companyDetails" && value.includes("http") ? (
+                                                <motion.a
+                                                href={value}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-indigo-400 hover:text-indigo-300 flex items-center gap-1 sm:gap-2 transition-colors group text-sm sm:text-base"
+                                                whileHover={{ scale: isMobile ? 1 : 1.05 }}
+                                                >
+                                                <span className="border-b border-transparent group-hover:border-indigo-400 transition-all">
+                                                    Application Link
+                                                </span>
+                                                <FaExternalLinkAlt className="text-xs sm:text-sm transition-transform group-hover:rotate-45" />
+                                                </motion.a>
+                                            ) : (
+                                                <motion.p 
+                                                className="text-gray-300 whitespace-pre-wrap text-sm sm:text-base"
+                                                initial={{ opacity: 0 }}
+                                                animate={{ opacity: 1 }}
+                                                >
+                                                {value}
+                                                </motion.p>
+                                            )}
+                                            </div>
+                                        </div>
                                     </motion.div>
                                 </motion.div>
                                 );
@@ -269,9 +289,9 @@ const CompanyDetails = () => {
                     </div>
                     </motion.div>
                 )}
-                </AnimatePresence>
+            </AnimatePresence>
 
-            {/* Eligibility Criteria */}
+            {/* Eligibility Criteria Section (unchanged) */}
             <AnimatePresence>
                 {view === "eligibility" && (
                     <motion.div

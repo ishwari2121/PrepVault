@@ -101,7 +101,7 @@ const Navbar = () => {
                         </div>
                         <input
                             type="text"
-                            placeholder="Search questions, companies..."
+                            placeholder="Search by companies..."
                             value={searchQuery}
                             onChange={(e) => {
                                 setSearchQuery(e.target.value);

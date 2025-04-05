@@ -60,10 +60,8 @@ router.get('/id/:id', async (req, res) => {
 
 // Create new question
 router.post('/', async (req, res) => {
-    console.log("hello world")
   const { language, type, question, options, correctOption, defaultExplanation } = req.body;
-  console.log(req.body);
-  
+ 
   if (options.length !== 4) {
     return res.status(400).json({ message: 'Exactly 4 options required' });
   }
@@ -97,7 +95,7 @@ router.post('/:id/explanations', async (req, res) => {
     if (!username || !explanation) {
       return res.status(400).json({ message: 'Username and explanation are required' });
     }
-
+  
     question.userExplanations.push({
       username,
       explanation
@@ -161,9 +159,6 @@ router.delete('/:questionId/explanations/:explanationId', async (req, res) => {
       if (explanationIndex === -1) {
         return res.status(404).json({ message: 'Explanation not found' });
       }
-  
-      // Optional: Add authorization check here if needed
-      // For example, check if the requesting user owns this explanation
   
       question.userExplanations.splice(explanationIndex, 1);
       await question.save();

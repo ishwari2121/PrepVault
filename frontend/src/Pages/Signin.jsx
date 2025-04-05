@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiAlertCircle, FiMail, FiLock, FiLogIn } from "react-icons/fi";
 import { AuthContext } from "../Context/AuthContext";
@@ -47,9 +47,10 @@ const Signin = () => {
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
-
+  const {id} = useParams();
   useEffect(() => {
     console.log("Context in Signin:", loginFromInterview); 
+    console.log(id);
   }, []);
 
   const handleChange = (e) => {
@@ -66,7 +67,16 @@ const Signin = () => {
       if (loginFromInterview) {
         setLoginFromInterview(false); 
         navigate("/interviewexp");
-      } else {
+      }
+      else if(id === "commonQuestion?category=technical")
+      {
+        navigate("/commonQuestion?category=technical");
+      }
+      else if (id)
+      {
+        navigate(`/answer/${id}`)
+      } 
+      else {
         navigate("/dashboard");
       }
 

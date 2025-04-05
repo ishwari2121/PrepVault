@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 import CommonQuestion from  "../models/CommonQuestion.js"
-
+import mongoose from 'mongoose';
 router.get('/', async (req, res) => {
   try {
     const { type } = req.query;
@@ -131,7 +131,7 @@ router.post('/answers/:id', async (req, res) => {
           error: error.message 
         });
       }
-    });
+});
 
 // POST route to update votes for a specific answer
 router.post('/:questionId/answers/:answerId/vote', async (req, res) => {
@@ -194,4 +194,51 @@ router.post('/:questionId/answers/:answerId/vote', async (req, res) => {
     });
   }
 });
+
+router.delete('/:questionId/answers/:answerId', async (req, res) => {
+  try {
+    console.log("surbhi");
+    const { questionId, answerId } = req.params;
+
+    // Validate MongoDB IDs
+    if (!mongoose.Types.ObjectId.isValid(questionId) || 
+        !mongoose.Types.ObjectId.isValid(answerId)) {
+      return res.status(400).json({ error: 'Invalid ID format' });
+    }
+
+    // Find the question and verify answer exists
+    const question = await CommonQuestion.findById(questionId);
+    
+    if (!question) {
+      return res.status(404).json({ error: 'Question not found' });
+    }
+
+    const answerExists = question.answers.some(answer => 
+      answer._id.toString() === answerId
+    );
+
+    if (!answerExists) {
+      return res.status(404).json({ error: 'Answer not found' });
+    }
+
+    // Remove the answer using atomic operation
+    const updatedQuestion = await CommonQuestion.findByIdAndUpdate(
+      questionId,
+      { $pull: { answers: { _id: answerId } } },
+      { new: true }
+    );
+
+    res.status(200).json({
+      message: 'Answer deleted successfully',
+      updatedQuestion
+    });
+
+  } catch (error) {
+    res.status(500).json({ 
+      error: error.message,
+      message: 'Failed to delete answer' 
+    });
+  }
+});
+
 export default router;

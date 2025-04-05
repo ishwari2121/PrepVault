@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const TechnicalQues = () => {
     const [allMcq, setAllMcq] = useState([]);
@@ -13,37 +14,12 @@ const TechnicalQues = () => {
     const [user, setUser] = useState("");
     const [selectedOptions, setSelectedOptions] = useState({});
     const [showUserExplanations, setShowUserExplanations] = useState({});
-    const [submissionStatus, setSubmissionStatus] = useState({ loading: false, error: null, success: false });
-
-    const fetchAllMcq = async () => {
-        try {
-            const response = await axios.get("http://localhost:5000/api/MCQ");
-            setAllMcq(response.data);
-        } catch (error) {
-            console.error("Error fetching MCQs:", error);
-        }
-    };
-
-    useEffect(() => {
-        const storedUser = localStorage.getItem("user");
-        if (storedUser) {
-            const parsedUser = JSON.parse(storedUser);
-            setUser(parsedUser.username);
-            axios.defaults.headers.common['Authorization'] = `Bearer ${parsedUser.token}`;
-        }
-        fetchAllMcq();
-    }, []);
-
-    useEffect(() => {
-        if (selectedLanguage && selectedType) {
-            const filtered = allMcq.filter(mcq => 
-                mcq.language === selectedLanguage && 
-                mcq.type === selectedType
-            );
-            setFilteredMcqs(filtered);
-        }
-    }, [allMcq, selectedLanguage, selectedType]);
-
+    const [submissionStatus, setSubmissionStatus] = useState({ 
+        loading: false, 
+        error: null, 
+        success: false 
+    });
+    const navigate = useNavigate();
     const languageSubtypes = {
         'C++': ['OOP', 'Objects', 'Reference', 'Functions'],
         'Java': [
@@ -59,6 +35,58 @@ const TechnicalQues = () => {
             'Assertion'
         ]
     };
+
+    const fetchAllMcq = async () => {
+        try {
+            const response = await axios.get("http://localhost:5000/api/MCQ");
+            setAllMcq(response.data);
+        } catch (error) {
+            console.error("Error fetching MCQs:", error);
+        }
+    };
+
+    // Load initial state from localStorage
+    useEffect(() => {
+        const storedUser = localStorage.getItem("user");
+        const savedState = localStorage.getItem("technicalQuesState");
+
+        if (storedUser) {
+            const parsedUser = JSON.parse(storedUser);
+            setUser(parsedUser.username);
+            axios.defaults.headers.common['Authorization'] = `Bearer ${parsedUser.token}`;
+        }
+
+        if (savedState) {
+            try {
+                const { selectedLanguage: savedLang, selectedType: savedType } = JSON.parse(savedState);
+                setSelectedLanguage(savedLang);
+                setSelectedType(savedType);
+            } catch (error) {
+                console.error("Error parsing saved state:", error);
+            }
+        }
+
+        fetchAllMcq();
+    }, []);
+
+    // Save state to localStorage
+    useEffect(() => {
+        localStorage.setItem(
+            "technicalQuesState",
+            JSON.stringify({ selectedLanguage, selectedType })
+        );
+    }, [selectedLanguage, selectedType]);
+
+    // Filter MCQs when selections or data changes
+    useEffect(() => {
+        if (selectedLanguage && selectedType) {
+            const filtered = allMcq.filter(mcq => 
+                mcq.language === selectedLanguage && 
+                mcq.type === selectedType
+            );
+            setFilteredMcqs(filtered);
+        }
+    }, [allMcq, selectedLanguage, selectedType]);
 
     const handleTypeSelect = (type) => {
         setSelectedType(type);
@@ -79,6 +107,11 @@ const TechnicalQues = () => {
     };
 
     const handleShareClick = (mcqId) => {
+        const user = JSON.parse(localStorage.getItem("user"));
+        if(!user)
+        {
+            navigate("/signin/commonQuestion?category=technical")
+        }
         setShowExplanationForm(prev => prev === mcqId ? null : mcqId);
         setUserExplanation('');
         setSubmissionStatus({ loading: false, error: null, success: false });
@@ -92,10 +125,7 @@ const TechnicalQues = () => {
         try {
             await axios.post(
                 `http://localhost:5000/api/MCQ/${mcqId}/explanations`,
-                {
-                    explanation: userExplanation,
-                    username: user
-                }
+                { explanation: userExplanation, username: user }
             );
 
             await fetchAllMcq();
@@ -143,43 +173,31 @@ const TechnicalQues = () => {
 
     return (
         <div className="p-6 bg-gray-900 min-h-screen">
-            <div className="flex gap-4 mb-8">
-                <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className={`px-6 py-2 rounded-lg ${
-                        selectedLanguage === 'C++' 
-                            ? 'bg-blue-600 text-white' 
-                            : 'bg-gray-700 text-gray-300'
-                    }`}
-                    onClick={() => {
-                        setSelectedLanguage('C++');
-                        setSelectedType(null);
-                        setAnsweredQuestions({});
-                        setSelectedOptions({});
-                    }}
-                >
-                    C++
-                </motion.button>
-                <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className={`px-6 py-2 rounded-lg ${
-                        selectedLanguage === 'Java' 
-                            ? 'bg-blue-600 text-white' 
-                            : 'bg-gray-700 text-gray-300'
-                    }`}
-                    onClick={() => {
-                        setSelectedLanguage('Java');
-                        setSelectedType(null);
-                        setAnsweredQuestions({});
-                        setSelectedOptions({});
-                    }}
-                >
-                    Java
-                </motion.button>
+            {/* Language Selection */}
+            <div className="flex flex-wrap gap-4 mb-8">
+                {['C++', 'Java'].map((lang) => (
+                    <motion.button
+                        key={lang}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className={`px-6 py-2 rounded-lg ${
+                            selectedLanguage === lang 
+                                ? 'bg-blue-600 text-white' 
+                                : 'bg-gray-700 text-gray-300'
+                        }`}
+                        onClick={() => {
+                            setSelectedLanguage(lang);
+                            setSelectedType(null);
+                            setAnsweredQuestions({});
+                            setSelectedOptions({});
+                        }}
+                    >
+                        {lang}
+                    </motion.button>
+                ))}
             </div>
 
+            {/* Subtype / Topic Selection */}
             {!selectedLanguage ? (
                 <div className="text-center text-gray-400 text-xl">
                     Please select a programming language
@@ -188,7 +206,7 @@ const TechnicalQues = () => {
                 <motion.div 
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="grid grid-cols-2 gap-4"
+                    className="grid grid-cols-1 sm:grid-cols-2 gap-4"
                 >
                     {languageSubtypes[selectedLanguage].map((type) => (
                         <motion.div
@@ -204,7 +222,8 @@ const TechnicalQues = () => {
                 </motion.div>
             ) : (
                 <div>
-                    <div className="flex items-center gap-4 mb-6">
+                    {/* Back Button and Heading */}
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
                         <button
                             className="text-gray-400 hover:text-blue-400"
                             onClick={() => {
@@ -258,7 +277,7 @@ const TechnicalQues = () => {
                                         {mcq.question}
                                     </h3>
                                     
-                                    <div className="grid grid-cols-2 gap-4 mb-6">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                                         {mcq.options.map((option, index) => (
                                             <motion.div
                                                 key={index}
@@ -321,7 +340,7 @@ const TechnicalQues = () => {
                                                         </div>
                                                     )}
 
-                                                    <div className="flex justify-end gap-3">
+                                                    <div className="flex flex-col sm:flex-row justify-end gap-3">
                                                         <button
                                                             className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-500 disabled:opacity-50"
                                                             onClick={() => setShowExplanationForm(null)}
@@ -407,7 +426,7 @@ const TechnicalQues = () => {
                                                             transition={{ duration: 0.3 }}
                                                             className="mt-4 space-y-4"
                                                         >
-                                                            <div className="flex justify-between items-center">
+                                                            <div className="flex flex-col sm:flex-row sm:items-center justify-between">
                                                                 <h4 className="text-blue-300 font-medium">Community Explanations</h4>
                                                                 <button
                                                                     onClick={() => refreshExplanations(mcq._id)}
