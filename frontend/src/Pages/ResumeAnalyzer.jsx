@@ -122,8 +122,10 @@ function App() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12 relative overflow-hidden"
         >
+
+
           <motion.div
-            className="absolute inset-0 opacity-20"
+            className="absolute inset-0"
             animate={{
               background: [
                 'linear-gradient(45deg, #00f2ff, #4d00ff)',
@@ -131,6 +133,7 @@ function App() {
               ],
             }}
             transition={{ duration: 8, repeat: Infinity, repeatType: "reverse" }}
+            style={{ opacity: 0 }} // Make the box transparent
           />
           
           <h1 className="text-5xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent mb-4 relative z-10">
@@ -285,14 +288,10 @@ function App() {
             }`}
           >
             {loading ? (
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ repeat: Infinity, duration: 1 }}
-                className="flex items-center gap-3"
-              >
+              <div className="flex items-center gap-3">
                 <FiLoader className="animate-spin" />
                 Analyzing...
-              </motion.div>
+              </div>
             ) : (
               <>
                 <FaMagic className="inline-block mr-3" />

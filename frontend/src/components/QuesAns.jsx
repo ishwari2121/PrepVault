@@ -385,10 +385,13 @@ const QuesAns = () => {
                 variants={floatingButtonVariants}
                 initial="hidden"
                 animate="visible"
-                whileHover="hover"
+                whileHover={{
+                    scale: 1.1,
+                    transition: { duration: 0.3, ease: "easeInOut" } // Smooth ease-in-out animation
+                }}
                 onClick={handleAddAnswerBtn}
             >
-                <FaPlus className="text-xl text-white transition-transform group-hover:rotate-90" />
+                <FaPlus className="text-xl text-white" /> {/* Removed rotating animation */}
                 <span className="text-white font-semibold pr-2">Add Answer</span>
             </motion.button>
 

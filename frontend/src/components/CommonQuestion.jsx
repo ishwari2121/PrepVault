@@ -176,7 +176,7 @@ const CommonQuestion = () => {
                     variants={slideUp}
                   >
                     <span className={`mr-3 ${isActive ? 'text-cyan-400' : 'text-gray-400'}`}>
-                      {category === 'Technical' && <FaCommentDots />}
+                      {category === 'Technical' && <FaCode />} {/* Revert to original icon */}
                       {category === 'Coding' && <FaCode />}
                       {category === 'HR' && <FaUsers />}
                       {category === 'Aptitude' && <FaLightbulb />}
