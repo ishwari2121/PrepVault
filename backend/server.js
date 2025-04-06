@@ -25,13 +25,21 @@ app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ 
+    error: 'Something broke!',
+    message: err.message
+  });
+});
+
+
 app.use("/api/auth", authRoutes);
 app.use("/api/companies", comroutes);
 app.use("/api/interviewExp", interview);
 app.use("/api/commonQuestions", connect);
 app.use("/api/MCQ", MCQRoute);
 app.use("/api/resume",AnalysisRoute);
-
 
 
 app.post("/analyze", upload.single("resume"), async (req, res) => {
@@ -109,9 +117,10 @@ app.post("/analyze", upload.single("resume"), async (req, res) => {
         - ... (continue listing several recommendations to enhance the resume)
 
         Your analysis should be professional, in-depth, and formatted with clear headings and bullet points to ensure readability. Provide as many detailed key points as possible, ensuring the response is comprehensive and spans at least 30 lines.
-        and if there is a other that resume is uploaded if you think like this then tell user not to upload any compressed pdf upload only of original size and do not generate anyting just display message with asking user to upload resume only in only pdf forms.
-
-        and if that pdf is not resume then provide smmary of the pdf in 4 to 6 lines
+        If the uploaded file is not a resume, summarize the content of the PDF in 4 to 6 lines.
+        If the uploaded PDF is compressed or scanned, do not proceed—just show a clear message: “Please upload the original PDF resume, not a compressed or scanned version.”
+        The uploaded file must strictly be a resume in .pdf format. If not, display: “Only PDF resume files are supported. Please upload your resume in PDF format.”
+        If the user enters a question or casual text in the "Job Description" section instead of an actual job description, respond in detail and let them know: “This section is for job descriptions only. If you have questions, please ask them in the appropriate chat area.”
 `;
 
 

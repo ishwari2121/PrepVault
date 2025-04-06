@@ -1,52 +1,38 @@
 import mongoose from 'mongoose';
 
-const AnalysisSchema = new mongoose.Schema({
+const analysisSchema = new mongoose.Schema({
   username: {
     type: String,
-    required: [true, 'Username is required'],
-    minlength: [3, 'Username must be at least 3 characters'],
-    maxlength: [30, 'Username cannot exceed 30 characters']
-  },
-  jobDescription:{
-    type : String,
-    required : true,
-  },
-  analysis: {
-    type: String,
-    required: [true, 'Analysis text is required'],
+    required: true
   },
   pdf: {
-    type: Buffer,
-    required: [true, 'PDF file is required']
+    data: {
+      type: Buffer,
+      required: true
+    },
+    contentType: {
+      type: String,
+      required: true
+    },
+    filename: {
+      type: String,
+      required: true
+    }
   },
-  pdftext: {
+  jobDescription: {
     type: String,
-    required: [true, 'Extracted PDF text is required'],
+    required: true
+  },
+  response: {
+    type: String,
+    required: true
   },
   createdAt: {
     type: Date,
     default: Date.now
   }
-}, {
-  // Removed timestamps and only keep createdAt
-  toJSON: { virtuals: true },
-  toObject: { virtuals: true }
 });
 
-// Indexes and virtual remain the same
-AnalysisSchema.index({
-  username: 'text',
-  analysis: 'text',
-  pdftext: 'text',
-  jobDescription : 'text',
-});
+const Analysis = mongoose.model('Analysis', analysisSchema);
 
-AnalysisSchema.virtual('formattedDate').get(function() {
-  return this.createdAt.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
-});
-
-export default mongoose.model('ResumeAnalysis', AnalysisSchema);
+export default Analysis;

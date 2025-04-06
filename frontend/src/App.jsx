@@ -31,6 +31,7 @@ function Layout() {
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
+        <Route path="/:id/signin" element={<Signin />} />
         <Route path="/signin/commonQuestion?category=technical" element={<Signin />} />
         <Route path="/signin/addAns/:id" element={<Signin />} />
         <Route path="/dashboard" element={<Home />} />
