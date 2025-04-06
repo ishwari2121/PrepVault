@@ -225,7 +225,7 @@ const TechnicalQues = () => {
                     {/* Back Button and Heading */}
                     <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
                         <button
-                            className="text-gray-400 hover:text-blue-400"
+                            className="text-gray-400 hover:text-blue-400 cursor-pointer"
                             onClick={() => {
                                 setSelectedType(null);
                                 setAnsweredQuestions({});
@@ -254,7 +254,7 @@ const TechnicalQues = () => {
                                 >
                                     <button
                                         onClick={() => handleShareClick(mcq._id)}
-                                        className="absolute top-4 right-4 text-blue-400 hover:text-blue-300 transition-colors"
+                                        className="absolute top-4 right-4 text-blue-400 hover:text-blue-300 transition-colors cursor-pointer"
                                         title="Share your explanation"
                                     >
                                         <svg
