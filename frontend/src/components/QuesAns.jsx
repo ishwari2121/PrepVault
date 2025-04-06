@@ -330,10 +330,10 @@ const QuesAns = () => {
 
                                 <div className="flex justify-center gap-4 mt-8">
                                     <motion.button
-                                        className="px-6 py-3 rounded-xl font-semibold flex items-center gap-2 bg-red-500/90 text-white"
+                                        className="px-6 py-3 rounded-xl font-semibold flex items-center gap-2 text-white"
                                         variants={buttonVariants}
-                                        whileHover="hover"
-                                        whileTap="tap"
+                                        whileHover={{ scale: 1.05, backgroundColor: '#DC2626' }} // Explicitly define hover state
+                                        whileTap={{ scale: 0.95 }}
                                         onClick={handleDeleteAnswer}
                                         initial={{ scale: 0.9 }}
                                         animate={{ 
@@ -344,11 +344,7 @@ const QuesAns = () => {
                                                 scale: { type: 'spring', stiffness: 300 }
                                             }
                                         }}
-                                        whileHover={{ 
-                                            scale: 1.05,
-                                            backgroundColor: '#DC2626'
-                                        }}
-                                        whileTap={{ scale: 0.95 }}
+                                        style={{ backgroundColor: '#EF4444' }}
                                     >
                                         <motion.span
                                             animate={{ x: [0, 5, 0] }}
@@ -358,22 +354,21 @@ const QuesAns = () => {
                                         </motion.span>
                                     </motion.button>
                                     <motion.button
-                                        className="px-6 py-3 rounded-xl font-semibold flex items-center gap-2 bg-gray-700/80 text-cyan-100"
+                                        className="px-6 py-3 rounded-xl font-semibold flex items-center gap-2 text-cyan-100"
                                         variants={buttonVariants}
-                                        whileHover="hover"
-                                        whileTap="tap"
+                                        whileHover={{ scale: 1.05, backgroundColor: '#3B82F6', color: '#FFFFFF' }} // Explicitly define hover state
+                                        whileTap={{ scale: 0.95 }}
                                         onClick={() => setShowDeleteConfirm(false)}
                                         initial={{ scale: 0.9 }}
                                         animate={{ 
                                             scale: 1,
-                                            transition: { type: 'spring', stiffness: 300 }
+                                            backgroundColor: 'rgba(55,65,81,0.8)',
+                                            transition: { 
+                                                backgroundColor: { duration: 0.3 },
+                                                scale: { type: 'spring', stiffness: 300 }
+                                            }
                                         }}
-                                        whileHover={{ 
-                                            scale: 1.05,
-                                            backgroundColor: '#3B82F6',
-                                            color: '#FFFFFF'
-                                        }}
-                                        whileTap={{ scale: 0.95 }}
+                                        style={{ backgroundColor: 'rgba(55,65,81,0.8)' }}
                                     >
                                         Cancel
                                     </motion.button>
@@ -390,10 +385,13 @@ const QuesAns = () => {
                 variants={floatingButtonVariants}
                 initial="hidden"
                 animate="visible"
-                whileHover="hover"
+                whileHover={{
+                    scale: 1.1,
+                    transition: { duration: 0.3, ease: "easeInOut" } // Smooth ease-in-out animation
+                }}
                 onClick={handleAddAnswerBtn}
             >
-                <FaPlus className="text-xl text-white transition-transform group-hover:rotate-90" />
+                <FaPlus className="text-xl text-white" /> {/* Removed rotating animation */}
                 <span className="text-white font-semibold pr-2">Add Answer</span>
             </motion.button>
 

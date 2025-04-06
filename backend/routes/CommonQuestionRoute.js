@@ -197,7 +197,7 @@ router.post('/:questionId/answers/:answerId/vote', async (req, res) => {
 
 router.delete('/:questionId/answers/:answerId', async (req, res) => {
   try {
-    console.log("surbhi");
+
     const { questionId, answerId } = req.params;
 
     // Validate MongoDB IDs
