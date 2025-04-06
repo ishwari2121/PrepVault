@@ -745,21 +745,17 @@ const AdminCompanyDashboard = () => {
                         <label className="block text-gray-700 mb-2" htmlFor="degree">
                           Degree
                         </label>
-                        <select
-                          id="degree"
-                          name="degree"
-                          value={newCriteria.degree}
-                          onChange={handleCriteriaChange}
-                          className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                          required
-                        >
-                          <option value="B.Tech">B.Tech</option>
-                          <option value="M.Tech">M.Tech</option>
-                          <option value="MCA">MCA</option>
-                          <option value="BCA">BCA</option>
-                          <option value="B.Sc">B.Sc</option>
-                          <option value="M.Sc">M.Sc</option>
-                        </select>
+                        <textarea
+                            id="degree"
+                            name="degree"
+                            value={newCriteria.degree}
+                            onChange={handleCriteriaChange}
+                            placeholder="Enter eligible degrees (e.g., B.Tech, M.Tech, MCA)"
+                            className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                            rows={3}
+                            required
+                        ></textarea>
+
                       </div>
                       <div>
                         <label className="block text-gray-700 mb-2" htmlFor="eligibility">
