@@ -17,6 +17,7 @@ import { Toaster } from "react-hot-toast";
 import CommonQuestion from "../src/components/CommonQuestion";
 import ADD_questions from "./Pages/ADD_questions";
 import DeveloperPage from "./Pages/DeveloperPage";
+import Profile from "./Pages/Profile";
 
 // ✅ Create and export context
 export const LoginFromInterviewExp = createContext();
@@ -46,6 +47,7 @@ function Layout() {
         <Route path="/answer/:id" element={<QuesAns />} />
         <Route path="*" element={<ErrorPage />} />
         <Route path="/developer" element={<DeveloperPage />} />
+        <Route path="/profile" element={<Profile/>}/>
       </Routes>
       <Toaster />
     </LoginFromInterviewExp.Provider>

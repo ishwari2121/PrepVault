@@ -49,21 +49,24 @@ router.get("/all-experiences", async (req, res) => {
 });
 
 // ✅ Get a Specific Interview Experience by ID
-router.get("/experience/:id", async (req, res) => {
+// ✅ Get all experiences for a specific user by their ID
+router.get("/user/:userId", async (req, res) => {
     try {
-        const experience = await InterviewExperience.findById(req.params.id)
-            .populate("createdBy", "username email"); // ✅ Fetches creator's username & email
+        const experiences = await InterviewExperience.find({ createdBy: req.params.userId })
+            .sort({ createdAt: -1 }) // Optional: newest first
+            .populate("createdBy", "username email");
 
-        if (!experience) {
-            return res.status(404).json({ message: "Experience not found." });
+        if (!experiences || experiences.length === 0) {
+            return res.status(404).json({ message: "No experiences found for this user." });
         }
 
-        res.status(200).json(experience);
+        res.status(200).json(experiences);
     } catch (error) {
-        console.error("Error fetching experience:", error);
+        console.error("Error fetching user experiences:", error);
         res.status(500).json({ message: "Server error", error: error.message });
     }
 });
+
 
 
 
