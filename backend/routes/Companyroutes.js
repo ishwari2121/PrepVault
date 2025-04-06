@@ -25,7 +25,6 @@ router.get("/:companyName", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-    console.log("hello");
     try {
         const { name, eligibilityCriteria = [], recruitmentProcess = "" } = req.body;
 
@@ -93,9 +92,9 @@ router.post("/:companyName/eligibility", async (req, res) => {
                 return res.status(400).json({ error: "Missing required fields in eligibility criteria" });
             }
 
-            if (typeof cgpa !== "number" || cgpa < 0 || cgpa > 10) {
-                return res.status(400).json({ error: "Invalid CGPA value. It should be between 0 and 10." });
-            }
+            // if (typeof cgpa !== "number" || cgpa < 0 || cgpa > 10) {
+            //     return res.status(400).json({ error: "Invalid CGPA value. It should be between 0 and 10." });
+            // }
         }
 
         // Append new eligibility criteria
@@ -110,9 +109,5 @@ router.post("/:companyName/eligibility", async (req, res) => {
         res.status(500).json({ error: "Failed to add eligibility criteria" });
     }
 });
-
-
-
-
 
 export default router;

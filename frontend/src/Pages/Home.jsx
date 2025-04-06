@@ -124,11 +124,11 @@ const Home = () => {
           >
             <div className="absolute -inset-2 bg-gradient-to-r from-purple-500 to-pink-600 rounded-lg blur opacity-75 group-hover:opacity-100 transition"></div>
             <button 
-              onClick={() => navigate("/developer")} 
+              onClick={() => navigate("/stories")} 
               className="relative bg-gradient-to-r from-purple-500 to-pink-600 px-8 py-3 rounded-lg text-lg font-bold shadow-2xl hover:shadow-purple-500/40 transition-all flex items-center gap-2"
             >
               <FaCode className="h-5 w-5" />
-              Meet Our Developers
+              View Exciting Stories
             </button>
           </motion.div>
         </motion.div>

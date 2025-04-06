@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 import authRoutes from "./routes/authRoutes.js";
-import comroutes from "./routes/companyRoutes.js";
+import comroutes from "./routes/Companyroutes.js";
 import interview from "./routes/InterviewExpRoutes.js";
 import connect from "./routes/CommonQuestionRoute.js";
 import MCQRoute from "./routes/MCQRoute.js";
