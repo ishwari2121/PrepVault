@@ -52,7 +52,7 @@ router.post("/signin", async (req, res) => {
         if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
     
         // Generate JWT Token
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "72000" });
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "2h" });
     
         res.status(200).json({
           message: "Login successful",

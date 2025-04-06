@@ -72,6 +72,10 @@ const Signin = () => {
       {
         navigate("/commonQuestion?category=technical");
       }
+      else if(id === "resume")
+      {
+        navigate('/resumeAnalyzer');
+      }
       else if (id)
       {
         navigate(`/answer/${id}`)

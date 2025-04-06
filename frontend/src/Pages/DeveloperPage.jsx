@@ -9,12 +9,13 @@ import Img1 from "../assets/image_1.png";
 import Img2 from "../assets/image_2.png";
 import Img3 from "../assets/image_3.png";
 import Img4 from "../assets/image_4.png";
-
+import { NavLink } from 'react-router-dom';
 
 const DeveloperPageMembers = [
     {
         name: "Ishwari Gondkar",
         branch:"Information Technology",
+        email: "ishwari@example.com",
         img: Img1,
         github: "#",
         linkedin: "#",
@@ -24,6 +25,7 @@ const DeveloperPageMembers = [
     {
         name: "Abhishek Patil",
         branch:"Computer Engineering",
+        email: "abhishek@example.com",
         img: Img2,
         github: "#",
         linkedin: "#",
@@ -33,6 +35,7 @@ const DeveloperPageMembers = [
     {
         name: "Sayyed Ziyaulhusen",
         branch:"Electronics & Telecommunication engineering",
+        email: "ziya@example.com",
         img: Img3,
         github: "#",
         linkedin: "#",
@@ -42,6 +45,7 @@ const DeveloperPageMembers = [
     {
         name: "Aditi Nandapurkar",
         branch:"Computer Engineering",
+        email: "aditi@example.com",
         img: Img4,
         github: "#",
         linkedin: "#",
@@ -102,9 +106,15 @@ export default function DeveloperPage() {
                                 <h3 className="text-2xl font-bold text-white mt-6 mb-4 text-center transition-colors group-hover:text-cyan-400">
                                     {member.name}
                                     <span className="block text-sm font-mono text-cyan-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <i className="fa-solid fa-graduation-cap mr-2"></i> {/* Add icon here */}
+                                        <i className="fa-solid fa-graduation-cap mr-2"></i>
                                         {member.branch}
                                     </span>
+                                    {/* Email Section */}
+                                    <NavLink to={`mailto:${member.email}`}>
+                                        <span className="block text-sm font-mono text-cyan-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            {member.email}
+                                        </span>
+                                    </NavLink>
                                 </h3>
 
                                 <div className="flex justify-center space-x-5">
