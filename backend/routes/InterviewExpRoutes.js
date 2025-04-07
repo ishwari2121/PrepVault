@@ -6,7 +6,6 @@ const router = express.Router();
 
 // ✅ Submit an Interview Experience
 router.post("/submit-experience", verifyToken, async (req, res) => {
-    console.log("Received Data:", req.body); // Debugging Line
     
     const { year, branch, company, totalRounds, rounds, additionalTips, type } = req.body;
 
@@ -67,6 +66,22 @@ router.get("/user/:userId", async (req, res) => {
     }
 });
 
+router.get("/experience/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        // alert("hello");
+        const experience = await InterviewExperience.findById(id);
+
+        if (!experience) {
+            return res.status(404).json({ message: "Interview experience not found" });
+        }
+
+        res.status(200).json(experience);
+    } catch (error) {
+        console.error("Error fetching interview experience:", error);
+        res.status(500).json({ message: "Server error" });
+    }
+});
 
 
 

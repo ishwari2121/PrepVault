@@ -4,6 +4,7 @@ import { AuthContext } from "../Context/AuthContext";
 import { FaCalendar, FaSchool, FaBuilding, FaPlus, FaTimes, FaInfoCircle, FaLightbulb, FaStar } from "react-icons/fa";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import { toast } from 'react-hot-toast'
+import { useNavigate } from "react-router-dom";
 const InterviewExperienceForm = () => {
     const { user } = useContext(AuthContext);
     const [companies, setCompanies] = useState([]);
@@ -17,7 +18,7 @@ const InterviewExperienceForm = () => {
     });
 
     
-
+    const navigate = useNavigate();
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -87,21 +88,19 @@ const handleSubmit = async (e) => {
     setIsSubmitting(true);
     
     try {
-        const userData = localStorage.getItem("user");
-        console.log("User Data from Local Storage:", userData);
+        const userData = JSON.parse(localStorage.getItem("user"))
         
-        const token = userData ? JSON.parse(userData).token : null;
-        console.log("Extracted Token:", token);
-                if (!token) {
-            alert("User is not authenticated.");
-            return;
+        if(!userData)
+        {
+            navigate('/signin');
+            return ;
         }
 
-        const headers = {
-            Authorization: token ? `Bearer ${token}` : "",
-        };
+        // const headers = {
+        //     Authorization: token ? `Bearer ${token}` : "",
+        // };
 
-        console.log("Headers being sent:", headers); 
+        // console.log("Headers being sent:", headers); 
         // Validate all rounds have content
         if (formData.rounds.some(round => !round.experience.trim())) {
             throw new Error("Please fill all interview round experiences");
@@ -130,12 +129,12 @@ const handleSubmit = async (e) => {
             "http://localhost:5000/api/interviewExp/submit-experience",
             payload,
             {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json"
-                }
+              headers: {
+                "Content-Type": "application/json"
+              }
             }
-        );
+          );
+          
         
         toast.success("Response Submitted Successfully!", {
             icon: '🚀',
