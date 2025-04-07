@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaLinkedin, FaGithub, FaTwitter, FaEnvelope } from 'react-icons/fa';
 import { NavLink } from 'react-router-dom';
 
 const Footer = () => {
@@ -13,9 +12,18 @@ const Footer = () => {
         },
     };
 
-    const iconVariants = {
-        hover: { scale: 1.2, rotate: 10 },
-        tap: { scale: 0.9 },
+    const developerButtonVariants = {
+        hover: {
+            y: -3,
+            scale: 1.03,
+            boxShadow: "0 10px 25px -5px rgba(34, 211, 238, 0.4)",
+            transition: {
+                type: "spring",
+                stiffness: 400,
+                damping: 10
+            }
+        },
+        tap: { scale: 0.98 }
     };
 
     return (
@@ -65,7 +73,6 @@ const Footer = () => {
                     >
                         <h3 className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
                             Contact Us
-                            +
                         </h3>
                         <ul className="space-y-2">
                             <li className="text-gray-300">Email: PrepVault@gmail.com</li>
@@ -74,52 +81,32 @@ const Footer = () => {
                         </ul>
                     </motion.div>
 
-                    {/* Social Media */}
-                    <motion.div
+                    {/* Developer Section */}
+                    <motion.div 
                         whileHover={{ y: -5 }}
                         className="space-y-4"
                     >
                         <h3 className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-                            Follow Us
+                            Behind the Scenes
                         </h3>
-                        <div className="flex space-x-4">
-                            <motion.a
-                                href="#"
-                                variants={iconVariants}
-                                whileHover="hover"
-                                whileTap="tap"
-                                className="text-gray-300 hover:text-cyan-400 transition-colors"
+                        <motion.div
+                            variants={developerButtonVariants}
+                            whileHover="hover"
+                            whileTap="tap"
+                            className="relative group"
+                        >
+                            <NavLink
+                                to="/developer"
+                                className="block w-full px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-700 rounded-lg text-white font-medium text-center shadow-lg overflow-hidden"
                             >
-                                <FaLinkedin className="h-6 w-6" />
-                            </motion.a>
-                            <motion.a
-                                href="#"
-                                variants={iconVariants}
-                                whileHover="hover"
-                                whileTap="tap"
-                                className="text-gray-300 hover:text-cyan-400 transition-colors"
-                            >
-                                <FaGithub className="h-6 w-6" />
-                            </motion.a>
-                            <motion.a
-                                href="#"
-                                variants={iconVariants}
-                                whileHover="hover"
-                                whileTap="tap"
-                                className="text-gray-300 hover:text-cyan-400 transition-colors"
-                            >
-                                <FaTwitter className="h-6 w-6" />
-                            </motion.a>
-                            <motion.a
-                                href="#"
-                                variants={iconVariants}
-                                whileHover="hover"
-                                whileTap="tap"
-                                className="text-gray-300 hover:text-cyan-400 transition-colors"
-                            >
-                                <FaEnvelope className="h-6 w-6" />
-                            </motion.a>
-                        </div>
+                                <span className="relative z-10">Meet the Developers</span>
+                                <span className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-cyan-400/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                            </NavLink>
+                        </motion.div>
+                        <p className="text-gray-400 text-sm mt-2">
+                            Learn about the creator behind this platform and their journey.
+                        </p>
                     </motion.div>
                 </div>
 

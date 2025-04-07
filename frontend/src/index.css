@@ -2,6 +2,18 @@
 
 /* Tooltip styles */
 /* Enhanced Tooltip */
+.react-select__control {
+    @apply border rounded-lg p-1;
+  }
+  
+  .react-select__multi-value {
+    @apply bg-blue-100 rounded-md;
+  }
+  
+  .react-select__multi-value__label {
+    @apply text-blue-800;
+  }
+  
 [data-tooltip] {
     position: relative;
     overflow: visible;

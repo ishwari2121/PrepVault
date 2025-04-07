@@ -15,9 +15,11 @@ import { createContext, useState } from "react";
 import InterviewDetail from "./components/InterviewDetail";
 import { Toaster } from "react-hot-toast";
 import CommonQuestion from "../src/components/CommonQuestion";
-import ADD_questions from "./Pages/ADD_questions";
 import DeveloperPage from "./Pages/DeveloperPage";
-
+import MainAdmin from './Admin/MainAdmin';
+import AddCompanies from './Admin/AddCompanies';
+import AddMCQ from './Admin/AddMCQ';
+import Profile from './Pages/Profile';
 // ✅ Create and export context
 export const LoginFromInterviewExp = createContext();
 
@@ -41,11 +43,20 @@ function Layout() {
         <Route path="/stories" element={<SharedInterview />} />
         <Route path="/company/:companyName" element={<CompanyDetails />} />
         <Route path="/interview/:id" element={<InterviewDetail />} />
-        <Route path="/admin" element={<ADD_questions />} />
         <Route path="/commonQuestion" element={<CommonQuestion />} />
         <Route path="/answer/:id" element={<QuesAns />} />
+        <Route path="/profile" element={<Profile/>} />
         <Route path="*" element={<ErrorPage />} />
         <Route path="/developer" element={<DeveloperPage />} />
+
+
+
+          {/* Admin Routes */}
+          
+          <Route path="/admin" element={<MainAdmin/>} />
+          <Route path="/addcompany" element={<AddCompanies/>} />
+          <Route path="/addmcqs" element={<AddMCQ/>} />
+          
       </Routes>
       <Toaster />
     </LoginFromInterviewExp.Provider>

@@ -30,7 +30,6 @@ router.get('/all-users',async (req,res)=>{
     try
     {
         const all_user = await User.find();
-        console.log(all_user);
         res.status(200).json(all_user);
     }
     catch(err)

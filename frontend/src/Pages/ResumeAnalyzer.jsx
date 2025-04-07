@@ -102,7 +102,7 @@ function App() {
       navigate("/resume/signin");
       return;
     }
-  }, [navigate]);
+  });
 
   const handleFileChange = (e) => {
     e.preventDefault();
@@ -702,7 +702,7 @@ function App() {
                     <textarea
                       className="w-full h-64 p-4 bg-transparent text-cyan-100 placeholder-cyan-400/60 focus:outline-none resize-none relative z-10"
                       placeholder="🚀 Paste the job description here to get a tailored analysis!
-Our AI will evaluate how well your resume aligns with the role, identify key strengths, potential weaknesses, and suggest actionable improvements to boost your chances in this company."
+Our AI will evaluate how well your resume aligns with the role, identify key strengths, potential weaknesses, and suggest actionable improvements to boost your chances in perticular company."
                       value={jobDescription}
                       onChange={(e) => setJobDescription(e.target.value)}
                     />
