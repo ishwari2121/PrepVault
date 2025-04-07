@@ -7,6 +7,7 @@ import {
   FaBars, FaTimes, FaSearch, FaChevronDown
 } from 'react-icons/fa';
 import TechnicalMcq from '../components/TechnicalQues';
+import AptitudeQuestions from '../components/AptitudeQuestions';
 import { useMediaQuery } from '../hooks/useMediaQuery'
 
 const CommonQuestion = () => {
@@ -119,6 +120,60 @@ const CommonQuestion = () => {
 
   const scaleTap = {
     tap: { scale: 0.98 }
+  };
+
+  const renderSelectedComponent = () => {
+    switch(selectedCategory) {
+      case 'technical':
+        return <TechnicalMcq />;
+      case 'aptitude':
+        return <AptitudeQuestions />;
+      default:
+        return filteredQuestions.length ? (
+          <div className="grid gap-4">
+            {filteredQuestions.map((question) => (
+              <NavLink 
+                to={`/answer/${question?._id}`} 
+                key={question._id}
+                onClick={() => handleQuestionClick(question._id)}
+              >
+                <motion.div
+                  className={`group relative p-5 rounded-xl transition-all ${
+                    selectedQuestionId === question._id
+                      ? 'bg-cyan-500/10 border border-cyan-400/30'
+                      : 'bg-gray-700/20 hover:bg-gray-700/30 border border-transparent'
+                  }`}
+                  variants={slideUp}
+                  whileTap={scaleTap}
+                  whileHover={{ y: -2 }}
+                >
+                  <h3 className="font-medium text-cyan-100 mb-3">{question.question}</h3>
+                  <div className="flex items-center text-sm text-cyan-400/80">
+                    <div className="flex items-center mr-6">
+                      <FaCommentDots className="mr-2" />
+                      {question.answers?.length || 0} answers
+                    </div>
+                    <div className="flex items-center">
+                      <span className="mr-1">▲</span>
+                      {question.answers?.reduce((sum, ans) => sum + ans.upvotes, 0) || 0}
+                    </div>
+                  </div>
+                </motion.div>
+              </NavLink>
+            ))}
+          </div>
+        ) : (
+          <motion.div
+            className="p-5 bg-amber-500/10 rounded-xl border border-amber-400/30"
+            variants={fadeIn}
+          >
+            <p className="text-amber-300 flex items-center gap-3">
+              <FaLightbulb className="text-xl" />
+              No questions available for this category yet.
+            </p>
+          </motion.div>
+        );
+    }
   };
 
   return (
@@ -343,52 +398,7 @@ const CommonQuestion = () => {
                 {selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1)} Questions
               </motion.h2>
               <AnimatePresence>
-                {selectedCategory === 'technical' ? (
-                  <TechnicalMcq />
-                ) : filteredQuestions.length ? (
-                  <div className="grid gap-4">
-                    {filteredQuestions.map((question) => (
-                      <NavLink 
-                        to={`/answer/${question?._id}`} 
-                        key={question._id}
-                        onClick={() => handleQuestionClick(question._id)}
-                      >
-                        <motion.div
-                          className={`group relative p-5 rounded-xl transition-all ${
-                            selectedQuestionId === question._id
-                              ? 'bg-cyan-500/10 border border-cyan-400/30'
-                              : 'bg-gray-700/20 hover:bg-gray-700/30 border border-transparent'
-                          }`}
-                          variants={slideUp}
-                          whileTap={scaleTap}
-                          whileHover={{ y: -2 }}
-                        >
-                          <h3 className="font-medium text-cyan-100 mb-3">{question.question}</h3>
-                          <div className="flex items-center text-sm text-cyan-400/80">
-                            <div className="flex items-center mr-6">
-                              <FaCommentDots className="mr-2" />
-                              {question.answers?.length || 0} answers
-                            </div>
-                            <div className="flex items-center">
-                              <span className="mr-1">▲</span>
-                              {question.answers?.reduce((sum, ans) => sum + ans.upvotes, 0) || 0}
-                            </div>
-                          </div>
-                        </motion.div>
-                      </NavLink>
-                    ))}
-                  </div>
-                ) : (
-                  <motion.div
-                    className="p-5 bg-amber-500/10 rounded-xl border border-amber-400/30"
-                    variants={fadeIn}
-                  >
-                    <p className="text-amber-300 flex items-center gap-3">
-                      <FaLightbulb className="text-xl" />
-                      No questions available for this category yet.
-                    </p>
-                  </motion.div>
-                )}
+                {renderSelectedComponent()}
               </AnimatePresence>
             </>
           ) : (

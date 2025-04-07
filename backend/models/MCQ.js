@@ -12,7 +12,7 @@ const questionSchema = new mongoose.Schema({
     validate: {
       validator: function(v) {
         if (this.language === 'C++') {
-          return ['OOP', 'References', 'Objects', 'Functions'].includes(v);
+          return ['OOP', 'References', 'Objects', 'Functions','Pointers'].includes(v);
         }
         return [
           'Declarations and Language Fundamental',

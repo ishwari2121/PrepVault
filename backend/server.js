@@ -12,6 +12,7 @@ import multer from "multer";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import fs from "fs/promises";
 import pdf from "pdf-parse";
+import AptitudeRoutes from "./routes/AptitudeRoutes.js";
 
 dotenv.config();
 
@@ -40,7 +41,7 @@ app.use("/api/interviewExp", interview);
 app.use("/api/commonQuestions", connect);
 app.use("/api/MCQ", MCQRoute);
 app.use("/api/resume",AnalysisRoute);
-
+app.use('/api/aptitude',AptitudeRoutes)
 
 app.post("/analyze", upload.single("resume"), async (req, res) => {
   try {
