@@ -1,12 +1,11 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { AuthContext } from "../Context/AuthContext";
 import { FaCalendar, FaSchool, FaBuilding, FaPlus, FaTimes, FaInfoCircle, FaLightbulb, FaStar } from "react-icons/fa";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
-import { toast } from 'react-hot-toast'
+import { toast } from 'react-hot-toast';
 import { useNavigate } from "react-router-dom";
+
 const InterviewExperienceForm = () => {
-    const { user } = useContext(AuthContext);
     const [companies, setCompanies] = useState([]);
     const [formData, setFormData] = useState({
         year: new Date().getFullYear(),
@@ -17,7 +16,6 @@ const InterviewExperienceForm = () => {
         additionalTips: ""
     });
 
-    
     const navigate = useNavigate();
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -69,101 +67,107 @@ const InterviewExperienceForm = () => {
 
     useEffect(() => {
         axios.get("http://localhost:5000/api/companies")
-          .then(response => {
-            const sortedCompanies = response.data.sort((a, b) => 
-              a.name.localeCompare(b.name)
+            .then(response => {
+                const sortedCompanies = response.data.sort((a, b) => 
+                    a.name.localeCompare(b.name)
+                );
+                setCompanies(sortedCompanies);
+                if (sortedCompanies.length > 0) {
+                    setFormData(prev => ({ ...prev, company: sortedCompanies[0]._id }));
+                }
+            })
+            .catch(error => console.error("Error fetching companies:", error));
+    }, []);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        
+        try {
+            const userData = JSON.parse(localStorage.getItem("user"));
+            
+            if (!userData) {
+                navigate('/signin');
+                return;
+            }
+
+            if (formData.rounds.some(round => !round.experience.trim())) {
+                throw new Error("Please fill all interview round experiences");
+            }
+            
+            if (!formData.company) {
+                throw new Error("Please select a company");
+            }
+            
+            const selectedCompany = companies.find(c => c._id === formData.company);
+            if (!selectedCompany) {
+                throw new Error("Invalid company selection");
+            }
+
+            const payload = {
+                ...formData,
+                company: selectedCompany.name,
+                createdBy: userData.id,
+                totalRounds: formData.rounds.length,
+            };
+
+            delete payload._id;
+
+            await axios.post(
+                "http://localhost:5000/api/interviewExp/submit-experience",
+                payload,
+                {
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                }
             );
-            setCompanies(sortedCompanies);
-            // Initialize company if not set
-            if (!formData.company && sortedCompanies.length > 0) {
-              setFormData(prev => ({ ...prev, company: sortedCompanies[0]._id }));
-            }
-          })
-          .catch(error => console.error("Error fetching companies:", error));
-      }, []);
-
-    // In the handleSubmit function, modify the payload creation:
-const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
-    try {
-        const userData = JSON.parse(localStorage.getItem("user"))
-        
-        if(!userData)
-        {
-            navigate('/signin');
-            return ;
+            
+            toast.success("Experience submitted successfully!", {
+                icon: '🚀',
+                style: {
+                    borderRadius: '12px',
+                    background: 'linear-gradient(135deg, #3b82f6, #60a5fa)',
+                    color: '#fff',
+                    border: '2px solid #1e3a8a',
+                    boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.2)',
+                    padding: '12px 16px',
+                    fontWeight: 'bold',
+                    fontSize: '16px',
+                    textAlign: 'center',
+                },
+            });
+            
+            setIsSubmitted(true);
+            setFormData({
+                year: new Date().getFullYear(),
+                branch: "IT",
+                company: companies[0]?._id || "",
+                type: "Placement",
+                rounds: [{ roundNumber: 1, experience: "" }],
+                additionalTips: ""
+            });
+            
+        } catch (err) {
+            const errorMessage = err.response?.data?.message || 
+                              err.response?.data?.error || 
+                              err.message || 
+                              "Failed to submit experience";
+            
+            toast.error(errorMessage, {
+                style: {
+                    borderRadius: '12px',
+                    background: '#ff4444',
+                    color: '#fff',
+                    padding: '12px 16px',
+                    fontWeight: 'bold',
+                }
+            });
+        } finally {
+            setIsSubmitting(false);
         }
+    };
 
-        // const headers = {
-        //     Authorization: token ? `Bearer ${token}` : "",
-        // };
-
-        // console.log("Headers being sent:", headers); 
-        // Validate all rounds have content
-        if (formData.rounds.some(round => !round.experience.trim())) {
-            throw new Error("Please fill all interview round experiences");
-        }
-        if (!formData.company) {
-            throw new Error("Please select a company");
-        }
-        
-        // Find the selected company object
-        const selectedCompany = companies.find(c => c._id === formData.company);
-        if (!selectedCompany) {
-            throw new Error("Invalid company selection");
-        }
-
-        const payload = {
-            ...formData,
-            company: selectedCompany.name,  // Use company name instead of ID
-            createdBy: user.id,
-            totalRounds: formData.rounds.length,
-        };
-
-        // Remove the _id field if present
-        delete payload._id;
-
-        await axios.post(
-            "http://localhost:5000/api/interviewExp/submit-experience",
-            payload,
-            {
-              headers: {
-                "Content-Type": "application/json"
-              }
-            }
-          );
-          
-        
-        toast.success("Response Submitted Successfully!", {
-            icon: '🚀',
-            style: {
-              borderRadius: '12px',
-              background: 'linear-gradient(135deg, #3b82f6, #60a5fa)', // Smooth blue gradient
-              color: '#fff', // White text for contrast
-              border: '2px solid #1e3a8a', // Dark blue border for emphasis
-              boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.2)', // Soft shadow for depth
-              padding: '12px 16px',
-              fontWeight: 'bold',
-              fontSize: '16px',
-              textAlign: 'center',
-            },
-          });
-          
-        setIsSubmitted(true);
-    } catch (err) {
-        alert(
-            err.response?.data?.message || 
-            err.response?.data?.error || 
-            err.message || 
-            "Failed to submit experience"
-        );
-    } finally {
-        setIsSubmitting(false);
-    }
-};
-    // Animation configurations
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {

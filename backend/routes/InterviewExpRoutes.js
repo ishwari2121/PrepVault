@@ -5,11 +5,11 @@ import { verifyToken } from "../middleware/middleware.js";
 const router = express.Router();
 
 // ✅ Submit an Interview Experience
-router.post("/submit-experience", verifyToken, async (req, res) => {
-    
-    const { year, branch, company, totalRounds, rounds, additionalTips, type } = req.body;
+router.post("/submit-experience", async (req, res) => {  // Remove verifyToken middleware
+    const { year, branch, company, totalRounds, rounds, additionalTips, type, createdBy } = req.body;
 
-    if (!year || !branch || !company || !totalRounds || !rounds  || !type) {
+    // Add createdBy to required fields check
+    if (!year || !branch || !company || !totalRounds || !rounds  || !type || !createdBy) {
         return res.status(400).json({ message: "All fields are required." });
     }
 
@@ -21,8 +21,8 @@ router.post("/submit-experience", verifyToken, async (req, res) => {
             totalRounds,
             rounds,
             additionalTips,
-            type, // ✅ Added Internship/Placement type
-            createdBy: req.user.id, // ✅ Stores the user ID who submitted
+            type,
+            createdBy: createdBy  // Get from request body instead of req.user
         });
 
         await newExperience.save();

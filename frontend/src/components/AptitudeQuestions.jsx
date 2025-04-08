@@ -114,7 +114,7 @@ const AptitudeQuestions = () => {
             
             // Apply search filter if search term exists
             if (searchTerm) {
-                const searchTermLower = searchTerm.toLowerCase();
+                const searchTermLower = (searchTerm.toLowerCase()).trim();
                 filtered = filtered.filter(mcq => {
                     // Search in question
                     if (mcq.question.toLowerCase().includes(searchTermLower)) return true;
