@@ -28,6 +28,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
+    "firebase": "^11.6.0",
     "framer-motion": "^12.6.3",
     "highlight.js": "^11.11.1",
     "marked": "^15.0.7",

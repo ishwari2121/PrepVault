@@ -2,7 +2,6 @@ import jwt from "jsonwebtoken";
 
 export const verifyToken = (req, res, next) => {
   console.log("Authorization Header:", req.header("Authorization"));
-  console.log("Headers received in backend:", req.headers);
 
   const token = req.header("Authorization")?.split(" ")[1];
   console.log("Extracted Token:", token);

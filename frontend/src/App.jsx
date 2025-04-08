@@ -20,6 +20,7 @@ import MainAdmin from './Admin/MainAdmin';
 import AddCompanies from './Admin/AddCompanies';
 import AddMCQ from './Admin/AddMCQ';
 import Profile from './Pages/Profile';
+import SetPassword from "./Components/setpassword";
 // ✅ Create and export context
 export const LoginFromInterviewExp = createContext();
 
@@ -48,8 +49,7 @@ function Layout() {
         <Route path="/profile" element={<Profile/>} />
         <Route path="*" element={<ErrorPage />} />
         <Route path="/developer" element={<DeveloperPage />} />
-
-
+        <Route path="/set-password" element={<SetPassword />} />
 
           {/* Admin Routes */}
           

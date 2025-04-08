@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiAlertCircle, FiUser, FiMail, FiLock, FiLogIn } from "react-icons/fi";
 import { toast } from 'react-hot-toast'
+import OAuth from "../Components/OAuth";
+
 const Signup = () => {
   const [formData, setFormData] = useState({ username: "", email: "", password: "" });
   const [mounted, setMounted] = useState(false);
@@ -199,6 +201,7 @@ const Signup = () => {
                   </motion.div>
                 )}
               </AnimatePresence>
+              <OAuth/>
               <span className={isSubmitting ? "opacity-0" : "opacity-100 flex items-center justify-center gap-2"}>
                 <FiLogIn className="w-5 h-5" />
                 Create Account
