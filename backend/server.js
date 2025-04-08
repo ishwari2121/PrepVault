@@ -13,7 +13,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import fs from "fs/promises";
 import pdf from "pdf-parse";
 import AptitudeRoutes from "./routes/AptitudeRoutes.js";
-import HandleVotesRoute from './routes/HandleVotesRoute.js'
+
 
 dotenv.config();
 
@@ -43,7 +43,6 @@ app.use("/api/commonQuestions", connect);
 app.use("/api/MCQ", MCQRoute);
 app.use("/api/resume",AnalysisRoute);
 app.use('/api/aptitude',AptitudeRoutes)
-app.use('/api/vote',HandleVotesRoute);
 
 
 app.post("/analyze", upload.single("resume"), async (req, res) => {
