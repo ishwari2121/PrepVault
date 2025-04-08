@@ -21,6 +21,11 @@ export default function Signup() {
     confirmPassword: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [touched, setTouched] = useState({
+    username: false,
+    password: false,
+    confirmPassword: false
+  });
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -33,19 +38,21 @@ export default function Signup() {
     };
     fetchUsers();
   }, []);
+
   const validateUsername = (username) => {
     const regex = /^(?=(?:.*[a-z]){6,})(?=.*\d)[a-z0-9_]{8,}$/;
+    if (!username) return 'Username is required';
     if (!regex.test(username)) {
       return 'Username must have 6+ lowercase letters, at least 1 number, and underscores (optional)';
     }
     const exists = allUsers.some(user => user.username === username);
-    console.log(exists);
     return exists
       ? 'Username already exists, try a different one'
       : '';
   };
 
   const validatePassword = (password) => {
+    if (!password) return 'Password is required';
     const hasUpperCase = /[A-Z]/.test(password);
     const hasNumber = /\d/.test(password);
     if (password.length < 6) return 'Password must be at least 6 characters';
@@ -54,10 +61,26 @@ export default function Signup() {
     return '';
   };
 
+  const validateForm = () => {
+    const newErrors = {
+      username: validateUsername(formData.username),
+      password: validatePassword(formData.password),
+      confirmPassword: formData.password === formData.confirmPassword ? '' : 'Passwords do not match'
+    };
+    setErrors(newErrors);
+    setTouched({
+      username: true,
+      password: true,
+      confirmPassword: true
+    });
+    return !Object.values(newErrors).some(error => error);
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-
+    setTouched(prev => ({ ...prev, [name]: true }));
+    
     if (name === 'username') {
       setErrors(prev => ({ ...prev, username: validateUsername(value) }));
     }
@@ -65,24 +88,13 @@ export default function Signup() {
       setErrors(prev => ({ ...prev, password: validatePassword(value) }));
     }
     if (name === 'confirmPassword') {
-      const match = value === formData.password;
-      setErrors(prev => ({ ...prev, confirmPassword: match ? '' : 'Passwords do not match' }));
+      setErrors(prev => ({ ...prev, confirmPassword: value === formData.password ? '' : 'Passwords do not match' }));
     }
   };
 
   const handleGoogleSignup = async () => {
-    const usernameError = validateUsername(formData.username);
-    const passwordError = validatePassword(formData.password);
-    const confirmError = formData.password !== formData.confirmPassword
-      ? 'Passwords do not match'
-      : '';
-
-    if (usernameError || passwordError || confirmError) {
-      setErrors({
-        username: usernameError,
-        password: passwordError,
-        confirmPassword: confirmError
-      });
+    const isValid = validateForm();
+    if (!isValid) {
       toast.error('Please fix the errors before continuing');
       return;
     }
@@ -107,7 +119,7 @@ export default function Signup() {
       });
 
       toast.success('Registration successful!');
-      navigate('/login');
+      navigate('/signin');
     } catch (error) {
       toast.error('Registration failed. Please try again.');
       console.error('Signup error:', error);
@@ -129,9 +141,9 @@ export default function Signup() {
     { text: 'A-Z', met: /[A-Z]/.test(formData.password) },
     { text: '0-9', met: /\d/.test(formData.password) },
   ];
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-[#0f172a] to-[#1e3a5f] relative overflow-hidden">
-      {/* Animated background elements */}
       <motion.div 
         className="absolute w-80 h-80 bg-cyan-500/20 rounded-full -top-48 -left-48"
         animate={{ scale: [1, 1.2, 1], rotate: [0, 180] }}
@@ -150,7 +162,6 @@ export default function Signup() {
         transition={{ type: 'spring', stiffness: 100, damping: 15 }}
         whileHover={{ scale: 1.02 }}
       >
-        {/* Floating animation */}
         <motion.div
           className="absolute inset-0 bg-gradient-to-r from-cyan-400/20 to-blue-500/20 opacity-0"
           animate={{ opacity: [0, 0.2, 0], x: [-100, 100] }}
@@ -178,20 +189,27 @@ export default function Signup() {
 
         <div className="space-y-5">
           {/* Username Field */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.6 }}
-          >
+          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.6 }}>
+            <label htmlFor="username" className="block text-gray-200 mb-1">Username</label>
             <div className="relative group">
-              <FiUser className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-cyan-400 transition-colors" />
+              <FiUser className={`w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 transition-colors ${
+                errors.username ? 'text-red-400' : 'text-gray-400'
+              } ${touched.username && !errors.username ? 'text-green-400' : ''}`} />
               <input
+                id="username"
                 type="text"
                 name="username"
                 value={formData.username}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 pl-11 border border-white/10 rounded-xl bg-white/5 text-gray-200 placeholder-gray-400 transition-all 
-                  focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/20 focus:bg-white/10"
+                className={`w-full px-4 py-3 pl-11 rounded-xl bg-white/5 text-gray-200 placeholder-gray-400 transition-all 
+                  ${
+                    errors.username 
+                      ? 'border-2 border-red-400/50' 
+                      : touched.username && !errors.username 
+                      ? 'border-2 border-green-400/50' 
+                      : 'border border-white/10'
+                  }
+                  focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/20 focus:bg-white/10`}
                 placeholder="your_username_123"
               />
             </div>
@@ -211,20 +229,27 @@ export default function Signup() {
           </motion.div>
 
           {/* Password Field */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.8 }}
-          >
+          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.8 }}>
+            <label htmlFor="password" className="block text-gray-200 mb-1">Password</label>
             <div className="relative group">
-              <FiLock className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-cyan-400 transition-colors" />
+              <FiLock className={`w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 transition-colors ${
+                errors.password ? 'text-red-400' : 'text-gray-400'
+              } ${touched.password && !errors.password ? 'text-green-400' : ''}`} />
               <input
+                id="password"
                 type="password"
                 name="password"
                 value={formData.password}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 pl-11 border border-white/10 rounded-xl bg-white/5 text-gray-200 placeholder-gray-400 transition-all 
-                  focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/20 focus:bg-white/10"
+                className={`w-full px-4 py-3 pl-11 rounded-xl bg-white/5 text-gray-200 placeholder-gray-400 transition-all 
+                  ${
+                    errors.password 
+                      ? 'border-2 border-red-400/50' 
+                      : touched.password && !errors.password 
+                      ? 'border-2 border-green-400/50' 
+                      : 'border border-white/10'
+                  }
+                  focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/20 focus:bg-white/10`}
                 placeholder="••••••••"
               />
             </div>
@@ -249,20 +274,27 @@ export default function Signup() {
           </motion.div>
 
           {/* Confirm Password Field */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 1.0 }}
-          >
+          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 1.0 }}>
+            <label htmlFor="confirmPassword" className="block text-gray-200 mb-1">Confirm Password</label>
             <div className="relative group">
-              <FiLock className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-cyan-400 transition-colors" />
+              <FiLock className={`w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 transition-colors ${
+                errors.confirmPassword ? 'text-red-400' : 'text-gray-400'
+              } ${touched.confirmPassword && !errors.confirmPassword ? 'text-green-400' : ''}`} />
               <input
+                id="confirmPassword"
                 type="password"
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 pl-11 border border-white/10 rounded-xl bg-white/5 text-gray-200 placeholder-gray-400 transition-all 
-                  focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/20 focus:bg-white/10"
+                className={`w-full px-4 py-3 pl-11 rounded-xl bg-white/5 text-gray-200 placeholder-gray-400 transition-all 
+                  ${
+                    errors.confirmPassword 
+                      ? 'border-2 border-red-400/50' 
+                      : touched.confirmPassword && !errors.confirmPassword 
+                      ? 'border-2 border-green-400/50' 
+                      : 'border border-white/10'
+                  }
+                  focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/20 focus:bg-white/10`}
                 placeholder="••••••••"
               />
             </div>
