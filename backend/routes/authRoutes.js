@@ -40,17 +40,15 @@ router.get('/all-users',async (req,res)=>{
 
 router.post("/signin", async (req, res) => {
     try {
-        const { email, password } = req.body;
-    
-        // Check if user exists
-        const user = await User.findOne({ email });
+        const { usernameOrEmail, password } = req.body;
+
+        const user = await User.findOne({ $or: [{ email: usernameOrEmail },{ username: usernameOrEmail }]});
+        
         if (!user) return res.status(400).json({ message: "User not found" });
-    
-        // Compare passwords
+
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
-    
-        // Generate JWT Token
+
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "2h" });
     
         res.status(200).json({

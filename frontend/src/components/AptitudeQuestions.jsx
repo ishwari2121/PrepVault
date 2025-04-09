@@ -1,7 +1,7 @@
-import axios, { all } from 'axios';
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const AptitudeQuestions = () => {
     const [allMcq, setAllMcq] = useState([]);
@@ -22,6 +22,7 @@ const AptitudeQuestions = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [manualPageInput, setManualPageInput] = useState('');
     const navigate = useNavigate();
 
     const aptitudeTypes = [
@@ -67,9 +68,7 @@ const AptitudeQuestions = () => {
     const fetchAllMcq = async () => {
         try {
             const response = await axios.get("http://localhost:5000/api/aptitude");
-            console.log(response.data.data.length);
             setAllMcq(response.data.data);
-            
         } catch (error) {
             console.error("Error fetching Aptitude Questions:", error);
         }
@@ -130,8 +129,15 @@ const AptitudeQuestions = () => {
             }
             
             setFilteredMcqs(filtered);
-            setTotalPages(Math.ceil(filtered.length / QUESTIONS_PER_PAGE));
-            setCurrentPage(1); // Reset to first page when filters change
+            const newTotalPages = Math.ceil(filtered.length / QUESTIONS_PER_PAGE);
+            setTotalPages(newTotalPages);
+            
+            // Ensure current page doesn't exceed new total pages
+            if (currentPage > newTotalPages && newTotalPages > 0) {
+                setCurrentPage(newTotalPages);
+            } else if (newTotalPages === 0) {
+                setCurrentPage(1);
+            }
         }
     }, [allMcq, selectedType, searchTerm]);
 
@@ -226,8 +232,19 @@ const AptitudeQuestions = () => {
     };
 
     const handlePageChange = (page) => {
-        setCurrentPage(page);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (page >= 1 && page <= totalPages) {
+            setCurrentPage(page);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    };
+
+    const handleManualPageSubmit = (e) => {
+        e.preventDefault();
+        const page = parseInt(manualPageInput);
+        if (!isNaN(page) && page >= 1 && page <= totalPages) {
+            handlePageChange(page);
+            setManualPageInput('');
+        }
     };
 
     const highlightSearchTerm = (text) => {
@@ -288,7 +305,7 @@ const AptitudeQuestions = () => {
         });
 
         return (
-            <div className="flex justify-center mt-8">
+            <div className="flex flex-col sm:flex-row justify-center items-center mt-8 gap-4">
                 <nav className="flex items-center gap-2">
                     <button
                         onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
@@ -314,6 +331,25 @@ const AptitudeQuestions = () => {
                         </svg>
                     </button>
                 </nav>
+
+                <form onSubmit={handleManualPageSubmit} className="flex items-center gap-2">
+                    <span className="text-gray-300">Go to page:</span>
+                    <input
+                        type="number"
+                        min="1"
+                        max={totalPages}
+                        value={manualPageInput}
+                        onChange={(e) => setManualPageInput(e.target.value)}
+                        className="w-16 px-2 py-1 bg-gray-700 text-white rounded border border-gray-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                        placeholder="#"
+                    />
+                    <button
+                        type="submit"
+                        className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-500 transition-colors"
+                    >
+                        Go
+                    </button>
+                </form>
             </div>
         );
     };

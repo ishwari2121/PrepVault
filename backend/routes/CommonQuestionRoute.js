@@ -241,4 +241,48 @@ router.delete('/:questionId/answers/:answerId', async (req, res) => {
   }
 });
 
+
+
+router.post('/:questionId/answers/:answerId/reduce_vote', async (req, res) => {
+  try {
+    const { questionId, answerId } = req.params;
+    const { action } = req.body;
+
+    // Validate action
+    if (!['upvote', 'downvote'].includes(action)) {
+      return res.status(400).json({ error: 'Invalid action. Use "upvote" or "downvote"' });
+    }
+
+    // Determine which field to update
+    const updateField = action === 'upvote' 
+      ? 'answers.$.upvotes' 
+      : 'answers.$.downvotes';
+
+    // Find and update the answer
+    const updatedQuestion = await CommonQuestion.findOneAndUpdate(
+      {
+        _id: questionId,
+        'answers._id': answerId
+      },
+      {
+        $inc: { [updateField]: -1 }
+      },
+      { new: true }
+    );
+
+    if (!updatedQuestion) {
+      return res.status(404).json({ error: 'Question or answer not found' });
+    }
+
+    res.json({
+      message: 'Vote updated successfully',
+      question: updatedQuestion
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      error: error.message || 'An error occurred while updating the vote'
+    });
+  }
+});
+
 export default router;

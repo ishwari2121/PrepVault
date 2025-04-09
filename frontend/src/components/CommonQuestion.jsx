@@ -260,6 +260,7 @@ const CommonQuestion = () => {
               </div>
               {filteredCompanies.map((company) => (
                 <motion.div
+                onClick={(e)=>alert("We’re working on company-wise questions — and will be available soon! 👨‍💻✨ Stay tuned !!!")}
                   key={company?._id}
                   className="flex items-center px-4 py-2.5 text-gray-300 hover:bg-gray-700/20 rounded-lg cursor-pointer"
                   variants={slideUp}

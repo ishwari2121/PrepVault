@@ -1,17 +1,24 @@
 import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
 import { AuthContext } from "../Context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const { user } = useContext(AuthContext);
   const [experiences, setExperiences] = useState([]);
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if(!user)navigate("/signin");
+    return;
+  });
+  
   useEffect(() => {
     const fetchExperiences = async () => {
       try {
         if (user && user.id) {
           const res = await axios.get(`http://localhost:5000/api/interviewExp/user/${user.id}`);
-          console.log("Fetched interview experiences:", res.data);
           setExperiences(Array.isArray(res.data) ? res.data : []);
         }
       } catch (err) {

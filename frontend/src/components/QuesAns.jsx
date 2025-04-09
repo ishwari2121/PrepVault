@@ -43,7 +43,7 @@ const QuesAns = () => {
 
         const user = JSON.parse(localStorage.getItem("user"));
         setCurrentUser(user?.username);
-    }, [id]);
+    },[id]);
 
     const sortedAnswers = () => {
         if (!allData?.answers) return [];
@@ -117,6 +117,9 @@ const QuesAns = () => {
                 return;
             }
 
+            //sabke sab is answerID ke votes delete ho jayenge
+            await axios.delete(`http://localhost:5000/api/vote/${id}/${answerToDelete}/delete_all_votes`);
+
             await axios.delete(
                 `http://localhost:5000/api/commonQuestions/${id}/answers/${answerToDelete}`,
                 { headers: { Authorization: `Bearer ${token}` } }
@@ -146,18 +149,73 @@ const QuesAns = () => {
     };
 
     async function handleDownvote(answerId) {
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user) {
+            alert("First login to vote");
+            navigate(`/signin/addAns/${id}`);
+            return;
+        }
+        const token = user.token;
         const action = { action: "downvote" };
+
         try {
-            const token = JSON.parse(localStorage.getItem("user"))?.token;
-            if (!token) {
-                alert("User is not authenticated.");
-                return;
+
+            const vote = await axios.get(`http://localhost:5000/api/vote/${user.username}/${id}/${answerId}/votehistory`);
+
+            if(vote.data.success == false)
+            {
+                //downvote ++ ho gaya
+                await axios.post(
+                    `http://localhost:5000/api/commonQuestions/${id}/answers/${answerId}/vote`,
+                    {action : "downvote"},
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+
+                // data base mai user ki entry ho gayi
+                await axios.post(`http://localhost:5000/api/vote/${id}/answers/${answerId}/votehistory`,
+                    {
+                        username : user.username,
+                        action : "downvote"
+                    }
+                )
             }
-            await axios.post(
-                `http://localhost:5000/api/commonQuestions/${id}/answers/${answerId}/vote`,
-                action,
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
+
+            if(vote.data.action === "downvote")
+            {
+                // downvote decrease ho gaya
+                await axios.post(
+                    `http://localhost:5000/api/commonQuestions/${id}/answers/${answerId}/reduce_vote`,
+                    action,
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+
+                //database mai se entry remove ho gayi
+                await axios.delete(`http://localhost:5000/api/vote/${user.username}/${id}/${answerId}/delete`);
+            }
+
+            if(vote.data.action === "upvote")
+            {
+                // downvote decrease ho gaya
+                await axios.post(
+                    `http://localhost:5000/api/commonQuestions/${id}/answers/${answerId}/reduce_vote`,
+                    {action : "upvote"},
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+
+                //downvote ++ ho gaya
+                await axios.post(
+                    `http://localhost:5000/api/commonQuestions/${id}/answers/${answerId}/vote`,
+                    action,
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+
+                //user action ko upvote upvote se downvote mai update karenge
+                await axios.put(`http://localhost:5000/api/vote/${user.username}/${id}/${answerId}/update`,
+                    {action : "downvote"}
+                );
+
+            }
+
             // Refresh data after vote
             const response = await axios.get(`http://localhost:5000/api/commonQuestions/${id}`);
             setAllData(response.data);
@@ -167,21 +225,78 @@ const QuesAns = () => {
     }
   
     async function handleUpvote(answerId) {
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user) {
+            alert("First login to vote");
+            navigate(`/signin/addAns/${id}`);
+            return;
+        }
+        const token = user.token;
         const action = { action: "upvote" };
+
         try {
-            const token = JSON.parse(localStorage.getItem("user"))?.token;
-            if (!token) {
-                alert("User is not authenticated.");
-                return;
+           
+            const vote = await axios.get(`http://localhost:5000/api/vote/${user.username}/${id}/${answerId}/votehistory`);
+    
+            if(vote.data.success === false)
+            {
+                // upvote ka count increase ho gaya
+                await axios.post(
+                    `http://localhost:5000/api/commonQuestions/${id}/answers/${answerId}/vote`,
+                    action,
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+                
+                // data base mai user ki entry ho gayi
+                await axios.post(`http://localhost:5000/api/vote/${id}/answers/${answerId}/votehistory`,
+                    {
+                        username : user.username,
+                        action : "upvote"
+                    }
+                )
             }
-            await axios.post(
-                `http://localhost:5000/api/commonQuestions/${id}/answers/${answerId}/vote`,
-                action,
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
+
+            if(vote.data.action === "upvote")
+            {
+                // upvote decrease ho gaya
+                await axios.post(
+                    `http://localhost:5000/api/commonQuestions/${id}/answers/${answerId}/reduce_vote`,
+                    action,
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+
+                //database mai se entry delete ho gayi
+                await axios.delete(`http://localhost:5000/api/vote/${user.username}/${id}/${answerId}/delete`);
+
+            }
+
+            if(vote.data.action === "downvote")
+            {
+                // downvote ka count decrease ho gaya
+                await axios.post(
+                    `http://localhost:5000/api/commonQuestions/${id}/answers/${answerId}/reduce_vote`,
+                    {action : "downvote"},
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+
+                // upvote ka count increase ho gaya
+                await axios.post(
+                    `http://localhost:5000/api/commonQuestions/${id}/answers/${answerId}/vote`,
+                    action,
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+
+                //user action ko upvote downvote se upvote mai update karenge
+                await axios.put(`http://localhost:5000/api/vote/${user.username}/${id}/${answerId}/update`,
+                    {action : "upvote"}
+                );
+
+            }
+
             // Refresh data after vote
             const response = await axios.get(`http://localhost:5000/api/commonQuestions/${id}`);
             setAllData(response.data);
+
         } catch (e) {
             console.error("Error upvoting:", e);
         }

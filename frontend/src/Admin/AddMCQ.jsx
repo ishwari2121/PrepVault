@@ -187,7 +187,7 @@ const AdminPanel = () => {
   };
 
   const languageTypes = {
-    'C++': ['OOP', 'References', 'Objects', 'Functions'],
+    'C++': ['OOP', 'References', 'Objects', 'Functions','Pointers'],
     'Java': [
       'Declarations and Language Fundamental',
       'Operator and Assignment',
