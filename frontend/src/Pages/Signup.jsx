@@ -257,7 +257,7 @@ export default function Signup() {
               <button
                 type="button"
                 onClick={() => setShowPassword(prev => !prev)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-black-400 hover:text-red-700 transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-red-500 transition-colors"
               >
                 {showPassword ? <FiEyeOff /> : <FiEye />}
               </button>
