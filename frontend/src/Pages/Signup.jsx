@@ -41,17 +41,17 @@ export default function Signup() {
   }, []);
 
   const validateUsername = (username) => {
-    const regex = /^(?=(?:.*[a-z]){6,})(?=.*\d)[a-z0-9_]{8,}$/;
+    const regex = /^(?=(?:.*[a-z]){6,})[a-z0-9_]{8,}$/; // Removed the requirement for a number
     if (!username) return 'Username is required';
     if (!regex.test(username)) {
-      return 'Username must have 6+ lowercase letters, at least 1 number, and underscores (optional)';
+      return 'Username must have 6+ lowercase letters and underscores (optional)';
     }
     const exists = allUsers.some(user => user.username === username);
     return exists
       ? 'Username already exists, try a different one'
       : '';
+      
   };
-
   const validatePassword = (password) => {
     if (!password) return 'Password is required';
     const hasUpperCase = /[A-Z]/.test(password);
@@ -212,7 +212,7 @@ export default function Signup() {
                       : 'border border-white/10'
                   }
                   focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/20 focus:bg-white/10`}
-                placeholder="your_username_123"
+                placeholder="Enter Username"
               />
             </div>
             <AnimatePresence>
@@ -252,7 +252,7 @@ export default function Signup() {
                       : 'border border-white/10'
                   }
                   focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/20 focus:bg-white/10`}
-                placeholder="••••••••"
+                placeholder="Enter Password"
               />
               <button
                 type="button"
@@ -304,7 +304,7 @@ export default function Signup() {
                       : 'border border-white/10'
                   }
                   focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/20 focus:bg-white/10`}
-                placeholder="••••••••"
+                placeholder="Confirm Password"
               />
             </div>
             <AnimatePresence>
