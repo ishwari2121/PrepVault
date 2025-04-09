@@ -5,7 +5,7 @@ import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
 import { app } from '../firebase';
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiUser, FiLock, FiCheck, FiX, FiAlertCircle } from "react-icons/fi";
+import { FiUser, FiLock, FiCheck, FiX, FiAlertCircle, FiEye, FiEyeOff } from "react-icons/fi";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -26,6 +26,7 @@ export default function Signup() {
     password: false,
     confirmPassword: false
   });
+  const [showPassword, setShowPassword] = useState(false); // ← new state
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -138,12 +139,13 @@ export default function Signup() {
 
   const passwordRequirements = [
     { text: '6+ chars', met: formData.password.length >= 6 },
-    { text: 'A-Z', met: /[A-Z]/.test(formData.password) },
-    { text: '0-9', met: /\d/.test(formData.password) },
+    { text: 'A-Z (at least 1)', met: /[A-Z]/.test(formData.password) },
+    { text: '0-9 (at least 1)', met: /\d/.test(formData.password) },
   ];
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-[#0f172a] to-[#1e3a5f] relative overflow-hidden">
+      {/* Background blobs */}
       <motion.div 
         className="absolute w-80 h-80 bg-cyan-500/20 rounded-full -top-48 -left-48"
         animate={{ scale: [1, 1.2, 1], rotate: [0, 180] }}
@@ -228,7 +230,7 @@ export default function Signup() {
             </AnimatePresence>
           </motion.div>
 
-          {/* Password Field */}
+          {/* Password Field with Eye Toggle */}
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.8 }}>
             <label htmlFor="password" className="block text-gray-200 mb-1">Password</label>
             <div className="relative group">
@@ -237,7 +239,7 @@ export default function Signup() {
               } ${touched.password && !errors.password ? 'text-green-400' : ''}`} />
               <input
                 id="password"
-                type="password"
+                type={showPassword ? 'text' : 'password'}      // ← toggle here
                 name="password"
                 value={formData.password}
                 onChange={handleInputChange}
@@ -252,6 +254,13 @@ export default function Signup() {
                   focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/20 focus:bg-white/10`}
                 placeholder="••••••••"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(prev => !prev)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-black-400 hover:text-red-700 transition-colors"
+              >
+                {showPassword ? <FiEyeOff /> : <FiEye />}
+              </button>
             </div>
             <motion.div className="flex gap-4 mt-3">
               {passwordRequirements.map((req, index) => (
@@ -273,7 +282,7 @@ export default function Signup() {
             </motion.div>
           </motion.div>
 
-          {/* Confirm Password Field */}
+          {/* Confirm Password Field (no eye toggle) */}
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 1.0 }}>
             <label htmlFor="confirmPassword" className="block text-gray-200 mb-1">Confirm Password</label>
             <div className="relative group">
