@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from 'react-hot-toast';
 import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
 import { app } from '../firebase';
@@ -144,7 +144,7 @@ export default function Signup() {
   ];
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-[#0f172a] to-[#1e3a5f] relative overflow-hidden">
+    <div className="flex flex-col justify-center items-center min-h-screen bg-gradient-to-br from-[#0f172a] to-[#1e3a5f] relative overflow-hidden">
       {/* Background blobs */}
       <motion.div 
         className="absolute w-80 h-80 bg-cyan-500/20 rounded-full -top-48 -left-48"
@@ -352,22 +352,18 @@ export default function Signup() {
             )}
           </div>
         </motion.button>
-
-        <motion.div 
+      </motion.div>
+      <motion.div 
           className="text-center text-gray-300/80 text-sm"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.4 }}
         >
           Already have an account?{" "}
-          <a 
-            href="/signin" 
-            className="text-cyan-400 hover:text-cyan-300 font-medium transition-colors"
-          >
-            Sign in here
-          </a>
+          <button type="button">
+            <Link to="/signin">Sign in here</Link>
+          </button>
         </motion.div>
-      </motion.div>
     </div>
   );
 }
