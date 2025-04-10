@@ -110,15 +110,17 @@ const QuesAns = () => {
         if (!answerToDelete) return;
         
         try {
-            const token = JSON.parse(localStorage.getItem("user"))?.token;
+            const user = JSON.parse(localStorage.getItem("user"));
+            const token = user.token;
             if (!token) {
                 alert("Please login to delete this answer");
                 navigate('/signin');
                 return;
             }
-
             //sabke sab is answerID ke votes delete ho jayenge
-            await axios.delete(`http://localhost:5000/api/vote/${id}/${answerToDelete}/delete_all_votes`);
+            const vote = await axios.get(`http://localhost:5000/api/vote/${user.username}/${id}/${answerToDelete}/votehistory`);
+            console.log(vote);
+            if(!vote.data)await axios.delete(`http://localhost:5000/api/vote/${id}/${answerToDelete}/delete_all_votes`);
 
             await axios.delete(
                 `http://localhost:5000/api/commonQuestions/${id}/answers/${answerToDelete}`,
