@@ -358,19 +358,9 @@ const CompanyList = () => {
                                                 <FaBuilding className="h-6 w-6 text-cyan-400" />
                                             </motion.div>
                                             <div>
-                                                <h3 className="text-xl font-bold bg-gradient-to-r from-cyan-300 to-blue-400 bg-clip-text text-transparent">
-                                                    {company.name}
-                                                </h3>
-                                                <div className="flex items-center mt-1">
-                                                    <div className="h-2 w-full bg-gray-700 rounded-full overflow-hidden">
-                                                        <motion.div 
-                                                            initial={{ width: 0 }}
-                                                            animate={{ width: "100%" }}
-                                                            transition={{ duration: 1 }}
-                                                            className="h-full bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full"
-                                                        />
-                                                    </div>
-                                                </div>
+                                            <h3 className="text-xl font-bold text-blue-400">
+                                                {company.name}
+                                            </h3>
                                             </div>
                                         </div>
 

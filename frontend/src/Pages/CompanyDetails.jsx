@@ -83,7 +83,7 @@ const CompanyDetails = () => {
             className="max-w-7xl mx-auto"
         >
             {/* Company Name */}
-            <h1 className="text-3xl sm:text-4xl font-bold text-white mb-6 sm:mb-8 ">
+            <h1 className="text-3xl sm:text-4xl font-bold text-white mb-6 sm:mb-8">
                 {company.name}
             </h1>
 
