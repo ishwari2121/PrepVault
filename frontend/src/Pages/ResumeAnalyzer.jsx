@@ -577,7 +577,7 @@ function App() {
             />
             <button
               onClick={() => setActiveTab('analyze')}
-              className={`relative px-6 py-2 rounded-full transition-colors ${
+              className={`relative px-6 py-2 rounded-full transition-colors cursor-pointer ${
                 activeTab === 'analyze' ? 'bg-cyan-600 text-white' : 'text-cyan-300 hover:text-white'
               }`}
             >
@@ -588,7 +588,7 @@ function App() {
                 setActiveTab('history');
                 fetchHistory();
               }}
-              className={`relative px-6 py-2 rounded-full transition-colors ${
+              className={`relative px-6 py-2 rounded-full transition-colors cursor-pointer ${
                 activeTab === 'history' ? 'bg-cyan-600 text-white' : 'text-cyan-300 hover:text-white'
               }`}
             >
@@ -750,7 +750,7 @@ Our AI will evaluate how well your resume aligns with the role, identify key str
                 }}
                 onClick={analyzeResume}
                 disabled={loading}
-                className="relative overflow-hidden px-12 py-4 rounded-full text-xl font-bold bg-gradient-to-r from-cyan-500 to-blue-600"
+                className="relative overflow-hidden px-12 py-4 rounded-full text-xl font-bold bg-gradient-to-r from-cyan-500 to-blue-600 cursor-pointer"
               >
                 <div className="absolute inset-0 bg-noise opacity-10" />
                 <div className="relative z-10 flex items-center justify-center gap-3">
@@ -761,7 +761,7 @@ Our AI will evaluate how well your resume aligns with the role, identify key str
                     </>
                   ) : (
                     <>
-                      <FaMagic className="inline-block mr-3" />
+                      <FaMagic className="inline-block mr-3 " />
                       Generate Magic Insights
                     </>
                   )}
@@ -851,7 +851,8 @@ Our AI will evaluate how well your resume aligns with the role, identify key str
                   Analysis History
                 </h2>
                 <div className="flex items-center gap-4">
-                  <div className="relative">
+                {/* Search Bar for History */}
+                <div className="relative">
                     <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                     <input
                       type="text"
@@ -861,11 +862,11 @@ Our AI will evaluate how well your resume aligns with the role, identify key str
                       onChange={(e) => setSearchQuery(e.target.value)}
                     />
                   </div>
+                  
                   <button
                     onClick={() => fetchHistory()}
-                    className="text-cyan-400 hover:text-cyan-300 text-sm flex items-center gap-2"
+                    className="text-cyan-400 hover:text-cyan-300 text-sm flex items-center gap-2 cursor-pointer"
                   >
-                    <FiLoader className="animate-spin" />
                     Refresh
                   </button>
                 </div>
