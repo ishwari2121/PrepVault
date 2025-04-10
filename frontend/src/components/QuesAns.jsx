@@ -509,7 +509,7 @@ const QuesAns = () => {
                 onClick={handleAddAnswerBtn}
             >
                 <FaPlus className="text-xl text-white" /> {/* Removed rotating animation */}
-                <span className="text-white font-semibold pr-2">Add Answer</span>
+                <span className="text-white font-semibold pr-2 cursor-pointer">Add Answer</span>
             </motion.button>
 
             {/* Answer Submission Form */}
