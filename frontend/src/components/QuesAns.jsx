@@ -743,7 +743,7 @@ const QuesAns = () => {
                                 {/* Delete Button (only shown for current user's answers) */}
                                 {currentUser === ans.username && (
                                     <motion.button
-                                        className="absolute top-4 right-4 text-red-400 hover:text-red-300 transition-colors z-10"
+                                        className="absolute top-4 right-4 text-red-400 hover:text-red-300 transition-colors z-10 cursor-pointer"
                                         onClick={() => handleDeleteClick(ans._id)}
                                         whileHover={{ scale: 1.1 }}
                                         whileTap={{ scale: 0.9 }}
