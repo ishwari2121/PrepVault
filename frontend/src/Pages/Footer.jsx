@@ -63,6 +63,7 @@ const Footer = () => {
                             <li><NavLink to="/companies" className="text-gray-300 hover:text-cyan-400 transition-colors">Company Profiles</NavLink></li>
                             <li><NavLink to="/interviewexp" className="text-gray-300 hover:text-cyan-400 transition-colors">Share Interview</NavLink></li>
                             <li><NavLink to="/commonQuestion" className="text-gray-300 hover:text-cyan-400 transition-colors">Question Bank</NavLink></li>
+                            <li><NavLink to="/resumeAnalyzer" className="text-gray-300 hover:text-cyan-400 transition-colors">Analyze Resume</NavLink></li>
                         </ul>
                     </motion.div>
 

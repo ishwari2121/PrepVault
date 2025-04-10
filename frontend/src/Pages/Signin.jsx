@@ -222,7 +222,7 @@ const Signin = () => {
                 id="password"
                 name="password"
                 className="w-full px-4 py-3 pl-11 pr-11 border border-white/10 rounded-xl bg-white/5 text-gray-200"
-                placeholder="••••••••"
+                placeholder="Enter Password"
                 onChange={handleChange}
                 required
               />

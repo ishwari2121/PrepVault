@@ -19,7 +19,7 @@ import {
 const CompanyDetails = () => {
     const { companyName } = useParams();
     const [company, setCompany] = useState(null);
-    const [view, setView] = useState(null);
+    const [view, setView] = useState("recruitment");
     const [selectedYear, setSelectedYear] = useState(null);
     const [isMobile, setIsMobile] = useState(window.innerWidth < 600);
 
@@ -83,8 +83,8 @@ const CompanyDetails = () => {
             className="max-w-7xl mx-auto"
         >
             {/* Company Name */}
-            <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-indigo-400 to-blue-500 bg-clip-text text-transparent mb-6 sm:mb-8">
-            {company.name}
+            <h1 className="text-3xl sm:text-4xl font-bold text-white mb-6 sm:mb-8 ">
+                {company.name}
             </h1>
 
             {/* View Buttons - Stacked on mobile */}
