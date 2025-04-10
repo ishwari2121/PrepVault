@@ -50,20 +50,19 @@ export default function Signup() {
   }, []);
 
   const validateUsername = (username) => {
-    const regex = /^(?=(?:.*[a-z]){6,})(?=.*\d)[a-z0-9_]{8,}$/;
+    const regex = /^(?=(?:.*[a-z]){4,})[a-z0-9_]{6,}$/;
+
     if (!username) return 'Username is required';
-    if (!regex.test(username)) {
-      return 'Username must have 6+ lowercase letters, at least 1 number, and underscores (optional)';
-    }
-    const exists = allUsers.some(user => user.username === username);
-    return exists
+    if (!regex.test(username)) return ' ';
+    return allUsers.some(u => u.username === username)
       ? 'Username already exists, try a different one'
       : '';
-      
   };
+
   const validatePassword = (password) => {
     if (!password) return 'Password is required';
     if (password.length < 6) return 'Password must be at least 6 characters';
+    if (!/[A-Z]/.test(password)) return 'Must contain at least one capital letter';
     if (!/\d/.test(password)) return 'Must contain at least one number';
     return '';
   };
@@ -141,12 +140,13 @@ export default function Signup() {
     { text: '6+ chars (in total)', met: formData.username.length >= 6 },
     { text: '4+ lowercase letters', met: (formData.username.match(/[a-z]/g) || []).length >= 4 },
     // { text: 'At least 1 number', met: /\d/.test(formData.username) },
-    { text: 'Only a-z , 0-9 or underscore', met: /^[a-z0-9_]*$/.test(formData.username) }
+    { text: 'Only a-z, 0-9, _', met: /^[a-z0-9_]*$/.test(formData.username) }
   ];
 
   const passwordRequirements = [
-    { text: '6+ characters (in total)', met: formData.password.length >= 6 },
-    { text: 'At least 1 number', met: /\d/.test(formData.password) }
+    { text: '6+ chars', met: formData.password.length >= 6 },
+    { text: 'A-Z (at least 1)', met: /[A-Z]/.test(formData.password) },
+    { text: '0-9 (at least 1)', met: /\d/.test(formData.password) }
   ];
 
   return (
@@ -194,139 +194,199 @@ export default function Signup() {
           </motion.p>
         </motion.div>
 
-        <div className="space-y-5">
-          {/* Username Field */}
-          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.6 }}>
-            <label htmlFor="username" className="block text-gray-200 mb-1">Username</label>
-            <div className="relative group">
-              <FiUser className={`w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 transition-colors ${
-                errors.username ? 'text-red-400' : 'text-gray-400'
-              } ${touched.username && !errors.username ? 'text-green-400' : ''}`} />
-              <input
-                id="username"
-                type="text"
-                name="username"
-                value={formData.username}
-                onChange={handleInputChange}
-                className={`w-full px-4 py-3 pl-11 rounded-xl bg-white/5 text-gray-200 placeholder-gray-400 transition-all 
-                  ${
-                    errors.username 
-                      ? 'border-2 border-red-400/50' 
-                      : touched.username && !errors.username 
-                      ? 'border-2 border-green-400/50' 
-                      : 'border border-white/10'
-                  }
-                  focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/20 focus:bg-white/10`}
-                placeholder="your_username_123"
-              />
-            </div>
-            <AnimatePresence>
-              {errors.username && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="flex items-center gap-2 mt-2 text-red-400 text-sm"
-                >
-                  <FiAlertCircle className="flex-shrink-0" />
-                  <span>{errors.username}</span>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.div>
-
-          {/* Password Field with Eye Toggle */}
-          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.8 }}>
-            <label htmlFor="password" className="block text-gray-200 mb-1">Password</label>
-            <div className="relative group">
-              <FiLock className={`w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 transition-colors ${
-                errors.password ? 'text-red-400' : 'text-gray-400'
-              } ${touched.password && !errors.password ? 'text-green-400' : ''}`} />
-              <input
-                id="password"
-                type={showPassword ? 'text' : 'password'}      // ← toggle here
-                name="password"
-                value={formData.password}
-                onChange={handleInputChange}
-                className={`w-full px-4 py-3 pl-11 rounded-xl bg-white/5 text-gray-200 placeholder-gray-400 transition-all 
-                  ${
-                    errors.password 
-                      ? 'border-2 border-red-400/50' 
-                      : touched.password && !errors.password 
-                      ? 'border-2 border-green-400/50' 
-                      : 'border border-white/10'
-                  }
-                  focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/20 focus:bg-white/10`}
-                placeholder="••••••••"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(prev => !prev)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-red-500 transition-colors"
+        {/* Username Field */}
+        <motion.div
+          initial={{ opacity:0, x:-20 }}
+          animate={{ opacity:1, x:0 }}
+          transition={{ delay:0.4 }}
+        >
+          <label htmlFor="username" className="block text-gray-200 mb-1">Username</label>
+          <div className="relative">
+            <FiUser
+              className={`
+                w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 transition-colors
+                ${errors.username
+                  ? 'text-red-400'
+                  : touched.username && !errors.username
+                  ? 'text-green-400'
+                  : 'text-gray-400'
+                }
+              `}
+            />
+            <input
+              id="username"
+              name="username"
+              type="text"
+              value={formData.username}
+              onChange={handleInputChange}
+              placeholder="your_username_123"
+              className={`
+                w-full px-4 py-3 pl-11 rounded-xl bg-white text-gray-900 placeholder-gray-500 transition-all
+                ${errors.username
+                  ? 'border-2 border-red-500'
+                  : touched.username && !errors.username
+                  ? 'border-2 border-green-500'
+                  : 'border border-gray-300'
+                }
+                focus:border-green-500 focus:ring-2 focus:ring-green-100
+              `}
+              autoComplete="off"
+            />
+          </div>
+          <AnimatePresence>
+            {errors.username && (
+              <motion.div
+                initial={{ opacity:0, height:0 }}
+                animate={{ opacity:1, height:'auto' }}
+                exit={{ opacity:0, height:0 }}
+                className="flex items-center gap-2 mt-2 text-red-500 text-sm"
               >
-                {showPassword ? <FiEyeOff /> : <FiEye />}
-              </button>
-            </div>
-            <motion.div className="flex gap-4 mt-3">
-              {passwordRequirements.map((req, index) => (
-                <motion.div 
-                  key={index}
-                  className="flex items-center gap-1"
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: 1 + index * 0.1 }}
-                >
-                  <div className={`transition-colors ${req.met ? 'text-green-400' : 'text-gray-500'}`}>
-                    {req.met ? <FiCheck /> : <FiX />}
-                  </div>
-                  <span className={`text-xs ${req.met ? 'text-green-400' : 'text-gray-400'}`}>
-                    {req.text}
-                  </span>
-                </motion.div>
-              ))}
-            </motion.div>
-          </motion.div>
+                <FiAlertCircle className="flex-shrink-0" />
+                <span>{errors.username}</span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <div className="flex flex-wrap gap-4 mt-3">
+            {usernameRequirements.map((req, i) => (
+              <motion.div
+                key={i}
+                className="flex items-center gap-1"
+                initial={{ scale:0 }}
+                animate={{ scale:1 }}
+                transition={{ delay:0.4 + i*0.1 }}
+              >
+                {req.met ? (
+                  <FiCheck className="text-green-400" />
+                ) : (
+                  <FiX className="text-gray-500" />
+                )}
+                <span className={`text-xs ${req.met ? 'text-green-400' : 'text-gray-400'}`}>
+                  {req.text}
+                </span>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
 
-          {/* Confirm Password Field (no eye toggle) */}
-          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 1.0 }}>
-            <label htmlFor="confirmPassword" className="block text-gray-200 mb-1">Confirm Password</label>
-            <div className="relative group">
-              <FiLock className={`w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 transition-colors ${
-                errors.confirmPassword ? 'text-red-400' : 'text-gray-400'
-              } ${touched.confirmPassword && !errors.confirmPassword ? 'text-green-400' : ''}`} />
-              <input
-                id="confirmPassword"
-                type="password"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleInputChange}
-                className={`w-full px-4 py-3 pl-11 rounded-xl bg-white/5 text-gray-200 placeholder-gray-400 transition-all 
-                  ${
-                    errors.confirmPassword 
-                      ? 'border-2 border-red-400/50' 
-                      : touched.confirmPassword && !errors.confirmPassword 
-                      ? 'border-2 border-green-400/50' 
-                      : 'border border-white/10'
-                  }
-                  focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/20 focus:bg-white/10`}
-                placeholder="••••••••"
-              />
-            </div>
-            <AnimatePresence>
-              {errors.confirmPassword && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="flex items-center gap-2 mt-2 text-red-400 text-sm"
-                >
-                  <FiAlertCircle className="flex-shrink-0" />
-                  <span>{errors.confirmPassword}</span>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.div>
-        </div>
+        {/* Password Field */}
+        <motion.div
+          initial={{ opacity:0, x:-20 }}
+          animate={{ opacity:1, x:0 }}
+          transition={{ delay:0.6 }}
+        >
+          <label htmlFor="password" className="block text-gray-200 mb-1">Password</label>
+          <div className="relative">
+            <FiLock
+              className={`
+                w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 transition-colors
+                ${errors.password
+                  ? 'text-red-400'
+                  : touched.password && !errors.password
+                  ? 'text-green-400'
+                  : 'text-gray-400'
+                }
+              `}
+            />
+            <input
+              id="password"
+              name="password"
+              type={showPassword ? 'text' : 'password'}
+              value={formData.password}
+              onChange={handleInputChange}
+              placeholder="Create Your Password"
+              className={`
+                w-full px-4 py-3 pl-11 rounded-xl bg-white/5 text-gray-200 placeholder-gray-400 transition-all
+                ${errors.password
+                  ? 'border-2 border-red-400/50'
+                  : touched.password && !errors.password
+                  ? 'border-2 border-green-400/50'
+                  : 'border border-white/10'
+                }
+                focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/20 focus:bg-white/10
+              `}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(v => !v)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-cyan-300 hover:text-cyan-500 transition-colors"
+            >
+              {showPassword ? <FiEyeOff /> : <FiEye />}
+            </button>
+          </div>
+          <div className="flex gap-4 mt-3">
+            {passwordRequirements.map((req, i) => (
+              <motion.div
+                key={i}
+                className="flex items-center gap-1"
+                initial={{ scale:0 }}
+                animate={{ scale:1 }}
+                transition={{ delay:0.6 + i*0.1 }}
+              >
+                {req.met ? (
+                  <FiCheck className="text-green-400" />
+                ) : (
+                  <FiX className="text-gray-500" />
+                )}
+                <span className={`text-xs ${req.met ? 'text-green-400' : 'text-gray-400'}`}>
+                  {req.text}
+                </span>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Confirm Password Field */}
+        <motion.div
+          initial={{ opacity:0, x:-20 }}
+          animate={{ opacity:1, x:0 }}
+          transition={{ delay:0.8 }}
+        >
+          <label htmlFor="confirmPassword" className="block text-gray-200 mb-1">Confirm Password</label>
+          <div className="relative">
+            <FiLock
+              className={`
+                w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 transition-colors
+                ${errors.confirmPassword
+                  ? 'text-red-400'
+                  : touched.confirmPassword && !errors.confirmPassword
+                  ? 'text-green-400'
+                  : 'text-gray-400'
+                }
+              `}
+            />
+            <input
+              id="confirmPassword"
+              name="confirmPassword"
+              type="password"
+              value={formData.confirmPassword}
+              onChange={handleInputChange}
+              placeholder="Re-Enter Your Password"
+              className={`
+                w-full px-4 py-3 pl-11 rounded-xl bg-white/5 text-gray-200 placeholder-gray-400 transition-all
+                ${errors.confirmPassword
+                  ? 'border-2 border-red-400/50'
+                  : touched.confirmPassword && !errors.confirmPassword
+                  ? 'border-2 border-green-400/50'
+                  : 'border border-white/10'
+                }
+                focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/20 focus:bg-white/10
+              `}
+            />
+          </div>
+          <AnimatePresence>
+            {errors.confirmPassword && (
+              <motion.div
+                initial={{ opacity:0, height:0 }}
+                animate={{ opacity:1, height:'auto' }}
+                exit={{ opacity:0, height:0 }}
+                className="flex items-center gap-2 mt-2 text-red-400 text-sm"
+              >
+                <FiAlertCircle className="flex-shrink-0" />
+                <span>{errors.confirmPassword}</span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
 
         {/* Google Signup Button */}
         <motion.button
@@ -352,13 +412,13 @@ export default function Signup() {
                 <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M12.24 10.285V14.4h6.806c-.275 1.765-2.056 5.174-6.806 5.174-4.095 0-7.439-3.389-7.439-7.574s3.345-7.574 7.439-7.574c2.33 0 3.891.989 4.785 1.849l3.254-3.138C18.189 1.186 15.479 0 12.24 0c-6.635 0-12 5.365-12 12s5.365 12 12 12c6.926 0 11.52-4.869 11.52-11.726 0-.788-.085-1.39-.189-1.989H12.24z"/>
                 </svg>
-                <span>Continue with Google</span>
+                <span>SignUp with Google</span>
               </>
             )}
           </div>
         </motion.button>
 
-        {/* Animated "Already have an account?" */}
+        {/* Animated “Already have an account?” */}
         <motion.div
           initial={{ y: 10, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -384,3 +444,4 @@ export default function Signup() {
     </div>
   );
 }
+

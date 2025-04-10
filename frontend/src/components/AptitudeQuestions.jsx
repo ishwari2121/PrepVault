@@ -155,7 +155,7 @@ const AptitudeQuestions = () => {
 
     const handleAnswerSelect = (mcqId, selectedIndex, correctIndex) => {
         setSelectedOptions(prev => ({
-            ...prev,
+            ...prev, 
             [mcqId]: selectedIndex
         }));
         
