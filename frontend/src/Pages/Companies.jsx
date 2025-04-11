@@ -407,7 +407,7 @@ const CompanyList = () => {
                     <p className="text-cyan-100/70 mb-4">Can't find your company?</p>
                     <button
                         onClick={() => setIsModalOpen(true)}
-                        className="inline-block px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-medium hover:shadow-lg hover:shadow-cyan-500/20 transition-all"
+                        className="inline-block px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-medium hover:shadow-lg hover:shadow-cyan-500/20 transition-all cursor-pointer"
                     >
                         Suggest a Company
                     </button>
