@@ -5,7 +5,7 @@ import {
     faInstagram 
 } from '@fortawesome/free-brands-svg-icons';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
-import Img1 from "../assets/image_1.png";
+import Img1 from "../assets/dev-1-ishwari.png";
 import Img2 from "../assets/image_2.png";
 import Img3 from "../assets/image_3.png";
 import Img4 from "../assets/image_4.png";
@@ -18,40 +18,37 @@ const DeveloperPageMembers = [
     {
         name: "Ishwari Gondkar",
         branch:"Information Technology",
-        email: "ishwari@example.com",
         img: Img1,
-        github: "#",
-        linkedin: "#",
+        github: "https://github.com/ishwari2121",
+        linkedin: "https://www.linkedin.com/in/ishwari-gondkar-31a296258",
         instagram: "https://www.instagram.com/ishwari_.14/",
-        contact: "#",
+        contact: "mailto:ishwari@example.com",
     },
     {
         name: "Abhishek Patil",
         branch:"Computer Engineering",
         email: "abhi.patil3579@gmail.com",
         img: Img2,
-        github: "#",
+        github: "https://github.com/abhishekpatil904",
         linkedin: "https://www.linkedin.com/in/abhishek-patil-795714258/",
-        instagram: "https://www.instagram.com/abhishekpatil904/",
-        contact: "7028727108",
+        instagram: "https://www.instagram.com/abhishekpatil904",
+        contact: "mailto:abhi.patil3579@gmail.com",
     },
     {
         name: "Sayyed Ziyaulhusen",
-        branch:"Electronics & Telecommunication engineering",
-        email: "ziya@example.com",
+        branch:"Electronics & Telecommunication Engineering",
         img: Img3,
-        github: "#",
-        linkedin: "#",
+        github: "https://github.com/ZiyaSalar",
+        linkedin: "https://www.linkedin.com/in/ziya-sayyad-0119a824b/",
         instagram: "https://www.instagram.com/ziya_salar",
-        contact: "#",
+        contact: "mailto:ziyasalar.public@gmail.com",
     },
     {
         name: "Aditi Nandapurkar",
         branch:"Computer Engineering",
-        email: "aditi@example.com",
         img: Img4,
-        github: "#",
-        linkedin: "#",
+        github: "https://github.com/alphanov44",
+        linkedin: "https://www.linkedin.com/in/aditi-nandapurkar-a9166a266/",
         instagram: "https://www.instagram.com/aditi_nandapurkar/",
         contact: "mailto:aditi@example.com",
     },
