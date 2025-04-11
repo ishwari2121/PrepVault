@@ -22,7 +22,7 @@ const DeveloperPageMembers = [
         github: "https://github.com/ishwari2121",
         linkedin: "https://www.linkedin.com/in/ishwari-gondkar-31a296258",
         instagram: "https://www.instagram.com/ishwari_.14/",
-        contact: "mailto:ishwari@example.com",
+        contact: "mailto:ishwarigondkar7@gmail.com",
     },
     {
         name: "Abhishek Patil",
