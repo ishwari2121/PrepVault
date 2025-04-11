@@ -16,6 +16,7 @@ import {
   FaClock,
   FaCalendarAlt
 } from 'react-icons/fa';
+import LikeDislikeButtons from './LikeDislikeButtons'; 
 
 const QuesAns = () => {
     const { id } = useParams();
@@ -806,7 +807,6 @@ const QuesAns = () => {
                                             </motion.pre>
                                         )}
                                     </motion.div>
-
                                     {/* Voting Buttons */}
                                     <motion.div 
                                         className="flex items-center gap-4"
@@ -814,31 +814,14 @@ const QuesAns = () => {
                                         animate={{ opacity: 1 }}
                                         transition={{ delay: 0.5 }}
                                     >
-                                        <motion.button
-                                            className="flex items-center gap-2 px-6 py-3 bg-cyan-500/10 text-cyan-400 rounded-full hover:bg-cyan-500/20 transition-all border border-cyan-400/20"
-                                            whileHover={{ 
-                                                scale: 1.05,
-                                                boxShadow: '0 5px 15px -3px rgba(34, 211, 238, 0.1)'
-                                            }}
-                                            whileTap={{ scale: 0.95 }}
-                                            onClick={() => handleUpvote(ans._id)}
-                                        >
-                                            <FaRegThumbsUp className="text-lg transition-transform hover:scale-125" />
-                                            <span className="font-medium">{ans.upvotes}</span>
-                                        </motion.button>
-                                        
-                                        <motion.button
-                                            className="flex items-center gap-2 px-6 py-3 bg-red-500/10 text-red-400 rounded-full hover:bg-red-500/20 transition-all border border-red-400/20"
-                                            whileHover={{ 
-                                                scale: 1.05,
-                                                boxShadow: '0 5px 15px -3px rgba(239, 68, 68, 0.1)'
-                                            }}
-                                            whileTap={{ scale: 0.95 }}
-                                            onClick={() => handleDownvote(ans._id)}
-                                        >
-                                            <FaRegThumbsDown className="text-lg transition-transform hover:scale-125" />
-                                            <span className="font-medium">{ans.downvotes}</span>
-                                        </motion.button>
+                                        <div className="flex items-center gap-4">
+                                            <LikeDislikeButtons 
+                                                initialLikes={ans.upvotes}
+                                                initialDislikes={ans.downvotes}
+                                                onLike={() => handleUpvote(ans._id)}
+                                                onDislike={() => handleDownvote(ans._id)}
+                                            />
+                                        </div>
                                     </motion.div>
                                 </div>
                             </motion.div>
