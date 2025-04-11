@@ -22,7 +22,7 @@ const CommonQuestion = () => {
   const questionsContainerRef = useRef(null);
   const isMobile = useMediaQuery('(max-width: 800px)');
   
-  const initialCategory = searchParams.get('category') || '';
+  const initialCategory = searchParams.get('category') || 'aptitude';
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
 
   const filteredCompanies = totalCompanies.filter(company =>
@@ -216,7 +216,7 @@ const CommonQuestion = () => {
               <h3 className="text-sm font-semibold text-cyan-300/80 uppercase tracking-wider mb-4">
                 Categories
               </h3>
-              {['Technical', 'Coding', 'HR', 'Aptitude'].map((category) => {
+              {[ 'Aptitude', 'Coding', 'Technical', 'HR'].map((category) => {
                 const isActive = selectedCategory === category.toLowerCase();
                 return (
                   <motion.div
