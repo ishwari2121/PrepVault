@@ -205,7 +205,7 @@ router.delete('/:questionId/answers/:answerId', async (req, res) => {
         !mongoose.Types.ObjectId.isValid(answerId)) {
       return res.status(400).json({ error: 'Invalid ID format' });
     }
-
+        
     // Find the question and verify answer exists
     const question = await CommonQuestion.findById(questionId);
     

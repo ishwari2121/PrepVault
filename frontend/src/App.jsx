@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import axios from "axios";
+axios.defaults.withCredentials = true;
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext, AuthProvider } from "./Context/AuthContext";
+import { useLocation } from "react-router-dom";
 import Signup from "./Pages/Signup";
 import Signin from "./Pages/Signin";
 import Home from "./Pages/Home";
@@ -10,55 +15,91 @@ import QuesAns from "./components/QuesAns";
 import ErrorPage from "./Pages/ErrorPage";
 import CompanyDetails from "./Pages/CompanyDetails";
 import UserNavbar from "./components/UserNavbar";
-import { AuthProvider } from "./Context/AuthContext";
-import { createContext, useState } from "react";
 import InterviewDetail from "./components/InterviewDetail";
-import { Toaster } from "react-hot-toast";
-import CommonQuestion from "../src/components/CommonQuestion";
+import CommonQuestion from "./components/CommonQuestion";
 import DeveloperPage from "./Pages/DeveloperPage";
 import MainAdmin from "./Admin/MainAdmin";
 import AddCompanies from "./Admin/AddCompanies";
 import AddMCQ from "./Admin/AddMCQ";
 import Profile from "./Pages/Profile";
 
-// ✅ Create and export context
-export const LoginFromInterviewExp = createContext();
+import { Toaster } from "react-hot-toast";
+
+const PrivateRoute = ({ children }) => {
+  const { user, loading } = useContext(AuthContext);
+  const location = useLocation();
+
+  if (loading) return null;
+
+  return user ? (
+    children
+  ) : (
+    <Navigate to="/signin" replace state={{ from: location }} />
+  );
+};
 
 function Layout() {
-  const [loginFromInterview, setLoginFromInterview] = useState(false);
-  const user = JSON.parse(localStorage.getItem("user"));
-
   return (
-    <LoginFromInterviewExp.Provider value={{ loginFromInterview, setLoginFromInterview }}>
+    <>
       <UserNavbar />
       <Routes>
+        {/* Public Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/:id/signin" element={<Signin />} />
         <Route path="/signin/commonQuestion" element={<Signin />} />
         <Route path="/signin/addAns/:id" element={<Signin />} />
-        <Route path="/dashboard" element={<Home />} />
-        <Route path="/resumeAnalyzer" element={<ResumeAnalyzer />} />
-        <Route path="/interviewexp" element={<Interview />} />
-        <Route path="/companies" element={<Companies />} />
-        <Route path="/stories" element={<SharedInterview />} />
-        <Route path="/company/:companyName" element={<CompanyDetails />} />
-        <Route path="/interview/:id" element={<InterviewDetail />} />
-        <Route path="/commonQuestion" element={<CommonQuestion />} />
-        <Route path="/answer/:id" element={<QuesAns />} />
-        <Route path="/profile" element={<Profile />} />
         <Route path="/developer" element={<DeveloperPage />} />
-        <Route path="*" element={<ErrorPage />} />
 
+        {/* Protected Routes */}
+        <Route path="/dashboard" element={
+          <Home />
+        } />
+        <Route path="/resumeAnalyzer" element={
+          <PrivateRoute><ResumeAnalyzer /></PrivateRoute>
+        } />
+        <Route path="/interviewexp" element={
+          <PrivateRoute><Interview /></PrivateRoute>
+        } />
+        <Route path="/companies" element={
+        <Companies />
+        } />
+        <Route path="/stories" element={
+          <PrivateRoute><SharedInterview /></PrivateRoute>
+        } />
+        <Route path="/company/:companyName" element={
+          <CompanyDetails />
+        } />
+        <Route path="/interview/:id" element={
+          <PrivateRoute><InterviewDetail /></PrivateRoute>
+        } />
+        <Route path="/commonQuestion" element={
+          <PrivateRoute><CommonQuestion /></PrivateRoute>
+        } />
+        <Route path="/answer/:id" element={
+          <PrivateRoute><QuesAns /></PrivateRoute>
+        } />
+        <Route path="/profile" element={
+          <PrivateRoute><Profile /></PrivateRoute>
+        } />
 
         {/* Admin Routes */}
-        <Route path="/admin" element={<MainAdmin />} />
-        <Route path="/addcompany" element={<AddCompanies />} />
-        <Route path="/addmcqs" element={<AddMCQ />} />
+        <Route path="/admin" element={
+          <PrivateRoute><MainAdmin /></PrivateRoute>
+        } />
+        <Route path="/addcompany" element={
+          <PrivateRoute><AddCompanies /></PrivateRoute>
+        } />
+        <Route path="/addmcqs" element={
+          <PrivateRoute><AddMCQ /></PrivateRoute>
+        } />
+
+        {/* 404 */}
+        <Route path="*" element={<ErrorPage />} />
       </Routes>
       <Toaster />
-    </LoginFromInterviewExp.Provider>
+    </>
   );
 }
 

@@ -15,17 +15,18 @@ import pdf from "pdf-parse";
 import AptitudeRoutes from "./routes/AptitudeRoutes.js";
 import VoteHistoryRoute from "./routes/VoteHistoryRoute.js"
 import SuggestedCompanyRoute from "./routes/SuggestedCompanyRoute.js";
-
+import cookieParser from "cookie-parser";
 dotenv.config();
 
 const upload = multer({ dest: "uploads/" });
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_KEY);
-
-const apiKey = process.env.GOOGLE_GEMINI_KEY;
-
 const app = express();
+app.use(cookieParser());
+app.use(cors({
+  origin: "http://localhost:5173", // your frontend URL
+  credentials: true               // allow cookies
+}));
 app.use(express.json());
-app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
 app.use((err, req, res, next) => {

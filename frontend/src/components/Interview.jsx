@@ -1,17 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect,useContext } from "react";
 import axios from "axios";
 import { FaCalendar, FaSchool, FaBuilding, FaPlus, FaTimes, FaInfoCircle, FaLightbulb, FaStar } from "react-icons/fa";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import { toast } from 'react-hot-toast';
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../Context/AuthContext";
 
 const InterviewExperienceForm = () => {
     const [companies, setCompanies] = useState([]);
+    const { user } = useContext(AuthContext);
+
     const [formData, setFormData] = useState({
         year: new Date().getFullYear(),
         branch: "IT",
         company: "",
         type: "Placement",
+        totalRounds: 1,
         rounds: [{ roundNumber: 1, experience: "" }],
         additionalTips: ""
     });
@@ -84,9 +88,8 @@ const InterviewExperienceForm = () => {
         setIsSubmitting(true);
         
         try {
-            const userData = JSON.parse(localStorage.getItem("user"));
             
-            if (!userData) {
+            if (!user) {
                 navigate('/signin');
                 return;
             }
@@ -104,22 +107,10 @@ const InterviewExperienceForm = () => {
                 throw new Error("Invalid company selection");
             }
 
-            const payload = {
-                ...formData,
-                company: selectedCompany.name,
-                createdBy: userData.id,
-                totalRounds: formData.rounds.length,
-            };
-
-            delete payload._id;
-
             await axios.post(
-                "http://localhost:5000/api/interviewExp/submit-experience",
-                payload,
+                "http://localhost:5000/api/interviewExp/submit-experience",formData,
                 {
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
+                    withCredentials: true,
                 }
             );
             

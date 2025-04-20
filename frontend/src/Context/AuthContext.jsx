@@ -5,9 +5,8 @@ const AuthContext = createContext(null);
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
- 
+  const [loading, setLoading] = useState(true);
 
-  // Initialize auth state from localStorage
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
@@ -15,13 +14,11 @@ const AuthProvider = ({ children }) => {
       setUser(parsedUser);
       axios.defaults.headers.common['Authorization'] = `Bearer ${parsedUser.token}`;
     }
+    setLoading(false); 
   }, []);
 
   const login = (userData) => {
-    if (!userData?.token) {
-      console.error("Invalid login data - no token provided");
-      return;
-    }
+    if (!userData?.token) return;
 
     const newUser = {
       ...userData.user,
@@ -34,22 +31,13 @@ const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    // Clear all auth-related data
     setUser(null);
     localStorage.removeItem("user");
-    
-    // Completely remove axios authorization header
     delete axios.defaults.headers.common['Authorization'];
-    
-    // Force clear cached credentials
-    axios.interceptors.request.use(config => {
-      config.headers['Authorization'] = undefined;
-      return config;
-    });
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, setUser }}>
+    <AuthContext.Provider value={{ user, login, logout, loading, setUser }}>
       {children}
     </AuthContext.Provider>
   );

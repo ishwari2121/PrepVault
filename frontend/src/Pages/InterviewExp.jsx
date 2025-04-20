@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { LoginFromInterviewExp } from "../App";
-import InterviewExperienceForm from "../components/Interview";
+import InterviewExperienceForm from "../Components/Interview";
 import { AuthContext } from "../Context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaLock, FaArrowRight, FaArrowLeft, FaShieldAlt } from "react-icons/fa";
@@ -9,7 +8,6 @@ import { FaStar } from "react-icons/fa";
 
 const ProtectedPage = () => {
     const { user } = useContext(AuthContext);
-    const { loginFromInterview, setLoginFromInterview } = useContext(LoginFromInterviewExp);
     const navigate = useNavigate();
 
     const handleLogin = () => {

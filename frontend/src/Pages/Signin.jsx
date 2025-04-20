@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { useNavigate, useParams, Link,useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FiAlertCircle,
@@ -13,7 +13,6 @@ import {
   FiArrowRight
 } from "react-icons/fi";
 import { AuthContext } from "../Context/AuthContext";
-import { LoginFromInterviewExp } from "../App";
 import { toast } from 'react-hot-toast';
 
 // Add global styles once
@@ -45,8 +44,8 @@ styleSheet.innerText = toastStyles;
 document.head.appendChild(styleSheet);
 
 const Signin = () => {
+  const location = useLocation();
   const { login } = useContext(AuthContext);
-  const { loginFromInterview, setLoginFromInterview } = useContext(LoginFromInterviewExp);
   const [formData, setFormData] = useState({
     usernameOrEmail: "",
     password: ""
@@ -64,23 +63,11 @@ const Signin = () => {
 
   const handleSubmit = async e => {
     e.preventDefault();
+    const from = location.state?.from?.pathname || "/dashboard";
     setIsSubmitting(true);
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/signin", formData);
+      const res = await axios.post("http://localhost:5000/api/auth/signin", formData,{ withCredentials: true });      
       login(res.data);
-
-      if (loginFromInterview) {
-        setLoginFromInterview(false);
-        navigate("/interviewexp");
-      } else if (id === "commonQuestion?category=technical") {
-        navigate("/commonQuestion?category=technical");
-      } else if (id === "resume") {
-        navigate("/resumeAnalyzer");
-      } else if (id) {
-        navigate(`/answer/${id}`);
-      } else {
-        navigate("/dashboard");
-      }
 
       toast.success(
         <div style={{
@@ -150,6 +137,7 @@ const Signin = () => {
           }
         }
       );
+      navigate(from, { replace: true });    
     } catch (err) {
       setError(err.response?.data?.message || "Invalid credentials");
       setIsSubmitting(false);

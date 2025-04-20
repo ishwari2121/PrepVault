@@ -1,28 +1,39 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect,  useContext} from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaBuilding, FaUser, FaCalendarAlt, FaStar, FaSearch, FaBriefcase, FaGraduationCap, FaRocket } from "react-icons/fa";
+import { AuthContext } from "../Context/AuthContext";
 
 const SharedInterview = () => {
     const [experiences, setExperiences] = useState([]);
+    const { user } = useContext(AuthContext);
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedType, setSelectedType] = useState("Both");
     const navigate = useNavigate();
 
     // Filter experiences
-    const filteredExperiences = experiences.filter(exp => {
-        const matchesSearch = exp.company.toLowerCase().includes(searchQuery.toLowerCase());
-        const matchesType = selectedType === "Both" || exp.type === selectedType;
-        return matchesSearch && matchesType;
+    const filteredExperiences = experiences.filter((exp) => {
+        console.log(user);
+        console.log(user.id);
+        console.log(exp.createdBy._id);
+        const matchesType =
+            selectedType === "Both" ||
+            exp.type === selectedType ||
+            (selectedType === "My" &&
+                (exp.createdBy._id === user.id));
+        return matchesType;
     });
+    
 
     useEffect(() => {
         const fetchExperiences = async () => {
             try {
                 const response = await axios.get("http://localhost:5000/api/interviewExp/all-experiences");
                 setExperiences(response.data);
+                console.log(response.data);
+                
             } catch (error) {
                 console.error("Error fetching interview experiences:", error);
             } finally {
@@ -147,7 +158,7 @@ const SharedInterview = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                     >
-                        {["Both", "Internship", "Placement"].map((type) => (
+                        {["Both", "Internship", "Placement","My"].map((type) => (
                             <motion.button
                                 key={type}
                                 whileHover={{ scale: 1.05 }}

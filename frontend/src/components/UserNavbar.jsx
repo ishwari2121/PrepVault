@@ -6,6 +6,7 @@ import { AuthContext } from '../Context/AuthContext';
 
 const Navbar = () => {
     const navigate = useNavigate();
+    
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [companies, setCompanies] = useState([]);

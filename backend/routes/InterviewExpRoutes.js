@@ -1,17 +1,18 @@
 import express from "express";
 import InterviewExperience from "../models/InterviewExp.js"; // Adjust path as needed
-import { verifyToken } from "../middleware/middleware.js";
+import { authMiddleware } from "../middleware/middleware.js";
 
 const router = express.Router();
 
 // ✅ Submit an Interview Experience
-router.post("/submit-experience", async (req, res) => {  // Remove verifyToken middleware
-    const { year, branch, company, totalRounds, rounds, additionalTips, type, createdBy } = req.body;
-
+router.post("/submit-experience", authMiddleware,async (req, res) => {  // Remove verifyToken middleware
+    const { year, branch, company, totalRounds, rounds, additionalTips, type } = req.body;
+    console.log(req.body);
+    
     // Add createdBy to required fields check
-    if (!year || !branch || !company || !totalRounds || !rounds  || !type || !createdBy) {
+    if (!year || !branch || !company || !totalRounds || !rounds  || !type) {
         return res.status(400).json({ message: "All fields are required." });
-    }
+    }    
 
     try {
         const newExperience = new InterviewExperience({
@@ -22,7 +23,7 @@ router.post("/submit-experience", async (req, res) => {  // Remove verifyToken m
             rounds,
             additionalTips,
             type,
-            createdBy: createdBy  // Get from request body instead of req.user
+            createdBy: req.user.id  // Get from request body instead of req.user
         });
 
         await newExperience.save();
