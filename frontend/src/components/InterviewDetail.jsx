@@ -22,7 +22,7 @@ const InterviewDetail = () => {
     useEffect(() => {
         const fetchExperience = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/interviewExp/experience/${id}`);
+                const response = await axios.get(`https://prepvault-adkn.onrender.com/api/interviewExp/experience/${id}`);
                 setExperience(response.data);
             } catch (error) {
                 console.error("Error fetching interview experience:", error);

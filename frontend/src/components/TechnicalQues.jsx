@@ -46,7 +46,7 @@ const TechnicalQues = () => {
 
     const fetchAllMcq = async () => {
         try {
-            const response = await axios.get("http://localhost:5000/api/MCQ");
+            const response = await axios.get("https://prepvault-adkn.onrender.com/api/MCQ");
             setAllMcq(response.data);
         } catch (error) {
             console.error("Error fetching MCQs:", error);

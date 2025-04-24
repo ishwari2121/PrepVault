@@ -70,7 +70,7 @@ const InterviewExperienceForm = () => {
     };
 
     useEffect(() => {
-        axios.get("http://localhost:5000/api/companies")
+        axios.get("https://prepvault-adkn.onrender.com/api/companies")
             .then(response => {
                 const sortedCompanies = response.data.sort((a, b) => 
                     a.name.localeCompare(b.name)

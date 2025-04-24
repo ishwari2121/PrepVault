@@ -9,7 +9,7 @@ const PDFPreview = ({ analysisId }) => {
   useEffect(() => {
     const fetchPDF = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/resume/preview/${analysisId}`);
+        const response = await fetch(`https://prepvault-adkn.onrender.com/api/resume/preview/${analysisId}`);
         
         if (!response.ok) {
           throw new Error('Failed to load PDF');

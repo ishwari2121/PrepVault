@@ -23,8 +23,8 @@ const CompanyList = () => {
             try {
                 setIsLoading(true);
                 const [companiesRes, interviewsRes] = await Promise.all([
-                    axios.get("http://localhost:5000/api/companies"),
-                    axios.get("http://localhost:5000/api/interviewExp/all-experiences")
+                    axios.get("https://prepvault-adkn.onrender.com/api/companies"),
+                    axios.get("https://prepvault-adkn.onrender.com/api/interviewExp/all-experiences")
                 ]);
 
                 const sortedCompanies = companiesRes.data.sort((a, b) => 

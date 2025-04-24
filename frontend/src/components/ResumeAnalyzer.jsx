@@ -21,7 +21,7 @@ const ResumeAnalyzer = () => {
       
         try {
           const response = await axios.post(
-            'http://localhost:5000/api/analyze', // Directly specify the Node.js server URL
+            'https://prepvault-adkn.onrender.com/api/analyze', // Directly specify the Node.js server URL
             formData,
             {
               headers: {

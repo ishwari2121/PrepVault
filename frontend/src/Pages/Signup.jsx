@@ -40,7 +40,7 @@ export default function Signup() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/auth/all-users');
+        const response = await axios.get('https://prepvault-adkn.onrender.com/api/auth/all-users');
         setAllUsers(response.data);
       } catch {
         toast.error('Failed to fetch users');
