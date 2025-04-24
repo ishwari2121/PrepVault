@@ -4,7 +4,6 @@ import { authMiddleware } from "../middleware/middleware.js";
 
 const router = express.Router();
 
-// ✅ Submit an Interview Experience
 router.post("/submit-experience", authMiddleware,async (req, res) => {  // Remove verifyToken middleware
     const { year, branch, company, totalRounds, rounds, additionalTips, type } = req.body;
     console.log(req.body);
