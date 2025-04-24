@@ -4,9 +4,9 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "start:analyzer": "cd ../resume-analyzer-service && python app.py",
     "dev": "nodemon server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm install && npm install --prefix backend && npm run build --prefix frontend",
   },
   "keywords": [],
   "author": "",
