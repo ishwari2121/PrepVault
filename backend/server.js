@@ -24,7 +24,7 @@ const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_KEY);
 const app = express();
 app.use(cookieParser());
 app.use(cors({
-  origin: "https://prepvault-1-frontend.onrender.com", // your frontend URL
+  origin: "https://prep-vault-wew1.vercel.app", // your frontend URL
   credentials: true               // allow cookies
 }));
 app.use(express.json());
@@ -150,4 +150,4 @@ app.get("/", (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, '0.0.0.0',() => console.log(`🚀 Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
