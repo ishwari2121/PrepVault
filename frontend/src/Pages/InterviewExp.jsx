@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import InterviewExperienceForm from "../Components/Interview";
+import InterviewExperienceForm from "../components/Interview";
 import { AuthContext } from "../Context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaLock, FaArrowRight, FaArrowLeft, FaShieldAlt } from "react-icons/fa";
