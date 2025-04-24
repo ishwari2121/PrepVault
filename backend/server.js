@@ -16,6 +16,7 @@ import AptitudeRoutes from "./routes/AptitudeRoutes.js";
 import VoteHistoryRoute from "./routes/VoteHistoryRoute.js"
 import SuggestedCompanyRoute from "./routes/SuggestedCompanyRoute.js";
 import cookieParser from "cookie-parser";
+import { authMiddleware } from "./middleware/middleware.js";
 dotenv.config();
 
 const upload = multer({ dest: "uploads/" });
@@ -49,7 +50,7 @@ app.use("/api/vote/",VoteHistoryRoute);
 app.use("/api/suggetion",SuggestedCompanyRoute);
 
 
-app.post("/analyze", upload.single("resume"), async (req, res) => {
+app.post("/analyze", upload.single("resume"), authMiddleware,async (req, res) => {
   try {
     const { jobDescription } = req.body;
     if (!jobDescription || !req.file) {
@@ -150,4 +151,4 @@ app.get("/", (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+app.listen(PORT, '0.0.0.0',() => console.log(`🚀 Server running on port ${PORT}`));

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef,useContext } from 'react';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiUpload, FiFileText, FiLoader, FiAlertCircle, FiX, FiDownload, FiClock, FiPrinter, FiSearch } from 'react-icons/fi';
@@ -9,6 +9,7 @@ import rehypeHighlight from 'rehype-highlight';
 import 'highlight.js/styles/github-dark.css';
 import HistoryItem from '../components/HistoryItem';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../Context/AuthContext';
 
 // Animation variants
 const floatingVariants = {
@@ -68,6 +69,7 @@ function App() {
   const [jobDescription, setJobDescription] = useState('');
   const [analysis, setAnalysis] = useState('');
   const [loading, setLoading] = useState(false);
+  const { user } = useContext(AuthContext); 
   const [error, setError] = useState('');
   const [showParticles, setShowParticles] = useState(false);
   const [dragActive, setDragActive] = useState(false);
@@ -96,13 +98,6 @@ function App() {
     return formatted;
   }
 
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"))?.username;
-    if (!user) {
-      navigate("/resume/signin");
-      return;
-    }
-  });
 
   const handleFileChange = (e) => {
     e.preventDefault();
@@ -158,7 +153,9 @@ function App() {
     formData.append('jobDescription', jobDescription);
     
     try {
-      const response = await axios.post('http://localhost:5000/analyze', formData);
+      const response = await axios.post('http://localhost:5000/analyze', formData,{
+        withCredentials: true,
+    });
       const responseData = response.data.response;
       
       setShowParticles(true);
@@ -166,9 +163,6 @@ function App() {
         const formattedAnalysis = formatAnalysis(responseData);
         setAnalysis(formattedAnalysis);
         setShowParticles(false);
-
-        const user = JSON.parse(localStorage.getItem("user")) || { username: "anonymous" };
-
         const dbFormData = new FormData();
         dbFormData.append("username", user.username);
         dbFormData.append("jobDescription", jobDescription);
@@ -190,12 +184,11 @@ function App() {
 
   const fetchHistory = async () => {
     try {
-      const user = JSON.parse(localStorage.getItem("user")) || { username: "anonymous" };
-      const response = await axios.get('http://localhost:5000/api/resume/user-history', {
-        headers: { 
-          'user': JSON.stringify({ username: user.username }) 
+      const response = await axios.get('http://localhost:5000/api/resume/user-history',
+        {
+          withCredentials: true,
         }
-      });
+      );
       setHistory(response.data);
     } catch (err) {
       console.error("Error fetching history", err);

@@ -1,6 +1,7 @@
 import express from 'express';
 import Analysis from '../models/ResumeAnalysisSchema.js';
 import upload from '../middleware/upload.js';
+import { authMiddleware } from "../middleware/middleware.js";
 
 const router = express.Router();
 
@@ -36,12 +37,12 @@ router.post('/create', upload.single('pdf'), async (req, res) => {
 });
 
 // Get user history
-router.get('/user-history', async (req, res) => {
+router.get('/user-history', authMiddleware, async (req, res) => {
   try {
-    const user = JSON.parse(req.headers.user);
+    const user = req.user;
     const history = await Analysis.find({ username: user.username })
       .select('jobDescription pdf response createdAt')
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
 
     res.json(history.map(item => ({
       _id: item._id,
