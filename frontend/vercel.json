@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "frontend/package.json",  // Path to your frontend folder/package.json
+      "use": "@vercel/static-build"    // Use the static build for frontend apps
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"           // Handle all routes with index.html (important for SPA)
+    }
+  ]
+}
