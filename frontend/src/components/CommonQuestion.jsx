@@ -6,8 +6,8 @@ import {
   FaCode, FaUsers, FaLightbulb, FaCommentDots,
   FaBars, FaTimes, FaSearch, FaChevronDown
 } from 'react-icons/fa';
-import TechnicalMcq from '../components/TechnicalQues';
-import AptitudeQuestions from '../components/AptitudeQuestions';
+import TechnicalMcq from '../Components/TechnicalQues';
+import AptitudeQuestions from '../Components/AptitudeQuestions';
 import { useMediaQuery } from '../hooks/useMediaQuery'
 
 const CommonQuestion = () => {
@@ -55,7 +55,7 @@ const CommonQuestion = () => {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await axios.get("https://prepvault-adkn.onrender.com/api/commonQuestions");
+        const response = await axios.get("http://localhost:5000/api/commonQuestions");
         setQuestions(response.data?.data || []);
         setQuestionsLoaded(true);
       } catch (error) {
@@ -69,7 +69,7 @@ const CommonQuestion = () => {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const response = await axios.get("https://prepvault-adkn.onrender.com/api/companies");
+        const response = await axios.get("http://localhost:5000/api/companies");
         const sortedCompanies = response.data.sort((a, b) => a.name.localeCompare(b.name));
         setTotalCompanies(sortedCompanies);
       } catch (error) {

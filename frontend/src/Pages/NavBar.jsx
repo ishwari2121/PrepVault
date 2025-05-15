@@ -14,7 +14,7 @@ const Navbar = () => {
     const searchRef = useRef(null);
 
     useEffect(() => {
-        axios.get("https://prepvault-adkn.onrender.com/api/companies")
+        axios.get("http://localhost:5000/api/companies")
             .then(response => setCompanies(response.data))
             .catch(error => console.error("Error fetching companies:", error));
     }, []);

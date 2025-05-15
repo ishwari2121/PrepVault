@@ -67,7 +67,7 @@ const AptitudeQuestions = () => {
 
     const fetchAllMcq = async () => {
         try {
-            const response = await axios.get("https://prepvault-adkn.onrender.com/api/aptitude");
+            const response = await axios.get("http://localhost:5000/api/aptitude");
             setAllMcq(response.data.data);
         } catch (error) {
             console.error("Error fetching Aptitude Questions:", error);

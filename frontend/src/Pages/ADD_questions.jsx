@@ -44,7 +44,7 @@ const QuestionForm = () => {
     e.preventDefault();
     if (!validate()) return;
     try {
-      await axios.post('https://prepvault-adkn.onrender.com/api/MCQ', formData);
+      await axios.post('http://localhost:5000/api/MCQ', formData);
       setMessage('Question added successfully!');
       setMessageType('success');
       setFormData({

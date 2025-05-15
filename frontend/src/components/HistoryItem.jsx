@@ -11,7 +11,7 @@ const HistoryItem = ({ item }) => {
   const [showResponseOnly, setShowResponseOnly] = useState(false);
 
   const downloadPDF = async () => {
-    window.open(`https://prepvault-adkn.onrender.com/api/resume/download/${item._id}`, '_blank');
+    window.open(`http://localhost:5000/api/resume/download/${item._id}`, '_blank');
   };
 
   const printAnalysis = () => {

@@ -34,7 +34,7 @@ const QuesAns = () => {
     useEffect(() => {
         const fetchQuestions = async () => {
             try {
-                const response = await axios.get(`https://prepvault-adkn.onrender.com/api/commonQuestions/${id}`);
+                const response = await axios.get(`http://localhost:5000/api/commonQuestions/${id}`);
                 setAllData(response.data || {});
             } catch (error) {
                 console.error("Error fetching interview questions:", error);
@@ -81,7 +81,7 @@ const QuesAns = () => {
                 return;
             }
 
-            await axios.post(`https://prepvault-adkn.onrender.com/api/commonQuestions/answers/${id}`, {
+            await axios.post(`http://localhost:5000/api/commonQuestions/answers/${id}`, {
                 username: JSON.parse(localStorage.getItem("user")).username,
                 answer: formData.answer,
                 code: formData.code
@@ -90,7 +90,7 @@ const QuesAns = () => {
             });
 
             // Refresh data after successful submission
-            const response = await axios.get(`https://prepvault-adkn.onrender.com/api/commonQuestions/${id}`);
+            const response = await axios.get(`http://localhost:5000/api/commonQuestions/${id}`);
             setAllData(response.data);
             setFormData({ answer: '', code: '' });
             setShowAnswerForm(false);
@@ -119,17 +119,17 @@ const QuesAns = () => {
                 return;
             }
             //sabke sab is answerID ke votes delete ho jayenge
-            const vote = await axios.get(`https://prepvault-adkn.onrender.com/api/vote/${user.username}/${id}/${answerToDelete}/votehistory`);
+            const vote = await axios.get(`http://localhost:5000/api/vote/${user.username}/${id}/${answerToDelete}/votehistory`);
             console.log(vote);
-            if(!vote.data)await axios.delete(`https://prepvault-adkn.onrender.com/api/vote/${id}/${answerToDelete}/delete_all_votes`);
+            if(!vote.data)await axios.delete(`http://localhost:5000/api/vote/${id}/${answerToDelete}/delete_all_votes`);
 
             await axios.delete(
-                `https://prepvault-adkn.onrender.com/api/commonQuestions/${id}/answers/${answerToDelete}`,
+                `http://localhost:5000/api/commonQuestions/${id}/answers/${answerToDelete}`,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
 
             // Refresh the question data
-            const response = await axios.get(`https://prepvault-adkn.onrender.com/api/commonQuestions/${id}`);
+            const response = await axios.get(`http://localhost:5000/api/commonQuestions/${id}`);
             setAllData(response.data);
             
         } catch (error) {
@@ -163,19 +163,19 @@ const QuesAns = () => {
 
         try {
 
-            const vote = await axios.get(`https://prepvault-adkn.onrender.com/api/vote/${user.username}/${id}/${answerId}/votehistory`);
+            const vote = await axios.get(`http://localhost:5000/api/vote/${user.username}/${id}/${answerId}/votehistory`);
 
             if(vote.data.success == false)
             {
                 //downvote ++ ho gaya
                 await axios.post(
-                    `https://prepvault-adkn.onrender.com/api/commonQuestions/${id}/answers/${answerId}/vote`,
+                    `http://localhost:5000/api/commonQuestions/${id}/answers/${answerId}/vote`,
                     {action : "downvote"},
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
 
                 // data base mai user ki entry ho gayi
-                await axios.post(`https://prepvault-adkn.onrender.com/api/vote/${id}/answers/${answerId}/votehistory`,
+                await axios.post(`http://localhost:5000/api/vote/${id}/answers/${answerId}/votehistory`,
                     {
                         username : user.username,
                         action : "downvote"
@@ -187,40 +187,40 @@ const QuesAns = () => {
             {
                 // downvote decrease ho gaya
                 await axios.post(
-                    `https://prepvault-adkn.onrender.com/api/commonQuestions/${id}/answers/${answerId}/reduce_vote`,
+                    `http://localhost:5000/api/commonQuestions/${id}/answers/${answerId}/reduce_vote`,
                     action,
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
 
                 //database mai se entry remove ho gayi
-                await axios.delete(`https://prepvault-adkn.onrender.com/api/vote/${user.username}/${id}/${answerId}/delete`);
+                await axios.delete(`http://localhost:5000/api/vote/${user.username}/${id}/${answerId}/delete`);
             }
 
             if(vote.data.action === "upvote")
             {
                 // downvote decrease ho gaya
                 await axios.post(
-                    `https://prepvault-adkn.onrender.com/api/commonQuestions/${id}/answers/${answerId}/reduce_vote`,
+                    `http://localhost:5000api/commonQuestions/${id}/answers/${answerId}/reduce_vote`,
                     {action : "upvote"},
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
 
                 //downvote ++ ho gaya
                 await axios.post(
-                    `https://prepvault-adkn.onrender.com/api/commonQuestions/${id}/answers/${answerId}/vote`,
+                    `http://localhost:5000/api/commonQuestions/${id}/answers/${answerId}/vote`,
                     action,
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
 
                 //user action ko upvote upvote se downvote mai update karenge
-                await axios.put(`https://prepvault-adkn.onrender.com/api/vote/${user.username}/${id}/${answerId}/update`,
+                await axios.put(`http://localhost:5000/api/vote/${user.username}/${id}/${answerId}/update`,
                     {action : "downvote"}
                 );
 
             }
 
             // Refresh data after vote
-            const response = await axios.get(`https://prepvault-adkn.onrender.com/api/commonQuestions/${id}`);
+            const response = await axios.get(`http://localhost:5000/api/commonQuestions/${id}`);
             setAllData(response.data);
         } catch (e) {
             console.error("Error downvoting:", e);
@@ -239,19 +239,19 @@ const QuesAns = () => {
 
         try {
            
-            const vote = await axios.get(`https://prepvault-adkn.onrender.com/api/vote/${user.username}/${id}/${answerId}/votehistory`);
+            const vote = await axios.get(`http://localhost:5000/api/vote/${user.username}/${id}/${answerId}/votehistory`);
     
             if(vote.data.success === false)
             {
                 // upvote ka count increase ho gaya
                 await axios.post(
-                    `https://prepvault-adkn.onrender.com/api/commonQuestions/${id}/answers/${answerId}/vote`,
+                    `http://localhost:5000/api/commonQuestions/${id}/answers/${answerId}/vote`,
                     action,
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
                 
                 // data base mai user ki entry ho gayi
-                await axios.post(`https://prepvault-adkn.onrender.com/api/vote/${id}/answers/${answerId}/votehistory`,
+                await axios.post(`http://localhost:5000/api/vote/${id}/answers/${answerId}/votehistory`,
                     {
                         username : user.username,
                         action : "upvote"
@@ -263,13 +263,13 @@ const QuesAns = () => {
             {
                 // upvote decrease ho gaya
                 await axios.post(
-                    `https://prepvault-adkn.onrender.com/api/commonQuestions/${id}/answers/${answerId}/reduce_vote`,
+                    `http://localhost:5000/api/commonQuestions/${id}/answers/${answerId}/reduce_vote`,
                     action,
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
 
                 //database mai se entry delete ho gayi
-                await axios.delete(`https://prepvault-adkn.onrender.com/api/vote/${user.username}/${id}/${answerId}/delete`);
+                await axios.delete(`http://localhost:5000/api/vote/${user.username}/${id}/${answerId}/delete`);
 
             }
 
@@ -277,27 +277,27 @@ const QuesAns = () => {
             {
                 // downvote ka count decrease ho gaya
                 await axios.post(
-                    `https://prepvault-adkn.onrender.com/api/commonQuestions/${id}/answers/${answerId}/reduce_vote`,
+                    `http://localhost:5000/api/commonQuestions/${id}/answers/${answerId}/reduce_vote`,
                     {action : "downvote"},
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
 
                 // upvote ka count increase ho gaya
                 await axios.post(
-                    `https://prepvault-adkn.onrender.com/api/commonQuestions/${id}/answers/${answerId}/vote`,
+                    `http://localhost:5000/api/commonQuestions/${id}/answers/${answerId}/vote`,
                     action,
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
 
                 //user action ko upvote downvote se upvote mai update karenge
-                await axios.put(`https://prepvault-adkn.onrender.com/api/vote/${user.username}/${id}/${answerId}/update`,
+                await axios.put(`http://localhost:5000/api/vote/${user.username}/${id}/${answerId}/update`,
                     {action : "upvote"}
                 );
 
             }
 
             // Refresh data after vote
-            const response = await axios.get(`https://prepvault-adkn.onrender.com/api/commonQuestions/${id}`);
+            const response = await axios.get(`http://localhost:5000/api/commonQuestions/${id}`);
             setAllData(response.data);
 
         } catch (e) {

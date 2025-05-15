@@ -30,7 +30,7 @@ const SharedInterview = () => {
     useEffect(() => {
         const fetchExperiences = async () => {
             try {
-                const response = await axios.get("https://prepvault-adkn.onrender.com/api/interviewExp/all-experiences");
+                const response = await axios.get("http://localhost:5000/api/interviewExp/all-experiences");
                 setExperiences(response.data);
                 console.log(response.data);
                 

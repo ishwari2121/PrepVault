@@ -33,7 +33,7 @@ const CompanyDetails = () => {
 
     useEffect(() => {
         axios
-        .get(`https://prepvault-adkn.onrender.com/api/companies/${companyName}`)
+        .get(`http://localhost:5000/api/companies/${companyName}`)
         .then((response) => {
             setCompany(response.data);
         })

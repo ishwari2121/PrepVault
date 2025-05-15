@@ -18,7 +18,7 @@ const Profile = () => {
     const fetchExperiences = async () => {
       try {
         if (user && user.id) {
-          const res = await axios.get(`https://prepvault-adkn.onrender.com/api/interviewExp/user/${user.id}`);
+          const res = await axios.get(`http://localhost:5000/api/interviewExp/user/${user.id}`);
           setExperiences(Array.isArray(res.data) ? res.data : []);
         }
       } catch (err) {

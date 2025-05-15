@@ -25,7 +25,7 @@ const Home = () => {
   useEffect(() => {
     const fetchExperiences = async () => {
       try {
-        const response = await axios.get("https://prepvault-adkn.onrender.com/api/interviewExp/all-experiences");
+        const response = await axios.get("http://localhost:5000/api/interviewExp/all-experiences");
         setTotalSharedInterview(response.data);
       } catch (error) {
         console.error("Error fetching interview experiences:", error);
@@ -38,7 +38,7 @@ const Home = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get("https://prepvault-adkn.onrender.com/api/auth/all-users");
+        const response = await axios.get("http://localhost:5000/api/auth/all-users");
         setTotalMembersRegistered(response.data);
       } catch (error) {
         console.error("Error fetching users:", error);
@@ -51,7 +51,7 @@ const Home = () => {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const response = await axios.get("https://prepvault-adkn.onrender.com/api/companies");
+        const response = await axios.get("http://localhost:5000/api/companies");
         setTotalCompaniesCoved(response.data);
       } catch (error) {
         console.error("Error fetching companies:", error);
