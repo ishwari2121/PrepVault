@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useContext  } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { FaBuilding, FaChevronRight, FaSearch, FaInfoCircle, FaTimes } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
-
+import { AuthContext } from "../Context/AuthContext";
 const CompanyList = () => {
+    const { user } = useContext(AuthContext);
     const [companies, setCompanies] = useState([]);
     const [allInterviews, setAllInterviews] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
@@ -74,7 +75,6 @@ const CompanyList = () => {
                 error: false
             });
 
-            const user = JSON.parse(localStorage.getItem("user"));
             if (!user) {
                 setSuggestionStatus({
                     loading: false,
@@ -84,9 +84,12 @@ const CompanyList = () => {
                 return;
             }
 
-            const response = await axios.post("http://localhost:5000/api/suggetion/suggest-company", {
-                username: user.username,
-                company: suggestedCompany.trim()
+
+            const response = await axios.post("http://localhost:5000/api/suggetion/suggest-company", 
+                { company: suggestedCompany } ,
+                {
+                    withCredentials: true,
+                
             });
 
             setSuggestionStatus({

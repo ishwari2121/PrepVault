@@ -1,17 +1,18 @@
 import express from "express";
 import SuggestedCompany from "../models/SuggestedCompany.js";
 const router = express.Router();
+import { authMiddleware } from "../middleware/middleware.js";
 
-router.post("/suggest-company", async (req, res) => {
+
+router.post("/suggest-company", authMiddleware,async (req, res) => {
   try {
-    const { username, company } = req.body;
-
-    const existing = await SuggestedCompany.findOne({ company });
-
+    const { company  } = req.body;
+    const { username } = req.user;
+    
+    const existing = await SuggestedCompany.findOne({ company });    
     if (existing) {
       return res.status(400).json({ message: "Thank You But Already Suggested" });
     }
-    
     const newSuggestion = new SuggestedCompany({ username, company });
     await newSuggestion.save();
 
