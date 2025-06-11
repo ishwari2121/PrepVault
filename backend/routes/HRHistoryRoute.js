@@ -1,5 +1,5 @@
 import express from "express";
-import VoteHistory from "../models/VoteHistory.js";
+import VoteHistory from "../models/HRHistory.js";
 const router = express.Router();
 
 

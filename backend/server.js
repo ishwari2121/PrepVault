@@ -13,7 +13,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import fs from "fs/promises";
 import pdf from "pdf-parse";
 import AptitudeRoutes from "./routes/AptitudeRoutes.js";
-import VoteHistoryRoute from "./routes/VoteHistoryRoute.js"
+import HRHistoryRoute from "./routes/HRHistoryRoute.js"
 import SuggestedCompanyRoute from "./routes/SuggestedCompanyRoute.js";
 import cookieParser from "cookie-parser";
 import { authMiddleware } from "./middleware/middleware.js";
@@ -45,7 +45,7 @@ app.use("/api/commonQuestions", connect);
 app.use("/api/MCQ", MCQRoute);
 app.use("/api/resume",AnalysisRoute);
 app.use('/api/aptitude',AptitudeRoutes)
-app.use("/api/vote/",VoteHistoryRoute);
+app.use("/api/vote/",HRHistoryRoute);
 app.use("/api/suggetion",SuggestedCompanyRoute);
 
 

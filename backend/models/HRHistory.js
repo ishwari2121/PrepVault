@@ -14,11 +14,6 @@ const VoteHistorySchema = new mongoose.Schema(
             type : String,
             required : true
         }, 
-        action : {
-            type : String,
-            enum : ["upvote","downvote"],
-            required : true,
-        },
         updated_at :{
             type : Date,
             default : Date.now
