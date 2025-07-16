@@ -23,8 +23,9 @@ const upload = multer({ dest: "uploads/" });
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_KEY);
 const app = express();
 app.use(cookieParser());
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL,
+  origin:true,
   credentials: true
 }));
 app.use(express.json());
