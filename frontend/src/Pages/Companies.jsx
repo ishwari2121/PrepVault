@@ -24,8 +24,8 @@ const CompanyList = () => {
             try {
                 setIsLoading(true);
                 const [companiesRes, interviewsRes] = await Promise.all([
-                    axios.get("${import.meta.env.VITE_API_BASE_URL}/companies"),
-                    axios.get("${import.meta.env.VITE_API_BASE_URL}/interviewExp/all-experiences")
+                    axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/companies`),
+                    axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/interviewExp/all-experiences`)
                 ]);
 
                 const sortedCompanies = companiesRes.data.sort((a, b) => 
@@ -85,7 +85,7 @@ const CompanyList = () => {
             }
 
 
-            const response = await axios.post("${import.meta.env.VITE_API_BASE_URL}/suggetion/suggest-company", 
+            const response = await axios.post("${import.meta.env.VITE_APP_BACKEND_URL}/suggetion/suggest-company", 
                 { company: suggestedCompany } ,
                 {
                     withCredentials: true,

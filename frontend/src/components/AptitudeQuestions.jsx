@@ -67,7 +67,7 @@ const AptitudeQuestions = () => {
 
     const fetchAllMcq = async () => {
         try {
-            const response = await axios.get("${import.meta.env.VITE_API_BASE_URL}/aptitude");
+            const response = await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/aptitude`);
             setAllMcq(response.data.data);
         } catch (error) {
             console.error("Error fetching Aptitude Questions:", error);
@@ -184,7 +184,7 @@ const AptitudeQuestions = () => {
         
         try {
             await axios.post(
-                `${import.meta.env.VITE_API_BASE_URL}/aptitude/${mcqId}/explanations`,
+                `${import.meta.env.VITE_APP_BACKEND_URL}/aptitude/${mcqId}/explanations`,
                 { explanation: userExplanation, username: user }
             );
 
@@ -223,7 +223,7 @@ const AptitudeQuestions = () => {
     const handleDeleteExplanation = async (questionId, explanationId) => {
         try {
             await axios.delete(
-                `${import.meta.env.VITE_API_BASE_URL}/aptitude/${questionId}/explanations/${explanationId}`
+                `${import.meta.env.VITE_APP_BACKEND_URL}/aptitude/${questionId}/explanations/${explanationId}`
             );
             fetchAllMcq();
         } catch (error) {

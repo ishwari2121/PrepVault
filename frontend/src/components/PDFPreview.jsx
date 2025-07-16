@@ -9,7 +9,7 @@ const PDFPreview = ({ analysisId }) => {
   useEffect(() => {
     const fetchPDF = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/resume/preview/${analysisId}`);
+        const response = await fetch(`${import.meta.env.VITE_APP_BACKEND_URL}/resume/preview/${analysisId}`);
         
         if (!response.ok) {
           throw new Error('Failed to load PDF');

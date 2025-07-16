@@ -6,8 +6,9 @@ import {
   FaCode, FaUsers, FaLightbulb, FaCommentDots,
   FaBars, FaTimes, FaSearch, FaChevronDown
 } from 'react-icons/fa';
-import TechnicalMcq from './components/TechnicalQues';
-import AptitudeQuestions from './components/AptitudeQuestions';
+//import TechnicalMcq from './components/TechnicalQues';
+import TechnicalQues from './TechnicalQues';
+import AptitudeQuestions from './AptitudeQuestions';
 import { useMediaQuery } from '../hooks/useMediaQuery'
 
 const CommonQuestion = () => {
@@ -55,7 +56,7 @@ const CommonQuestion = () => {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await axios.get("${import.meta.env.VITE_API_BASE_URL}/commonQuestions");
+        const response = await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/commonQuestions`);
         setQuestions(response.data?.data || []);
         setQuestionsLoaded(true);
       } catch (error) {
@@ -69,7 +70,7 @@ const CommonQuestion = () => {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const response = await axios.get("${import.meta.env.VITE_API_BASE_URL}/companies");
+        const response = await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/companies`);
         const sortedCompanies = response.data.sort((a, b) => a.name.localeCompare(b.name));
         setTotalCompanies(sortedCompanies);
       } catch (error) {
@@ -125,7 +126,7 @@ const CommonQuestion = () => {
   const renderSelectedComponent = () => {
     switch(selectedCategory) {
       case 'technical':
-        return <TechnicalMcq />;
+        return <TechnicalQues />;
       case 'aptitude':
         return <AptitudeQuestions />;
       default:

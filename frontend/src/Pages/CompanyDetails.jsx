@@ -33,7 +33,7 @@ const CompanyDetails = () => {
 
     useEffect(() => {
         axios
-        .get(`${import.meta.env.VITE_API_BASE_URL}/companies/${companyName}`)
+        .get(`${import.meta.env.VITE_APP_BACKEND_URL}/companies/${companyName}`)
         .then((response) => {
             setCompany(response.data);
         })

@@ -169,7 +169,7 @@ function App() {
         dbFormData.append("response", formattedAnalysis);
         dbFormData.append("pdf", resume);
 
-        await axios.post('${import.meta.env.VITE_API_BASE_URL}/resume/create', dbFormData, {
+        await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/resume/create`, dbFormData, {
           headers: { "Content-Type": "multipart/form-data" }
         });
         
@@ -184,7 +184,7 @@ function App() {
 
   const fetchHistory = async () => {
     try {
-      const response = await axios.get('${import.meta.env.VITE_API_BASE_URL}/resume/user-history',
+      const response = await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/resume/user-history`,
         {
           withCredentials: true,
         }
@@ -204,7 +204,7 @@ function App() {
   };
 
   const downloadPDF = (id, filename) => {
-    window.open(`${import.meta.env.VITE_API_BASE_URL}/resume/download/${id}`, '_blank');
+    window.open(`${import.meta.env.VITE_APP_BACKEND_URL}/resume/download/${id}`, '_blank');
   };
 
   const printAnalysis = () => {

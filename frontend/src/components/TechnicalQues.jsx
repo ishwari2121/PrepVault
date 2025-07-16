@@ -46,7 +46,7 @@ const TechnicalQues = () => {
 
     const fetchAllMcq = async () => {
         try {
-            const response = await axios.get("${import.meta.env.VITE_API_BASE_URL}/MCQ");
+            const response = await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/MCQ`);
             setAllMcq(response.data);
         } catch (error) {
             console.error("Error fetching MCQs:", error);
@@ -171,7 +171,7 @@ const TechnicalQues = () => {
         
         try {
             await axios.post(
-                `${import.meta.env.VITE_API_BASE_URL}/MCQ/${mcqId}/explanations`,
+                `${import.meta.env.VITE_APP_BACKEND_URL}/MCQ/${mcqId}/explanations`,
                 { explanation: userExplanation, username: user }
             );
 
@@ -210,7 +210,7 @@ const TechnicalQues = () => {
     const handleDeleteExplanation = async (questionId, explanationId) => {
         try {
             await axios.delete(
-                `${import.meta.env.VITE_API_BASE_URL}/MCQ/${questionId}/explanations/${explanationId}`
+                `${import.meta.env.VITE_APP_BACKEND_URL}/MCQ/${questionId}/explanations/${explanationId}`
             );
             fetchAllMcq();
         } catch (error) {

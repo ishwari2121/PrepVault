@@ -30,7 +30,7 @@ const SharedInterview = () => {
     useEffect(() => {
         const fetchExperiences = async () => {
             try {
-                const response = await axios.get("${import.meta.env.VITE_API_BASE_URL}/interviewExp/all-experiences");
+                const response = await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/interviewExp/all-experiences`);
                 setExperiences(response.data);
                 console.log(response.data);
                 

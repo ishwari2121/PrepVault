@@ -70,7 +70,7 @@ const InterviewExperienceForm = () => {
     };
 
     useEffect(() => {
-        axios.get("${import.meta.env.VITE_API_BASE_URL}/companies")
+        axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/companies`)
             .then(response => {
                 const sortedCompanies = response.data.sort((a, b) => 
                     a.name.localeCompare(b.name)
@@ -108,7 +108,7 @@ const InterviewExperienceForm = () => {
             }
 
             await axios.post(
-                "${import.meta.env.VITE_API_BASE_URL}/interviewExp/submit-experience",formData,
+                `${import.meta.env.VITE_APP_BACKEND_URL}/interviewExp/submit-experience`,formData,
                 {
                     withCredentials: true,
                 }

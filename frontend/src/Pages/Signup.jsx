@@ -40,7 +40,7 @@ export default function Signup() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('${import.meta.env.VITE_API_BASE_URL}/auth/all-users');
+        const response = await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/auth/all-users`);
         setAllUsers(response.data);
       } catch {
         toast.error('Failed to fetch users');
@@ -113,7 +113,7 @@ export default function Signup() {
         return;
       }
 
-      await axios.post('${import.meta.env.VITE_API_BASE_URL}/auth/signup', {
+      await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/auth/signup`, {
         username: formData.username,
         email,
         password: formData.password

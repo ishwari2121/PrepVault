@@ -44,7 +44,7 @@ const QuestionForm = () => {
     e.preventDefault();
     if (!validate()) return;
     try {
-      await axios.post('${import.meta.env.VITE_API_BASE_URL}/MCQ', formData);
+      await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/MCQ`,formData);
       setMessage('Question added successfully!');
       setMessageType('success');
       setFormData({

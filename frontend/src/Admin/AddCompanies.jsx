@@ -43,7 +43,7 @@ const AdminCompanyDashboard = () => {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const response = await axios.get('${import.meta.env.VITE_API_BASE_URL}/companies');
+        const response = await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/companies`);
         setCompanies(response.data);
         setIsLoading(false);
       } catch (error) {
@@ -88,7 +88,7 @@ const AdminCompanyDashboard = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('${import.meta.env.VITE_API_BASE_URL}/companies', formData);
+      const response = await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/companies`, formData);
       setCompanies([...companies, response.data.company]);
       setFormData({
         name: '',
@@ -117,7 +117,7 @@ const AdminCompanyDashboard = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/companies/${selectedCompany.name}/recruitment`,
+        `${import.meta.env.VITE_APP_BACKEND_URL}/companies/${selectedCompany.name}/recruitment`,
         { recruitmentProcess: formData.recruitmentProcess }
       );
       const updatedCompanies = companies.map(company =>
@@ -139,7 +139,7 @@ const AdminCompanyDashboard = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/companies/${selectedCompany.name}/eligibility`,
+        `${import.meta.env.VITE_APP_BACKEND_URL}/companies/${selectedCompany.name}/eligibility`,
         { eligibilityCriteria: [newCriteria] }
       );
       const updatedCompanies = companies.map(company =>
@@ -218,7 +218,7 @@ const AdminCompanyDashboard = () => {
   // Select a company to view/edit
   const selectCompany = async (companyName) => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/companies/${companyName}`);
+      const response = await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/companies/${companyName}`);
       setSelectedCompany(response.data);
       setFormData({
         name: response.data.name,
