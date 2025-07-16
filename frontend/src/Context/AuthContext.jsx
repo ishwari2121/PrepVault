@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode'; 
 
 const AuthContext = createContext(null);
 
@@ -9,12 +10,26 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
+
     if (storedUser) {
-      const parsedUser = JSON.parse(storedUser);
-      setUser(parsedUser);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${parsedUser.token}`;
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        const decoded = jwtDecode(parsedUser.token);
+
+        // Check if token has expired
+        if (decoded.exp * 1000 < Date.now()) {
+          logout(); // Token is expired, force logout
+        } else {
+          setUser(parsedUser);
+          axios.defaults.headers.common['Authorization'] = `Bearer ${parsedUser.token}`;
+        }
+      } catch (error) {
+        console.error("Failed to decode or parse token:", error);
+        logout(); // Malformed token or localStorage — clean it up
+      }
     }
-    setLoading(false); 
+
+    setLoading(false);
   }, []);
 
   const login = (userData) => {
