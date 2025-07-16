@@ -55,7 +55,7 @@ const CommonQuestion = () => {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/commonQuestions");
+        const response = await axios.get("${import.meta.env.VITE_API_BASE_URL}/commonQuestions");
         setQuestions(response.data?.data || []);
         setQuestionsLoaded(true);
       } catch (error) {
@@ -69,7 +69,7 @@ const CommonQuestion = () => {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/companies");
+        const response = await axios.get("${import.meta.env.VITE_API_BASE_URL}/companies");
         const sortedCompanies = response.data.sort((a, b) => a.name.localeCompare(b.name));
         setTotalCompanies(sortedCompanies);
       } catch (error) {

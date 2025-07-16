@@ -24,8 +24,8 @@ const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_KEY);
 const app = express();
 app.use(cookieParser());
 app.use(cors({
-  origin: "http://localhost:5173", // your frontend URL
-  credentials: true               // allow cookies
+  origin: process.env.FRONTEND_URL,
+  credentials: true
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

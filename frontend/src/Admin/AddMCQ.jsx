@@ -35,7 +35,7 @@ const AdminPanel = () => {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/MCQ');
+        const response = await axios.get('${import.meta.env.VITE_API_BASE_URL}/MCQ');
         const reversedData = [...response.data].reverse(); // Create a reversed copy
         setQuestions(reversedData);
         setFilteredQuestions(reversedData);
@@ -107,15 +107,15 @@ const AdminPanel = () => {
     e.preventDefault();
     try {
       if (isEditing) {
-        await axios.patch(`http://localhost:5000/api/MCQ/${selectedQuestion._id}`, formData);
+        await axios.patch(`${import.meta.env.VITE_API_BASE_URL}/MCQ/${selectedQuestion._id}`, formData);
         showNotification('Question updated successfully!', 'success');
       } else {
-        await axios.post('http://localhost:5000/api/MCQ', formData);
+        await axios.post('${import.meta.env.VITE_API_BASE_URL}/MCQ', formData);
         showNotification('Question added successfully!', 'success');
       }
   
       // Refresh and reverse the questions list
-      const response = await axios.get('http://localhost:5000/api/MCQ');
+      const response = await axios.get('${import.meta.env.VITE_API_BASE_URL}/MCQ');
       const reversedData = [...response.data].reverse();
       setQuestions(reversedData);
       setFilteredQuestions(reversedData); // Also update filtered if needed
@@ -143,10 +143,10 @@ const AdminPanel = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this question?')) {
       try {
-        await axios.delete(`http://localhost:5000/api/MCQ/${id}`);
+        await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/MCQ/${id}`);
         showNotification('Question deleted successfully!', 'success');
   
-        const response = await axios.get('http://localhost:5000/api/MCQ');
+        const response = await axios.get('${import.meta.env.VITE_API_BASE_URL}/MCQ');
         const reversedData = [...response.data].reverse();
         setQuestions(reversedData);
         setFilteredQuestions(reversedData); // if you're using filtered list too
@@ -161,11 +161,11 @@ const AdminPanel = () => {
     if (!selectedQuestion) return;
     
     try {
-      await axios.post(`http://localhost:5000/api/MCQ/${selectedQuestion._id}/explanations`, newExplanation);
+      await axios.post(`${import.meta.env.VITE_API_BASE_URL}/MCQ/${selectedQuestion._id}/explanations`, newExplanation);
       showNotification('Explanation added successfully!', 'success');
       
       // Refresh the selected question
-      const response = await axios.get(`http://localhost:5000/api/MCQ/id/${selectedQuestion._id}`);
+      const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/MCQ/id/${selectedQuestion._id}`);
       setSelectedQuestion(response.data);
       setNewExplanation({ username: '', explanation: '' });
     } catch (error) {
@@ -175,11 +175,11 @@ const AdminPanel = () => {
 
   const deleteExplanation = async (questionId, explanationId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/MCQ/${questionId}/explanations/${explanationId}`);
+      await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/MCQ/${questionId}/explanations/${explanationId}`);
       showNotification('Explanation deleted successfully!', 'success');
       
       // Refresh the selected question
-      const response = await axios.get(`http://localhost:5000/api/MCQ/id/${questionId}`);
+      const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/MCQ/id/${questionId}`);
       setSelectedQuestion(response.data);
     } catch (error) {
       showNotification('Error deleting explanation', 'error');

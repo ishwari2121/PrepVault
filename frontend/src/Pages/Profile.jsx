@@ -18,7 +18,7 @@ const Profile = () => {
     const fetchExperiences = async () => {
       try {
         if (user && user.id) {
-          const res = await axios.get(`http://localhost:5000/api/interviewExp/user/${user.id}`);
+          const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/interviewExp/user/${user.id}`);
           setExperiences(Array.isArray(res.data) ? res.data : []);
         }
       } catch (err) {

@@ -16,7 +16,7 @@ const CompanyDetails = () => {
     const scale = useTransform(scrollYProgress, [0, 1], [1, 1.05]);
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/api/companies/${companyName}`)
+        axios.get(`${import.meta.env.VITE_API_BASE_URL}/companies/${companyName}`)
             .then(response => setCompany(response.data))
             .catch(error => console.error("Error:", error));
     }, [companyName]);

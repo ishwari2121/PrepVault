@@ -21,7 +21,7 @@ const ResumeAnalyzer = () => {
       
         try {
           const response = await axios.post(
-            'http://localhost:5000/api/analyze', // Directly specify the Node.js server URL
+            '${import.meta.env.VITE_API_BASE_URL}/analyze', // Directly specify the Node.js server URL
             formData,
             {
               headers: {
