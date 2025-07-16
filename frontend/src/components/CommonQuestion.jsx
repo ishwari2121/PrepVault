@@ -7,6 +7,7 @@ import {
   FaBars, FaTimes, FaSearch, FaChevronDown
 } from 'react-icons/fa';
 import TechnicalMcq from '../Components/TechnicalQues';
+//import TechnicalMcq from '../Components/TechnicalQues';
 import AptitudeQuestions from '../Components/AptitudeQuestions';
 import { useMediaQuery } from '../hooks/useMediaQuery'
 
