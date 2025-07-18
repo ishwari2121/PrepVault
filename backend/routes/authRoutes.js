@@ -53,10 +53,11 @@ router.post("/signin", async (req, res) => {
     
         res.cookie("token", token, {
           httpOnly: true,
-          secure: false, // Use HTTPS in production
-          sameSite: "Lax",
-          maxAge: 2 * 60 * 60 * 1000, // 2 hours
+          secure: true, 
+          sameSite: "None",
+          maxAge: 4 * 60 * 60 * 1000,
         });
+
 
         res.status(200).json({
           token,
