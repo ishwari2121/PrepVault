@@ -153,7 +153,7 @@ function App() {
     formData.append('jobDescription', jobDescription);
     
     try {
-      const response = await axios.post('http://localhost:5000/analyze', formData,{
+      const response = await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/analyze`, formData,{
         withCredentials: true,
     });
       const responseData = response.data.response;
