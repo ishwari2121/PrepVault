@@ -13,7 +13,7 @@ const InterviewExperienceForm = () => {
     const [formData, setFormData] = useState({
         year: new Date().getFullYear(),
         branch: "IT",
-        company: "",
+        company: companies[0]?.name || "",
         type: "Placement",
         totalRounds: 1,
         rounds: [{ roundNumber: 1, experience: "" }],
@@ -77,8 +77,11 @@ const InterviewExperienceForm = () => {
                 );
                 setCompanies(sortedCompanies);
                 if (sortedCompanies.length > 0) {
-                    setFormData(prev => ({ ...prev, company: sortedCompanies[0]._id }));
+                    setFormData(prev => ({ ...prev, company: sortedCompanies[0].name }));
                 }
+                
+                console.log(sortedCompanies)
+
             })
             .catch(error => console.error("Error fetching companies:", error));
     }, []);
@@ -102,10 +105,12 @@ const InterviewExperienceForm = () => {
                 throw new Error("Please select a company");
             }
             
-            const selectedCompany = companies.find(c => c._id === formData.company);
+            const selectedCompany = companies.find(c => c.name === formData.company);
             if (!selectedCompany) {
                 throw new Error("Invalid company selection");
             }
+
+            console.log(formData);
 
             await axios.post(
                 `${import.meta.env.VITE_APP_BACKEND_URL}/interviewExp/submit-experience`,formData,
@@ -133,7 +138,7 @@ const InterviewExperienceForm = () => {
             setFormData({
                 year: new Date().getFullYear(),
                 branch: "IT",
-                company: companies[0]?._id || "",
+                company: companies[1]?.name || "",
                 type: "Placement",
                 rounds: [{ roundNumber: 1, experience: "" }],
                 additionalTips: ""
@@ -345,15 +350,17 @@ const InterviewExperienceForm = () => {
                                                             onChange={handleChange}
                                                             className="w-full pl-10 pr-4 py-3 rounded-lg bg-[#1e293b]/70 border border-cyan-500/30 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 text-white appearance-none transition-all duration-200 hover:border-cyan-400/50"
                                                         >
-                                                            {field.options.map(option => (
-                                                                <option 
-                                                                    key={field.name === 'company' ? option._id : option} 
-                                                                    value={field.name === 'company' ? option._id : option}
-                                                                    className="bg-[#1e293b]"
-                                                                >
-                                                                    {field.name === 'company' ? option.name : option}
-                                                                </option>
-                                                            ))}
+                                                            {field.options.map(option => {
+                                                                                        const value = field.name === 'company' ? option.name : option;
+                                                                                        const key = field.name === 'company' ? option.name : option;
+                                                                                        const label = field.name === 'company' ? option.name : option;
+
+                                                                                        return (
+                                                                                            <option key={key} value={value} className="bg-[#1e293b]">
+                                                                                            {label}
+                                                                                            </option>
+                                                                                        );
+                                                                                        })}
                                                         </select>
                                                         <div className="absolute right-3 top-3 pointer-events-none">
                                                             <svg className="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

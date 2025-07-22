@@ -15,9 +15,6 @@ const SharedInterview = () => {
 
     // Filter experiences
     const filteredExperiences = experiences.filter((exp) => {
-        console.log(user);
-        console.log(user.id);
-        console.log(exp.createdBy._id);
         const matchesType =
             selectedType === "Both" ||
             exp.type === selectedType ||

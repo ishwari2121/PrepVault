@@ -85,7 +85,7 @@ const CompanyList = () => {
             }
 
 
-            const response = await axios.post("${import.meta.env.VITE_APP_BACKEND_URL}/suggetion/suggest-company", 
+            const response = await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/suggetion/suggest-company`, 
                 { company: suggestedCompany } ,
                 {
                     withCredentials: true,

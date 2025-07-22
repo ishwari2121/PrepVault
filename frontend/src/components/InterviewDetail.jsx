@@ -24,6 +24,8 @@ const InterviewDetail = () => {
             try {
                 const response = await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/interviewExp/experience/${id}`);
                 setExperience(response.data);
+                console.log(response.data);
+                console.log(response.data.createdBy.username);
             } catch (error) {
                 console.error("Error fetching interview experience:", error);
             } finally {

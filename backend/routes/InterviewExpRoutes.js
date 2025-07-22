@@ -70,7 +70,7 @@ router.get("/experience/:id", async (req, res) => {
     try {
         const { id } = req.params;
         // alert("hello");
-        const experience = await InterviewExperience.findById(id);
+        const experience = await InterviewExperience.findById(id).populate('createdBy', 'username');
 
         if (!experience) {
             return res.status(404).json({ message: "Interview experience not found" });

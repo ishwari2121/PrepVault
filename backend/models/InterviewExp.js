@@ -13,9 +13,9 @@ const InterviewExperienceSchema = new mongoose.Schema({
         required: true,
     },
     company: {
-        type: String,
-        required: true,
-    },
+            type: String,
+            required: true,
+        },
     totalRounds: {
         type: Number,
         required: true,
