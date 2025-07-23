@@ -47,11 +47,11 @@ app.use("/api/commonQuestions", connect);
 app.use("/api/MCQ", MCQRoute);
 app.use("/api/resume",AnalysisRoute);
 app.use('/api/aptitude',AptitudeRoutes)
-app.use("/api/vote/",HRHistoryRoute);
+//app.use("/api/vote/",HRHistoryRoute);
 app.use("/api/suggetion",SuggestedCompanyRoute);
 
 
-app.post("/analyze", upload.single("resume"), authMiddleware,async (req, res) => {
+app.post("/api/analyze", upload.single("resume"), authMiddleware,async (req, res) => {//
   try {
     const { jobDescription } = req.body;
     if (!jobDescription || !req.file) {
