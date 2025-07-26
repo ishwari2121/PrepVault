@@ -1,6 +1,7 @@
 import express from 'express';
 const router = express.Router();
 import Question from '../models/MCQ.js';
+import { authMiddleware } from "../middleware/middleware.js";
 
 // Get all questions
 router.get('/', async (req, res) => {

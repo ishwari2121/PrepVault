@@ -134,7 +134,7 @@ router.post('/answers/:id', async (req, res) => {
 });
 
 // POST route to update votes for a specific answer
-router.post('/:questionId/answers/:answerId/vote', async (req, res) => {
+router.post('/:questionId/answers/:answerId/vote', authMiddleware,async (req, res) => {
   try {
     const { questionId, answerId } = req.params;
     const { action } = req.body; // 'upvote' or 'downvote'
@@ -195,7 +195,7 @@ router.post('/:questionId/answers/:answerId/vote', async (req, res) => {
   }
 });
 
-router.delete('/:questionId/answers/:answerId', async (req, res) => {
+router.delete('/:questionId/answers/:answerId', authMiddleware, async (req, res) => {
   try {
 
     const { questionId, answerId } = req.params;

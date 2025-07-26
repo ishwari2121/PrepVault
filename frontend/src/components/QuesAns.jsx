@@ -86,8 +86,8 @@ const QuesAns = () => {
                 answer: formData.answer,
                 code: formData.code
             }, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+                        withCredentials: true,
+                });
 
             // Refresh data after successful submission
             const response = await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/commonQuestions/${id}`);
@@ -119,13 +119,13 @@ const QuesAns = () => {
                 return;
             }
             //sabke sab is answerID ke votes delete ho jayenge
-            const vote = await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/vote/${user.username}/${id}/${answerToDelete}/votehistory`);
-            console.log(vote);
-            if(!vote.data)await axios.delete(`${import.meta.env.VITE_APP_BACKEND_URL}/vote/${id}/${answerToDelete}/delete_all_votes`);
-
+            //const vote = await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/vote/${user.username}/${id}/${answerToDelete}/votehistory`);
+            //console.log(vote);
+            //if(!vote.data)await axios.delete(`${import.meta.env.VITE_APP_BACKEND_URL}/vote/${id}/${answerToDelete}/delete_all_votes`);
+            console.log("hello")
             await axios.delete(
                 `${import.meta.env.VITE_APP_BACKEND_URL}/commonQuestions/${id}/answers/${answerToDelete}`,
-                { headers: { Authorization: `Bearer ${token}` } }
+                { withCredentials: true, }
             );
 
             // Refresh the question data
