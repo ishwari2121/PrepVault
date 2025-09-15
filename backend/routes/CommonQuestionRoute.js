@@ -2,6 +2,8 @@ import express from "express";
 const router = express.Router();
 import CommonQuestion from  "../models/CommonQuestion.js"
 import mongoose from 'mongoose';
+import { authMiddleware } from "../middleware/middleware.js";
+
 router.get('/', async (req, res) => {
   try {
     const { type } = req.query;
